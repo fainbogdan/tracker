@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Tracker | Emergency</title>
+<link rel="icon" type="image/png" href="http://paulferrett.com/fontawesome-favicon/generate.php?icon=rocket">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="" />
     <meta name="author" content="" />
@@ -30,7 +31,7 @@
     <div class="row">
         <div class="col-sm-6">
             <mvc:form role="form" modelAttribute="event" method="post">
-            <mvc:errors path="*"></mvc:errors>
+            	<mvc:input type="hidden" path="event_type" name="event_type" value="emergency" />
                 <div class="form-group">
                     <mvc:label path="expected_start">When it is happening?</mvc:label>
                     <div class='input-group date' id='datetimepicker1'>

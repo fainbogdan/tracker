@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Tracker | Home</title>
+<link rel="icon" type="image/png" href="http://paulferrett.com/fontawesome-favicon/generate.php?icon=rocket">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="" />
@@ -31,12 +32,12 @@
 				<div><i class="fa fa-rocket fa-5x"></i></div>
 				<div>
 					<span>Tracker</span>
-					track track track track track track track track track track track
+					Track the progress of everything you do with your system's
 				</div>
 		</div>
 	</div>
 	<div class="col-sm-12">
-		<div class="col-sm-4">
+		<div class="col-sm-3">
 			<a class="link" href="emergency" >
 			<div id="emergency-event-box">
 				<div id="emergency-event-box-header">
@@ -44,7 +45,7 @@
 					<span class="event-box-title">Emergency</span>
 				</div>
 				<ul>
-					<li>Use for creating emergency events</li>
+					<li>For creating emergency events</li>
 					<li>Events that start immediately</li>
 					<li>Accelerated Workflow</li>
 					<li>Systems restart or break-fix</li>
@@ -54,7 +55,7 @@
 			</a>
 		</div>
 		
-		<div class="col-sm-4">
+		<div class="col-sm-3">
 			<a href="planned" class="link">
 			<div id="planned-event-box">
 				<div id="planned-event-box-header">
@@ -62,22 +63,40 @@
 					<span class="event-box-title">Planned</span>
 				</div>
 				<ul>
-					<li>Use for creating planned events</li>
+					<li>For creating planned events</li>
 					<li>Events done at flexible times</li>
 					<li>Planned Workflow</li>
-					<li>Pre-planned upgrades & fixe's</li>
+					<li>Planned upgrades & fixe's</li>
 				</ul>
 				<span class="event-box-footer">Create Event</span>
 			</div>
 			</a>
 		</div>
 			
-		<div class="col-sm-4">
+		<div class="col-sm-3">
 			<a href="#" class="link">
 			<div id="start-event-box">
 				<div id="start-event-box-header">
 					<div><i class="fa fa-power-off fa-3x"></i></div>
 					<span class="event-box-title">Execute</span>
+				</div>
+				<ul>
+					<li>Work on events created</li>
+					<li>Track the progress of event</li>
+					<li>Edit the pre-written checklist</li>
+					<li>Manage the order of workflow</li>
+				</ul>
+				<span class="event-box-footer">Start Event</span>
+			</div>
+			</a>
+		</div>
+		
+		<div class="col-sm-3">
+			<a href="#" class="link">
+			<div id="reporting-event-box">
+				<div id="reporting-event-box-header">
+					<div><i class="fa fa-file-excel-o fa-3x"></i></div>
+					<span class="event-box-title">Reports</span>
 				</div>
 				<ul>
 					<li>Start a planned event</li>

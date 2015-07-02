@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Tracker | Planned</title>
+<link rel="icon" type="image/png" href="http://paulferrett.com/fontawesome-favicon/generate.php?icon=rocket">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="" />
@@ -31,7 +32,7 @@
     <div class="row">
         <div class="col-sm-6">
             <mvc:form role="form" method="post" commandName="event">
-        
+        		<mvc:input type="hidden" path="event_type" name="event_type" value="planned" />
                 <div class="form-group">
                     <label>Start time?</label>
                     <div class='input-group date' id='datetimepicker1'>

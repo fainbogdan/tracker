@@ -12,13 +12,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="events")
@@ -35,21 +35,29 @@ public class Event {
 	
 	private String event_type;
 	
-	@DateTimeFormat(pattern="MM/dd/yyyy")
 	@NotNull
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date expected_start;
 	
-	@DateTimeFormat(pattern="MM/dd/yyyy")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date expected_end;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date actual_start;
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date actual_end;
 	
 	@NotBlank
 	private String environment;
 	
 	private int executed_by;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@CreationTimestamp
 	private Date created_at;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@UpdateTimestamp
 	private Date updated_at;
 	
 	@ManyToOne
@@ -143,8 +151,7 @@ public class Event {
 		return created_at;
 	}
 
-	@CreationTimestamp
-	public void setCreate_at() {
+	public void setCreated_at(Date created_at) {
 		this.created_at = new Date();
 	}
 
@@ -152,8 +159,7 @@ public class Event {
 		return updated_at;
 	}
 
-	@UpdateTimestamp
-	public void setUpdated_at() {
+	public void setUpdated_at(Date updated_at) {
 		this.updated_at = new Date();
 	}
 
