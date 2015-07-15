@@ -26,7 +26,7 @@ public class RootConfig {
 
 	@Bean
 	@Autowired
-	public LocalSessionFactoryBean factoryBean(DataSource dataSource)
+	public LocalSessionFactoryBean sessionFactory(DataSource dataSource)
 	{
 		LocalSessionFactoryBean bean=new LocalSessionFactoryBean();
 		bean.setDataSource(dataSource);

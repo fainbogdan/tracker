@@ -40,8 +40,8 @@
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
-                        <mvc:errors path="expected_start"></mvc:errors>
                     </div>
+                    <mvc:errors path="expected_start" class="error"></mvc:errors>
                 </div>
                 <div class="form-group">
                     <label>End time?</label>
@@ -50,23 +50,23 @@
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
-                        <mvc:errors path="expected_end"></mvc:errors>
                     </div>
+                    <mvc:errors path="expected_end" class="error"></mvc:errors>
                 </div>
                 <div class="form-group">
                     <label>What is happening?</label>
                     <mvc:input type="text" path="name" class="form-control" placeholder="Title for this event"></mvc:input>
-                    <mvc:errors path="name"></mvc:errors>
+                    <mvc:errors path="name" class="error"></mvc:errors>
                 </div>
                 <div class="form-group">
                     <label>Environment?</label>
                     <mvc:input type="text" path="environment" class="form-control" placeholder="Possible effected area"></mvc:input>
-                    <mvc:errors path="environment"></mvc:errors>
+                    <mvc:errors path="environment" class="error"></mvc:errors>
                 </div>
                 <div class="form-group">
                     <label>Description?</label>
                     <mvc:textarea rows="3" path="description" class="form-control" placeholder="Additional related information"></mvc:textarea>
-                    <mvc:errors path="description"></mvc:errors>
+                    <mvc:errors path="description" class="error"></mvc:errors>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-8 col-sm-offset-2">

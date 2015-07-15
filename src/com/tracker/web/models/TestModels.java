@@ -1,18 +1,32 @@
 package com.tracker.web.models;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
 public class TestModels {
 
 	public static void main(String[] args) {
+		
+		System.out.println("run");
 		// TODO Auto-generated method stub
 
 		User user=new User();
+		Event event=new Event();
+		Checklist checklist=new Checklist();
+		Configuration configuration = new Configuration().configure();
+	    StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+	    SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+		Session session=sessionFactory.openSession();
+		session.beginTransaction();
+		session.save(user);
+		session.save(event);
+		session.save(checklist);
+		session.getTransaction().commit();
+		session.close();
+		/*User user=new User();
 		user.setFirst_name("lokesh");
 		
 		Event event1=new Event();
@@ -51,9 +65,7 @@ public class TestModels {
 		Session session1=sessionFactory.openSession();
 		session1.beginTransaction();
 		Event event=(Event) session1.get(Event.class, 1);
-		System.out.println(event.getName());
-		
-		//EntityManagerFactory entityManagerFactory=Persistence.createEntityManagerFactory(persistenceUnitName)
+		System.out.println(event.getName());*/
 	}
 
 }

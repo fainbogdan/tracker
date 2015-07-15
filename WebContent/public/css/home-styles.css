@@ -1,5 +1,4 @@
 @CHARSET "ISO-8859-1";
-
 #index-body
 {
 	 background: #E0E0E0;
@@ -8,10 +7,6 @@
 #index-container
 {
 	background: beige;
-	padding: 0em;
-}
-.container .col-sm-12
-{
 	padding: 0em;
 }
 
@@ -63,6 +58,10 @@ a.link
 	font-size: 2.5em;
 }
 
+#index-body .row:nth-child(2) .col-sm-3
+{
+	padding: 0 0.6em 0 0.6em;
+}
 
 #emergency-event-box,#planned-event-box,#start-event-box,#reporting-event-box
 {
@@ -89,7 +88,6 @@ a.link
 
 #emergency-event-box-header,#planned-event-box-header,#start-event-box-header,#reporting-event-box-header
 {
-	text-align:center;
 	color: white;
 	padding: 2em 0 1.75em 0;
 }
@@ -131,6 +129,7 @@ a.link
 #emergency-event-box ul li,#planned-event-box ul li,#start-event-box ul li,#reporting-event-box ul li
 {
 	margin: 1em 0 1em 0;
+	list-style: none;
 }
 
 .event-box-footer
@@ -139,7 +138,6 @@ a.link
 	background:#DDDFE0;
 	color:#007DBB;
 	padding: 0.625em 0 0.625em 0;
-	text-align: center;
 	width: 100%;
 	display: block;
 	border:0.0625em dashed #C2C1C1;	
@@ -151,3 +149,28 @@ a.link
 	border-bottom-left-radius: 7px;
 }
 
+.error
+{
+	color: red;
+}
+
+.event-cal-type .fa-exclamation-triangle
+{
+	color: #FFCCCC;
+	margin-top: .3em;
+}
+
+.event-cal-type .event-date
+{
+	margin-top: .3em;
+}
+
+.checklist-icon
+{
+	vertical-align: middle;
+}
+
+.checklist-icon,.watcher-icon,.edit-checklist-icon
+{
+	cursor: pointer;
+}

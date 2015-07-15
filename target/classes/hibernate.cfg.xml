@@ -51,9 +51,9 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">create</property>
 
-        <mapping class="com.tracker.models.User" />
-        <mapping class="com.tracker.models.Event" />
-        <mapping class="com.tracker.models.Checklist" />
+        <mapping class="com.tracker.web.models.User" />
+        <mapping class="com.tracker.web.models.Event" />
+        <mapping class="com.tracker.web.models.Checklist" />
         
 
     </session-factory>

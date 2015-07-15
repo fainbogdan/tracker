@@ -3,7 +3,6 @@ package com.tracker.web.models;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +18,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="events")
@@ -36,14 +36,17 @@ public class Event {
 	private String event_type;
 	
 	@NotNull
+	@DateTimeFormat(pattern="MM/dd/yyyy hh:mm a")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date expected_start;
 	
+	@DateTimeFormat(pattern="MM/dd/yyyy hh:mm a")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date expected_end;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date actual_start;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date actual_end;
 	
@@ -65,7 +68,7 @@ public class Event {
 	private User creator;
 	
 	@OneToMany(mappedBy="event")
-	private Collection<Checklist> checklists=new ArrayList<Checklist>();
+	private Collection<Checklist> checklist=new ArrayList<Checklist>();
 	
 	public int getId() {
 		return id;
@@ -104,7 +107,7 @@ public class Event {
 	}
 
 	public void setExpected_start(Date expected_start) {
-		this.expected_start = expected_start;
+		this.expected_start=expected_start;
 	}
 
 	public Date getExpected_end() {
@@ -112,7 +115,7 @@ public class Event {
 	}
 
 	public void setExpected_end(Date expected_end) {
-		this.expected_end = expected_end;
+		this.expected_end=expected_end;
 	}
 
 	public Date getActual_start() {
@@ -152,7 +155,7 @@ public class Event {
 	}
 
 	public void setCreated_at(Date created_at) {
-		this.created_at = new Date();
+		this.created_at = created_at;
 	}
 
 	public Date getUpdated_at() {
@@ -160,7 +163,7 @@ public class Event {
 	}
 
 	public void setUpdated_at(Date updated_at) {
-		this.updated_at = new Date();
+		this.updated_at = updated_at;
 	}
 
 	public User getCreator() {
@@ -171,12 +174,12 @@ public class Event {
 		this.creator = creator;
 	}
 
-	public Collection<Checklist> getChecklists() {
-		return checklists;
+	public Collection<Checklist> getChecklist() {
+		return checklist;
 	}
 
-	public void setChecklists(Collection<Checklist> checklists) {
-		this.checklists = checklists;
+	public void setChecklists(Collection<Checklist> checklist) {
+		this.checklist = checklist;
 	}
 	
 }

@@ -24,35 +24,36 @@
 </head>
 <body>
 <%@ include file="../static/layout.jsp" %>
+<%@ taglib prefix="mvc" uri="http://www.springframework.org/tags/form" %>
 <div class="container">
 
 	<div class="page-header">
         <h1 class="text-center">New Account <small> Registration</small></h1>
     </div>
     <div class="row col-sm-8 col-sm-offset-2">
-        <form role="form" class="form-horizontal">
+        <mvc:form role="form" class="form-horizontal" modelAttribute="user">
             <div class="form-group">
                 <label class="col-sm-3">First Name</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" name="first_name" placeholder="First Name">
+                    <mvc:input type="text" path="first_name" class="form-control" name="first_name" placeholder="First Name" />
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3">Last Name</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" name="last_name" placeholder="Last Name">
+                    <input type="text"  path="last_name" class="form-control" name="last_name" placeholder="Last Name">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3">Username</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" name="username" placeholder="Desired Username">
+                    <input type="text"  path="username" class="form-control" name="username" placeholder="Desired Username">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3">Password</label>
                 <div class="col-sm-9">
-                    <input type="password" class="form-control" name="password" placeholder="Password">
+                    <input type="password"  path="password" class="form-control" name="password" placeholder="Password">
                 </div>
             </div>
             <div class="form-group">
@@ -81,7 +82,7 @@
                     <button type="reset" class="btn btn-default btn-lg btn-block" style="background: #E6E6E6;">Reset</button>
                 </div>
             </div>
-        </form>
+        </mvc:form>
     </div>
 </div>
 </body>

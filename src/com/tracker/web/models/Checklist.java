@@ -7,9 +7,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name="checklists")
@@ -26,7 +29,13 @@ public class Checklist {
 	private String skipped_note;
 	private Date completed_on;
 	private int completed_by;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@CreationTimestamp
 	private Date created_at;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@UpdateTimestamp
 	private Date updated_at;
 	
 	@ManyToOne
@@ -108,7 +117,6 @@ public class Checklist {
 		return created_at;
 	}
 
-	@PrePersist
 	public void setCreated_at() {
 		this.created_at = new Date();
 	}
@@ -117,7 +125,6 @@ public class Checklist {
 		return updated_at;
 	}
 
-	@PreUpdate
 	public void setUpdated_at() {
 		this.updated_at = new Date();
 	}
