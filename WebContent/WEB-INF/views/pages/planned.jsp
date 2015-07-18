@@ -30,7 +30,7 @@
         <h1>Planned <small> Create an Planned event</small></h1>
     </div>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-md-6">
             <mvc:form role="form" method="post" commandName="event">
         		<mvc:input type="hidden" path="event_type" name="event_type" value="planned" />
                 <div class="form-group">
@@ -69,14 +69,14 @@
                     <mvc:errors path="description" class="error"></mvc:errors>
                 </div>
                 <div class="form-group">
-                    <div class="col-sm-8 col-sm-offset-2">
+                    <div class="col-md-8 col-md-offset-2">
                         <button class="btn btn-primary btn-block btn-lg">Create Planned Event</button>
                     </div>
                 </div>
             </mvc:form>
         </div>
-        <div class="col-sm-1"></div>
-        <div class="col-sm-5">
+        <div class="col-md-1"></div>
+        <div class="col-md-5">
             <!--calendar goes here -->
         </div>
     </div>

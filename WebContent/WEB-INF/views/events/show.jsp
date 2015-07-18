@@ -29,7 +29,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-6">
+			<div class="col-md-6">
 				
 				<span class="fa-stack fa-3x pull-left event-cal-type">
 					<i class="fa fa-calendar-o fa-stack-2x"></i>
@@ -48,7 +48,7 @@
 				<span>You are Watching this event <i class="fa fa-eye fa-lg watcher-icon"></i></span>
 				<hr/>
 				<div class="row">
-					<div class="col-sm-6">
+					<div class="col-md-6">
 						<dl>
 							<dt><i class="fa fa-cubes"></i>  Environment</dt> <dd><c:out value="${event.getEnvironment() }" /></dd>
 							<dt><i class="fa fa-user fa-fw"></i> Created By</dt> <dd></dd>
@@ -57,7 +57,7 @@
 							<dt><i class="fa fa-clock-o fa-fw"></i> Estimated Duartion</dt> <dd></dd>
 						</dl>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-md-6">
 						<dl>
 							<dt><i class="fa fa-user fa-fw"></i> Started By</dt> <dd></dd>
 							<dt><i class="fa fa-calendar fa-fw"></i> Actual Start</dt> <dd><c:out value="${event.getActual_start() }" /></dd>
@@ -75,7 +75,7 @@
 				</span>
 			</div>
 			
-			<div class="col-sm-6">
+			<div class="col-md-6">
 				<h2>Run Plan
 				<span class="pull-right"><i class="fa fa-pencil-square-o edit-checklist-icon"></i></span>
 				</h2>

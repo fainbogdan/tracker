@@ -3,6 +3,7 @@ package com.tracker.web.models;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,8 +17,11 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.NotBlank;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -36,19 +40,17 @@ public class Event {
 	private String event_type;
 	
 	@NotNull
-	@DateTimeFormat(pattern="MM/dd/yyyy hh:mm a")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date expected_start;
+	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+	private LocalDateTime expected_start;
 	
-	@DateTimeFormat(pattern="MM/dd/yyyy hh:mm a")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date expected_end;
+	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+	private LocalDateTime expected_end;
 	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date actual_start;
+	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+	private LocalDateTime actual_start;
 	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date actual_end;
+	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+	private LocalDateTime actual_end;
 	
 	@NotBlank
 	private String environment;
@@ -102,35 +104,35 @@ public class Event {
 		this.event_type = event_type;
 	}
 
-	public Date getExpected_start() {
+	public LocalDateTime getExpected_start() {
 		return expected_start;
 	}
 
-	public void setExpected_start(Date expected_start) {
+	public void setExpected_start(LocalDateTime expected_start) {
 		this.expected_start=expected_start;
 	}
 
-	public Date getExpected_end() {
+	public LocalDateTime getExpected_end() {
 		return expected_end;
 	}
 
-	public void setExpected_end(Date expected_end) {
+	public void setExpected_end(LocalDateTime expected_end) {
 		this.expected_end=expected_end;
 	}
 
-	public Date getActual_start() {
+	public LocalDateTime getActual_start() {
 		return actual_start;
 	}
 
-	public void setActual_start(Date actual_start) {
+	public void setActual_start(LocalDateTime actual_start) {
 		this.actual_start = actual_start;
 	}
 
-	public Date getActual_end() {
+	public LocalDateTime getActual_end() {
 		return actual_end;
 	}
 
-	public void setActual_end(Date actual_end) {
+	public void setActual_end(LocalDateTime actual_end) {
 		this.actual_end = actual_end;
 	}
 

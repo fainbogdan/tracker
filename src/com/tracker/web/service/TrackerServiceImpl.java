@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,7 +72,9 @@ public class TrackerServiceImpl implements TrackerService {
 	}
 
 	@Override
-	public List<Event> getEvents() {
+	public List<Event> getEvents(HttpServletRequest request) {
+		String page=request.getParameter("page");
+		
 		return repo.getEvents();
 	}
 

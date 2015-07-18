@@ -1,5 +1,7 @@
 package com.tracker.web.controllers;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tracker.web.models.Event;
 import com.tracker.web.models.User;
@@ -30,40 +33,6 @@ public class MainController {
 		return "pages/index";
 	}
 	
-	@RequestMapping(value="emergency",method=RequestMethod.GET)
-	public String createEmergencyEvent(Model model)
-	{
-		model.addAttribute("event", new Event());
-		return "pages/emergency";
-	}
-	
-	@RequestMapping(value="emergency",method=RequestMethod.POST)
-	public String storeEmergencyEvent(@Valid Event event, Errors errors)
-	{
-		if(errors.hasErrors())
-			return "pages/emergency";
-		
-		trackerService.save(event);
-		return "pages/index";
-	}
-	
-	@RequestMapping(value="planned",method=RequestMethod.GET)
-	public String createPlannedEvent(Model model)
-	{
-		model.addAttribute("event", new Event());
-		return "pages/planned";
-	}
-	
-	@RequestMapping(value="planned",method=RequestMethod.POST)
-	public String storePlannedEvent(@Valid Event event,Errors errors)
-	{
-		if(errors.hasErrors())
-			return "/pages/planned";
-
-		trackerService.save(event);
-		return "pages/index";
-	}
-	
 	@RequestMapping(value="register",method=RequestMethod.GET)
 	public String createUserRegistration(Model model)
 	{
@@ -82,11 +51,5 @@ public class MainController {
 	{
 		model.addAttribute("event", trackerService.getEvent(id));
 		return "events/show";
-	}
-	
-	@RequestMapping(value="events",method=RequestMethod.GET)
-	public String listEvents()
-	{
-		return "events/index";
 	}
 }

@@ -29,7 +29,7 @@
         <h1>Emergency <small> Create an Emergency event</small></h1>
     </div>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-md-6">
             <mvc:form role="form" modelAttribute="event" method="post">
             	<mvc:input type="hidden" path="event_type" name="event_type" value="emergency" />
                 <div class="form-group">
@@ -54,14 +54,14 @@
                     <mvc:textarea path="description" rows="3" class="form-control" placeholder="Additional related information"></mvc:textarea>
                 </div>
                 <div class="form-group">
-                    <div class="col-sm-8 col-sm-offset-2">
+                    <div class="col-md-8 col-md-offset-2">
                         <mvc:button class="btn btn-danger btn-block btn-lg">Start Emergency Event</mvc:button>
                     </div>
                 </div>
             </mvc:form>
         </div>
-        <div class="col-sm-1"></div>
-        <div class="col-sm-5">
+        <div class="col-md-1"></div>
+        <div class="col-md-5">
             <!--calendar goes here -->
         </div>
     </div>

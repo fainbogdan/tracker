@@ -27,92 +27,109 @@
 <body id="index-body">
 <%@ include file="../static/layout.jsp" %>
 <div class="container" id="index-container">
-	<div class="row">
-		<div class="col-sm-12" >
-			<div id="events-header-box">
-					<div><i class="fa fa-rocket fa-5x"></i></div>
-					<div>
-						<span>Tracker</span>
-						Track the progress of everything you do with your system's
-					</div>
+	
+	<div class="row" id="events-header-box">
+		<div class="col-md-12 page-header">
+			<div class="col-md-1"><i class="fa fa-rocket fa-5x"></i></div>
+			<div class="col-md-11">
+				<h1>Tracker</h1>
+				<span>Track the progress of everything you do with your system's</span>
 			</div>
 		</div>
 	</div>
+	
 	<div class="row">
-		<div class="col-sm-12">
-			<div class="col-sm-3">
-				<a class="link" href="emergency" >
-				<div id="emergency-event-box">
-					<div id="emergency-event-box-header" class="text-center">
-						<div><i class="fa fa-exclamation-triangle fa-3x"></i></div>
-						<span class="event-box-title">Emergency</span>
-					</div>
+	
+		<div class="col-md-3">
+			<a class="link" href="emergency" >
+			<div class="event-box">
+				<div class="event-box-header text-center">
+					<div><i class="fa fa-exclamation-triangle fa-3x"></i></div>
+					<span class="event-box-title">Emergency</span>
+				</div>
+				<div class="event-box-body">
 					<ul>
 						<li>For creating emergency events</li>
 						<li>Events that start immediately</li>
 						<li>Accelerated Workflow</li>
 						<li>Systems restart or break-fix</li>
 					</ul>
-					<span class="event-box-footer text-center" id="x">Create Event</span>
 				</div>
-				</a>
+				<div class="event-box-footer text-center">
+					<span>Start Event</span>
+				</div>
 			</div>
-			
-			<div class="col-sm-3">
-				<a href="planned" class="link">
-				<div id="planned-event-box">
-					<div id="planned-event-box-header" class="text-center">
-						<div><i class="fa fa-calendar fa-3x"></i></div>
-						<span class="event-box-title">Planned</span>
-					</div>
+			</a>
+		</div>
+		
+		<div class="col-md-3">
+			<a href="planned" class="link">
+			<div class="event-box">
+				<div class="event-box-header text-center">
+					<div><i class="fa fa-calendar fa-3x"></i></div>
+					<span class="event-box-title">Planned</span>
+				</div>
+				<div class="event-box-body">
 					<ul>
 						<li>For creating planned events</li>
 						<li>Events done at flexible times</li>
 						<li>Planned Workflow</li>
 						<li>Planned upgrades & fixe's</li>
 					</ul>
-					<span class="event-box-footer text-center">Create Event</span>
 				</div>
-				</a>
+				<div class="event-box-footer text-center">
+					<span>Start Event</span>
+				</div>
 			</div>
-				
-			<div class="col-sm-3">
-				<a href="events" class="link">
-				<div id="start-event-box">
-					<div id="start-event-box-header" class="text-center">
-						<div><i class="fa fa-power-off fa-3x"></i></div>
-						<span class="event-box-title">Execute</span>
-					</div>
+			</a>
+		</div>
+			
+		<div class="col-md-3">
+			<a href="events" class="link">
+			<div class="event-box">
+				<div class="event-box-header text-center">
+					<div><i class="fa fa-power-off fa-3x"></i></div>
+					<span class="event-box-title">Execute</span>
+				</div>
+				<div class="event-box-body">
 					<ul>
 						<li>Work on events created</li>
 						<li>Track the progress of event</li>
 						<li>Edit the pre-written checklist</li>
 						<li>Manage the order of workflow</li>
 					</ul>
-					<span class="event-box-footer text-center">Start Event</span>
 				</div>
-				</a>
+				<div class="event-box-footer text-center">
+					<span>Start Event</span>
+				</div>
 			</div>
-			
-			<div class="col-sm-3">
-				<a href="#" class="link">
-				<div id="reporting-event-box">
-					<div id="reporting-event-box-header" class="text-center">
-						<div><i class="fa fa-file-excel-o fa-3x"></i></div>
-						<span class="event-box-title">Reports</span>
-					</div>
+			</a>
+		</div>
+		
+		<div class="col-md-3">
+			<a href="#" class="link">
+			<div class="event-box">
+				<div class="event-box-header text-center">
+					<div><i class="fa fa-file-excel-o fa-3x"></i></div>
+					<span class="event-box-title">Reports</span>
+				</div>
+				<div class="event-box-body">
 					<ul>
 						<li>Start a planned event</li>
 						<li>Track the progress of event</li>
 						<li>Edit the pre-written checklist</li>
 						<li>Manage the order of workflow</li>
 					</ul>
-					<span class="event-box-footer text-center">Start Event</span>
 				</div>
-				</a>
+				<div class="event-box-footer text-center">
+					<span>Start Event</span>
+				</div>
 			</div>
+			</a>
 		</div>
+		
 	</div>
+	
 </div>	
 </body>
 </html>
