@@ -1,3 +1,4 @@
+<%@page import="org.joda.time.LocalDateTime"%>
 <%@page import="org.joda.time.DateTime"%>
 <%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -20,7 +21,6 @@
     <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="/tracker/public/css/home-styles.css">
 </head>
 
@@ -39,7 +39,7 @@
 					<c:set var="expected_start" value="${event.getExpected_start() }"></c:set>
 					<strong class="fa-stack-1x event-date">
 					<% 
-						DateTime date=new DateTime(pageContext.getAttribute("expected_start"));
+						LocalDateTime date=new LocalDateTime(pageContext.getAttribute("expected_start"));
 						out.print(date.getDayOfMonth());
 					%>
 					</strong>
@@ -77,7 +77,7 @@
 			
 			<div class="col-md-6">
 				<h2>Run Plan
-				<span class="pull-right"><i class="fa fa-pencil-square-o edit-checklist-icon"></i></span>
+				<a href='<c:out value="${event.getId() }" />/edit'><span class="pull-right"><i class="fa fa-pencil-square-o edit-checklist-icon"></i></span></a>
 				</h2>
 				<div id="pre-event">
 					<h3>Pre-Event Checklist</h3>
@@ -123,4 +123,7 @@
 		</div>
 	</div>
 </body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script data-require="bootstrap" data-semver="3.3.2" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 </html>

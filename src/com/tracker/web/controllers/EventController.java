@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -55,5 +56,18 @@ public class EventController {
 			service.save(event);
 			return "pages/index";
 		}
+	}
+	
+	@RequestMapping(value="/events/{id}",method=RequestMethod.GET)
+	public String show(@PathVariable("id") int id,Model model)
+	{
+		model.addAttribute("event", service.getEvent(id));
+		return "events/show";
+	}
+	
+	@RequestMapping(value="events/{id}/edit",method=RequestMethod.GET)
+	public String edit(Model model,@PathVariable("id") int id) {
+		model.addAttribute("event", service.getEvent(id));
+		return "events/edit";
 	}
 }

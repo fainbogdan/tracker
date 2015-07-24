@@ -64,4 +64,10 @@ public class TrackerRepoImpl implements TrackerRepo {
 		criteria.add(expression);
 		return (List<Event>) criteria.list();
 	}
+
+	@Override
+	public Checklist update(Checklist checklist) {
+		getCurrentSession().update(checklist);
+		return (Checklist) getCurrentSession().get(Checklist.class,checklist.getId());
+	}
 }

@@ -78,4 +78,9 @@ public class TrackerServiceImpl implements TrackerService {
 		return repo.getEvents();
 	}
 
+	@Override
+	public Checklist update(Checklist checklist) {
+		return repo.update(checklist);
+	}
+
 }

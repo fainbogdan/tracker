@@ -11,4 +11,5 @@ public interface TrackerRepo {
 	public void save(Checklist checklist);
 	public Event getEvent(int id);
 	public List<Event> getEvents();
+	public Checklist update(Checklist checklist);
 }
