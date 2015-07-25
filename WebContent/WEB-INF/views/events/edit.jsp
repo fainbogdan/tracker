@@ -192,12 +192,22 @@ $(function(){
 	    update: function (event, ui) {
 	        if (this === ui.item.parent()[0])
 	        {
-	            var order = [],
-	            counter = 1;
-	            $('.sortable div').each(function () {
-	                order.push($(this).attr('id') + "=" + counter++);
+	            var order = [], counter = 1;
+	            var newOrder=new Object();
+	            $('.sortable .checklistItem').each(function () {
+	               // order.push($(this).attr('id') + "=" + counter++);
+	                newOrder[$(this).attr('id')]=counter++;
 	            });
-	            console.log(order.join('&'));
+	            
+	            $.ajax({
+	            	url:'/tracker/checklist/sort',
+	            	method:'post',
+	            	data:JSON.stringify(newOrder),
+	            	success: function(data)
+	            	{
+	            		
+	            	}
+	            });
 	        }
 	    }
 	}).disableSelection();
@@ -222,6 +232,7 @@ $(function(){
 
     $('.fa-pencil').on('click',function()          //on click edit checklist item
     {
+    	 editingItem=$(this).parents('.checklistItem');                  //get editing items details and place in modal text boxes
         //display modal for editing
         var modal_title='<span>Edit Checklist</span>';
         $('.modal-title').html(modal_title);
@@ -229,47 +240,32 @@ $(function(){
         var modal_body='<form role="form"> ' +
 			               '<div class="form-group"> ' +
 				               '<label class="control-label">Item:</label> ' +
-				               '<input type="text" class="form-control" id="newName" value="'+$(this).parents('.checklistItem').find('.item-name').text().trim()+'"> ' +
+				               '<input type="text" class="form-control" id="newName" value="'+$(editingItem).find('.item-name').text().trim()+'"> ' +
 				            '</div>'+
 				            '<div class="form-group"> ' +
 				               '<label for="message-text" class="control-label">Details:</label> ' +
-				               '<textarea class="form-control" rows="5" id="newDetails">'+$(this).parents('.checklistItem').find('.item-details').text().trim()+'</textarea> ' +
+				               '<textarea class="form-control" rows="5" id="newDetails">'+$(editingItem).find('.item-details').text().trim()+'</textarea> ' +
 			               '</div> ' +
 		               '</form> ';
 
         $('.modal-body').html(modal_body);
-
         $('.checklistItem .fa-times').trigger('click');        //while editing zoomout other checklist items, to avoid overlapping
-
-       editingItem=$(this).parents('.checklistItem');                  //get editing items details and place in modal text boxes
         $('#myModal').modal('show')
                 .on('click','#save',function()              //on clicking submit to finish editing
                 {
-                   /* $(editingItem).find('input[name="item[]"]').val($('#updatedItem').val());       //place back updated values into checklist item
-                    $(editingItem).find('input[name="note[]"]').val($('#updatedNote').val());
-
-                    $(editingItem).find('.item').html($('#updatedItem').val());
-                    $(editingItem).find('.note').html($('#updatedNote').val());
-
-                    $('#modal').modal('hide');          // hide nad remove modal from DOM
-                    $('#addChecklistBtn').attr('id','editChecklistBtn');
-                    var id=$(editingItem).find('input[name="checklistId[]"]').val();*/
-                    
-                    var checklist={name:$('#newName').val(), details:$('#newDetails').val()};
                     $.ajax({                //send updated item values to
                         method:'put',
                         url:'/tracker/checklist/'+$(editingItem).attr('id'),
                         contentType:'application/json',
                         dataType:'json',
-                        data:checklist,
+                        data:JSON.stringify({name:$('#newName').val(), details:$('#newDetails').val()}),
                         success:function(data)
                         {
-                        	console.log(data);
+                        	$(editingItem).find('.item-name').text(data.name);
+                        	$(editingItem).find('.item-details').text(data.details);
                         	$('#myModal').modal('hide');
                         }
                     });
-
-                    //$('#modal').modal('hide');
                 });
     });
 
@@ -282,44 +278,32 @@ $(function(){
 
     $(document).on('click','.fa-trash-o',function()         //on click delete
     {
+    	deletingItem=$(this).parents('.checklistItem');   
     	$('.checklistItem .fa-times').trigger('click');
     	
         //show modal confirmation before delete
         var modal_title='<span>Delete Checklist</span>';
         $('.modal-title').html(modal_title);
         
-        var modal_body='Are you sure? Do you want to delete </br><li>' +$(this).parents('.checklistItem').find('.item-name').text().trim()+ '</li>';
+        var modal_body='Are you sure? Do you want to delete </br><li>' +$(deletingItem).find('.item-name').text().trim()+ '</li>';
         $('.modal-body').html(modal_body);
-
-        var icon=$(this);
         $('#myModal').modal('show')
-                .on('click', '#delete', function (e) {
-
+                .on('click', '#save', function (e) {
                     //send deleted data to database
-                    var id=$(icon).parent().siblings('input[name="checklistId[]"]').val();
                     $.ajax({
-                        url: '/checklists/'+id,
+                        url: '/tracker/checklist/'+$(deletingItem).attr('id'),
                         type:'delete',
                         success: function (data)
                         {
-                            //decrease order of elements next to deleted item
-                            $(icon).parents('.checklistItem').nextAll().find('input[name="order[]"]').each(function()
-                            {
-                                $(this).val(parseInt($(this).val())-1);
-                            });
-                            $(icon).parents('.col-sm-4').nextAll('.col-sm-4').find('input[name="order[]"]').each(function()
-                            {
-                                $(this).val(parseInt($(this).val())-1);
-                            });
-                            $(icon).parent().parent().remove();     //remove item from UI
-                            $.ajax({                    //send sorted items order to database
+                        	$(deletingItem).remove();     //remove item from UI
+                           /* $.ajax({                    //send sorted items order to database
                                 type:'PUT',
                                 url:'/checklists/1',
                                 data:$('form').serialize(),
                                 success:function(data)
                                 {
                                 }
-                            });
+                            });*/
                         }
                     });
 

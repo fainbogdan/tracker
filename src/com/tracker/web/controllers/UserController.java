@@ -7,15 +7,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.tracker.web.models.User;
-import com.tracker.web.service.TrackerService;
+import com.tracker.web.service.EventService;
 
 @Controller
 public class UserController {
 
-	private TrackerService service;
+	private EventService service;
 
 	@Autowired
-	public void setService(TrackerService service) {
+	public void setService(EventService service) {
 		this.service = service;
 	}
 	

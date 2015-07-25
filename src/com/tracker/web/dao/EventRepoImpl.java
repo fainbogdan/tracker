@@ -1,25 +1,20 @@
 package com.tracker.web.dao;
 
 import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
-import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Restrictions;
-import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import com.tracker.web.models.Checklist;
 import com.tracker.web.models.Event;
 
 @Repository
-public class TrackerRepoImpl implements TrackerRepo {
+public class EventRepoImpl implements EventRepo {
 
 	private SessionFactory sessionFactory;
 	
@@ -35,11 +30,6 @@ public class TrackerRepoImpl implements TrackerRepo {
 	@Override
 	public void save(Event event) {
 		getCurrentSession().save(event);
-	}
-
-	@Override
-	public void save(Checklist checklist) {
-		getCurrentSession().save(checklist);
 	}
 
 	@Override
@@ -65,9 +55,4 @@ public class TrackerRepoImpl implements TrackerRepo {
 		return (List<Event>) criteria.list();
 	}
 
-	@Override
-	public Checklist update(Checklist checklist) {
-		getCurrentSession().update(checklist);
-		return (Checklist) getCurrentSession().get(Checklist.class,checklist.getId());
-	}
 }
