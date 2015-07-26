@@ -26,7 +26,7 @@
 	<div class="row">
 	    <div class="col-md-4">
 	        <h3>Setup phase</h3>
-	        <div id="sortable1" class="sortable connectedSortable">
+	        <div id="sortable1" class="sortable connectedSortable"  phase='setup' event_id='<c:out value="${event.getId() }" />'>
 	        	<c:forEach items="${event.getChecklist() }" var="checklist">
 	        		<c:if test="${checklist.getPhase()=='setup' }">
 	        			<div class='checklistItem' id='<c:out value="${checklist.getId() }" />'> 
@@ -68,10 +68,10 @@
 	    </div>
 	    <div class="col-md-4">
 	        <h3>execute phase</h3>
-	        <div id="sortable2" class="sortable connectedSortable">
+	        <div id="sortable2" class="sortable connectedSortable"  phase="execute" event_id='<c:out value="${event.getId() }" />'>
 	            <c:forEach items="${event.getChecklist() }" var="checklist">
 	        		<c:if test="${checklist.getPhase()=='execute' }">
-	        			<div class='checklistItem' id='<c:out value="${checklist.getId() }" />'> 
+	        			<div class='checklistItem' id='<c:out value="${checklist.getId() }" />' > 
 	        				<div class="row checklistItem-header">
 	        					<div class="col-md-6 item-name">
 		        					<c:choose>
@@ -110,10 +110,10 @@
 	    </div>
 	    <div class="col-md-4">
 	        <h3>teardown phase</h3>
-	        <div id="sortable3" class="sortable connectedSortable">
+	        <div id="sortable3" class="sortable connectedSortable"  phase="teardown" event_id='<c:out value="${event.getId() }" />'>
 	           <c:forEach items="${event.getChecklist() }" var="checklist">
 	        		<c:if test="${checklist.getPhase()=='teardown' }">
-	        			<div class='checklistItem' id='<c:out value="${checklist.getId() }" />'> 
+	        			<div class='checklistItem' id='<c:out value="${checklist.getId() }" />' > 
 	        				<div class="row checklistItem-header">
 	        					<div class="col-md-6 item-name">
 		        					<c:choose>
@@ -180,8 +180,28 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 <script data-require="bootstrap" data-semver="3.3.2" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <script type="text/javascript">
+	function sort()
+	{
+		var order = [], counter = 1;
+	    $('.sortable .checklistItem').each(function () {
+	       var data=new Object();
+	       data["id"]=$(this).attr('id');
+	       data["item_order"]=counter++;
+	       data["phase"]=$(this).parents('.sortable').attr('phase');
+	       order.push(data);
+	    });
+	    
+	    $.ajax({
+	    	url:'/tracker/checklist/sort',
+	    	method:'post',
+	    	contentType:'application/json',
+	    	dataType:'json',
+	    	data:JSON.stringify(order),
+	    });
+	}
+	
 $(function(){
-
+	
 	$('.sortable').sortable({
 	    connectWith: ".connectedSortable",
 	    cursor: "move",
@@ -192,25 +212,11 @@ $(function(){
 	    update: function (event, ui) {
 	        if (this === ui.item.parent()[0])
 	        {
-	            var order = [], counter = 1;
-	            var newOrder=new Object();
-	            $('.sortable .checklistItem').each(function () {
-	               // order.push($(this).attr('id') + "=" + counter++);
-	                newOrder[$(this).attr('id')]=counter++;
-	            });
-	            
-	            $.ajax({
-	            	url:'/tracker/checklist/sort',
-	            	method:'post',
-	            	data:JSON.stringify(newOrder),
-	            	success: function(data)
-	            	{
-	            		
-	            	}
-	            });
+	            sort();
 	        }
 	    }
 	}).disableSelection();
+	
 	
 	$(document).on('click','.fa-ellipsis-h',function()  //on clicking dots icon zoom the div and show other details of item
     {
@@ -230,7 +236,8 @@ $(function(){
         $(this).parents('.checklistItem').offset({top:'75',left:window.innerWidth*0.15})
     });
 
-    $('.fa-pencil').on('click',function()          //on click edit checklist item
+	
+    $(document).on('click','.fa-pencil',function()          //on click edit checklist item
     {
     	 editingItem=$(this).parents('.checklistItem');                  //get editing items details and place in modal text boxes
         //display modal for editing
@@ -269,6 +276,7 @@ $(function(){
                 });
     });
 
+    
     $(document).on('click','.fa-times',function(e)          //zoom out div to hide details
     {
     	$(this).parents('.checklistItem').find('.checklistItem-body').hide();
@@ -276,6 +284,7 @@ $(function(){
       	$(this).removeClass('fa-times').addClass('fa-ellipsis-h'). parents('.checklistItem').css({'width':'','height':'','left':'','top':''}).removeClass('zoom no-sort');
     });
 
+    
     $(document).on('click','.fa-trash-o',function()         //on click delete
     {
     	deletingItem=$(this).parents('.checklistItem');   
@@ -293,24 +302,17 @@ $(function(){
                     $.ajax({
                         url: '/tracker/checklist/'+$(deletingItem).attr('id'),
                         type:'delete',
-                        success: function (data)
-                        {
-                        	$(deletingItem).remove();     //remove item from UI
-                           /* $.ajax({                    //send sorted items order to database
-                                type:'PUT',
-                                url:'/checklists/1',
-                                data:$('form').serialize(),
-                                success:function(data)
-                                {
-                                }
-                            });*/
-                        }
+                    }).done(function(data){
+                    	$(deletingItem).remove();     //remove item from UI
+                        $('#myModal').modal('hide');
+                    	
+                    }).done(function(){
+                    	sort();
                     });
-
-                    $('#modal').modal('hide');
                 });
     });
 
+    
     $(document).on('click','.newChecklistItem',function()
     {
         //show modal to enter new item details
@@ -331,57 +333,52 @@ $(function(){
         $('.modal-body').html(modal_body);
         
         $('.checklistItem .fa-times').trigger('click');        //zoom out other divs to avoid overlapping
-        addToGroup=$(this).parents('.col-sm-4');
+        var addToGroup=$(this).parent().prev('.sortable');
 
         $('#myModal').modal('show')
-                .on('click','#addChecklistBtn',function()
+                .on('click','#save',function()
                 {
-                    if($.trim($('#updatedItem').val())!="")         //check if modal values are empty
+                    if($.trim($('#newName').val())!="")         //check if modal values are empty
                     {
-                        $(addToGroup).nextAll().find('input[name="order[]"]').each(function()
-                        {
-                            $(this).val(1+parseInt($(this).val()));         //increase order of items next to new item
-                        });
-
-                        //create new item
-                        var newOrder=($(addToGroup).find('input[name="order[]"]').length) + ($(addToGroup).prevAll().find('input[name="order[]"]').length) +1;
-                        var x="<div class='form-group checklistItem'> " +
-                                "<input type='hidden' name='checklistId[]'>"+
-                                "<input type='hidden' value='"+$('#updatedItem').val()+"' name='item[]' > " +
-                                "<input type='hidden' value='"+newOrder+ "' name='order[]'>"+
-                                "<input type='hidden' value='" +$(addToGroup).find('.connectedSortable').attr('phase')+ "' name='phase[]'>"+
-                                "<input type='hidden' value='" +$('#updatedNote').val()+"' name='note[]'>" +
-                                "<div class='col-sm-6'> " +
-                                "<div class='item'>"+$('#updatedItem').val()+"</div>"+
-                                "<div class='note' style='display:none;'>"+$('#updatedNote').val()+"</div>"+
-                                "</div> " +
-                                "<div class='col-sm-2 icon-top-padding'> " +
-                                "<i class='fa fa-pencil fa-lg pointer'></i>"+
-                                "</div> " +
-                                "<div class='col-sm-2 .icon-top-padding'>"+
-                                "<i class='fa fa-trash-o fa-lg pointer'></i>"+
-                                "</div>"+
-                                "<div class='col-sm-2 .icon-top-padding'>"+
-                                "<i class='fa fa-ellipsis-h fa-lg pointer'></i>"+
-                                "</div>"+
-                                "</div>";
-
-                        //add new item to the group from which the add button is clicked
-                        var ele=$(x).appendTo($(addToGroup).find('.connectedSortable'));
-                        $('#modal').modal('hide');
-
-                        //send new item to database
+                    	//send new item to database
                         $.ajax({
-                            type:'post',
-                            url:'/checklists',
-                            data:{event_id:"{{$event->id}}",item:ele.find('input[name="item[]"]').val(),order:ele.find('input[name="order[]"]').val(),phase:ele.find('input[name="phase[]"]').val(),note:ele.find('input[name="note[]"]').val()},
+                        	method:'post',
+                            url:'/tracker/checklist/',
+                            contentType:'application/json',
+                            dataType:'json',
+                            data:JSON.stringify({event_id:$(addToGroup).attr('event_id'), name:$('#newName').val(), details:$('#newDetails').val(), phase:$(addToGroup).attr('phase')}),
                             success:function(data)
                             {
-                                $(ele).find('input[name="checklistId[]"]').val(data);
+                            	var x='<div class="checklistItem" id="'+data.id+'" >'+
+		    	        				'<div class="row checklistItem-header">'+
+		    	        					'<div class="col-md-6 item-name">'+
+		    		        					data.name
+		    	        					'</div>'+
+		    		        				'<div class="col-md-2 text-right">'+
+		    		        					'<i class="fa fa-lg fa-pencil"></i>'+
+		    		        				'</div>'+
+		    		        				'<div class="col-md-2 text-right">'+
+		    		        					'<i class="fa fa-lg fa-trash-o"></i>'+
+		    		        				'</div>'+
+		    		        				'<div class="col-md-2 text-right">'+
+		    			        				'<i class="fa fa-lg fa-ellipsis-h"></i>'+
+		    		        				'</div>'+
+		    	        				'</div>'+
+		    	        				
+		    	        				'<div class="row checklistItem-body">'+
+		    	        					'<div class="col-sm-12">'+
+		    	        						'<h5><strong>Deatils:</strong></h5>'+
+		    	        						'<span class="item-details">'+data.details+'</span>'+
+		    	        					'</div>'+
+		    	        				'</div>'+
+		    	        			'</div>';
+
+			                        //add new item to the group from which the add button is clicked
+			                        $(addToGroup).append(x);
+			                        sort();
+			                        $('#myModal').modal('hide');
                             }
                         });
-
-                        $('#modal').modal('hide');
                     }
                     else            //if modal values are empty . display as error
                     {
