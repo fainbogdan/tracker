@@ -84,7 +84,20 @@
 					<ul class="list-group">
 						<c:forEach items="${event.getChecklist() }" var="checklist">
 							<c:if test="${checklist.getPhase()=='setup' }">
-								<li class="list-group-item"><i class="fa fa-circle-o fa-2x fa-fw checklist-icon"></i> <c:out value="${checklist.getName() }" /></li>
+								<li class="list-group-item" checklist-id='<c:out value="${checklist.getId() }" />'>
+									<c:choose>
+										<c:when test="${checklist.getCompleted() eq 'Y' }">
+											<i class="fa fa-check-circle fa-2x fa-fw checklist-icon"></i>
+										</c:when>
+										<c:when test="${checklist.getCompleted() eq 'N' }">
+											<i class="fa fa-times-circle fa-2x fa-fw checklist-icon"></i>
+										</c:when>
+										<c:otherwise>
+											<i class="fa fa-circle-o fa-2x fa-fw checklist-icon"></i>
+										</c:otherwise>
+									</c:choose>
+									<c:out value="${checklist.getName() }" />
+								</li>
 							</c:if>
 						</c:forEach>
 					</ul>
@@ -99,7 +112,20 @@
 					<ul class="list-group">
 						<c:forEach items="${event.getChecklist() }" var="checklist">
 							<c:if test="${checklist.getPhase()=='execute' }">
-								<li class="list-group-item"><i class="fa fa-circle-o fa-2x fa-fw checklist-icon"></i> <c:out value="${checklist.getName() }" /></li>
+								<li class="list-group-item" checklist-id='<c:out value="${checklist.getId() }" />'>
+									<c:choose>
+										<c:when test="${checklist.getCompleted() eq 'Y' }">
+											<i class="fa fa-check-circle fa-2x fa-fw checklist-icon"></i>
+										</c:when>
+										<c:when test="${checklist.getCompleted() eq 'N' }">
+											<i class="fa fa-times-circle fa-2x fa-fw checklist-icon"></i>
+										</c:when>
+										<c:otherwise>
+											<i class="fa fa-circle-o fa-2x fa-fw checklist-icon"></i>
+										</c:otherwise>
+									</c:choose>
+									<c:out value="${checklist.getName() }" />
+								</li>
 							</c:if>
 						</c:forEach>
 					</ul>
@@ -114,7 +140,20 @@
 					<ul class="list-group">
 						<c:forEach items="${event.getChecklist() }" var="checklist">
 							<c:if test="${checklist.getPhase()=='teardown' }">
-								<li class="list-group-item"><i class="fa fa-circle-o fa-2x fa-fw checklist-icon"></i> <c:out value="${checklist.getName() }" /></li>
+								<li class="list-group-item" checklist-id='<c:out value="${checklist.getId() }" />'>
+									<c:choose>
+										<c:when test="${checklist.getCompleted() eq 'Y' }">
+											<i class="fa fa-check-circle fa-2x fa-fw checklist-icon"></i>
+										</c:when>
+										<c:when test="${checklist.getCompleted() eq 'N' }">
+											<i class="fa fa-times-circle fa-2x fa-fw checklist-icon"></i>
+										</c:when>
+										<c:otherwise>
+											<i class="fa fa-circle-o fa-2x fa-fw checklist-icon"></i>
+										</c:otherwise>
+									</c:choose>
+									<c:out value="${checklist.getName() }" />
+								</li>
 							</c:if>
 						</c:forEach>
 					</ul>
@@ -126,4 +165,122 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script data-require="bootstrap" data-semver="3.3.2" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(function()
+{
+	$('.checklist-icon').click(function()
+	{
+		var updatedIcon=$(this);
+		var newState;
+		if($(updatedIcon).hasClass('fa-check-circle'))
+			newState='N';
+		else
+			newState='Y';
+		
+		$(this).addClass('fa-spinner fa-spin');
+		$.ajax({
+			url:'/tracker/checklistState/'+$(this).parents('li').attr('checklist-id'),
+			method:'put',
+			contentType:'application/json',
+			datatype:'json',
+			data:JSON.stringify({"id": $(this).parents('li').attr('checklist-id'), "completed":newState}),
+			success:function(data)
+			{
+				if(data.message=="success")
+				{
+					var updatedChecklist=data.checklist;
+					if(updatedChecklist.completed=="Y")
+						$(updatedIcon).removeClass('fa-circle-o fa-times-circle fa-spinner fa-spin').addClass('fa-check-circle');
+					else
+						$(updatedIcon).removeClass('fa-check-circle fa-spinner fa-spin').addClass('fa-times-circle');
+				}
+				else
+				{
+					var alert='<div class="alert alert-danger alert-error"> ' +
+				                    '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
+				                    '<strong>Error!</strong> Cannot start event unless pre event items are completed ' +
+			                    '</div>';
+		            $('body').prepend(alert);
+		            setTimeout(function()
+		            {
+		                $('.alert').remove();
+		            },5000);
+				}
+			}
+		});
+		
+		
+	    /*var icon=$(this);
+	    var phase;
+	    var startDate;
+	    var endDate;
+	
+	    /*checking if event is started before entering inro execute phase. check if event is ended or not before ending into post events */
+	   /* $.getJSON('/checklists/'+$(icon).attr('checklist-id'), {
+	        type: 'json'
+	    }, 
+	    function(data, status, jqxhr) 
+	    {
+	        phase=data.phase;
+	
+	        var event_id ="";
+	                $.getJSON('/events/'+event_id, {
+	                    type: 'json'
+	                }, 
+	                function(data, status, jqxhr) 
+	                {
+	                    startDate=data.actual_start_ago;
+	                    endDate=data.actual_end_ago;
+	
+	                    if(phase=="execute")
+	                    {
+	                        if(startDate!='')
+	                            changeIconState(icon);            //changing state of execute phase items if event started
+	                        else
+	                        {
+	                            //displaying alert on error
+	                            var alert='<div id="alert" class="bs-example" > ' +
+	                                    '<div class="alert alert-danger alert-error"> ' +
+	                                    '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
+	                                    '<strong>Error!</strong> Cannot do this action without Completing setUp and start Event. ' +
+	                                    '</div> ' +
+	                                    '</div>';
+	                            $('body').prepend(alert);
+	                            setTimeout(function()
+	                            {
+	                                $('#alert').remove();
+	                            },5000);
+	                            return false;
+	                        }
+	                    }
+	
+	                    if(phase=="teardown")
+	                    {
+	                        if(endDate!='')     //if event has end date
+	                            changeIconState(icon);   //changing state of post event items if event ended
+	                        else
+	                        {               //if event not ended. show error
+	                            var alert='<div id="alert" class="bs-example" > ' +
+	                                    '<div class="alert alert-danger alert-error"> ' +
+	                                    '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
+	                                    '<strong>Error!</strong> Post-Event items can be done only after completing previous items and end event. ' +
+	                                    '</div> ' +
+	                                    '</div>';
+	                            $('body').prepend(alert);
+	                            setTimeout(function()
+	                            {
+	                                $('#alert').remove();
+	                            },5000);
+	                            return false;
+	                        }
+	                    }
+	                    else
+	                        changeIconState(icon);      //changing state of pre event items.
+	                });
+	    });*/
+	
+	});
+});
+	
+</script>
 </html>

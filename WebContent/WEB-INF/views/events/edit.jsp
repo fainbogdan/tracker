@@ -239,7 +239,7 @@ $(function(){
 	
     $(document).on('click','.fa-pencil',function()          //on click edit checklist item
     {
-    	 editingItem=$(this).parents('.checklistItem');                  //get editing items details and place in modal text boxes
+    	var editingItem=$(this).parents('.checklistItem');                  //get editing items details and place in modal text boxes
         //display modal for editing
         var modal_title='<span>Edit Checklist</span>';
         $('.modal-title').html(modal_title);
@@ -287,7 +287,7 @@ $(function(){
     
     $(document).on('click','.fa-trash-o',function()         //on click delete
     {
-    	deletingItem=$(this).parents('.checklistItem');   
+    	var deletingItem=$(this).parents('.checklistItem');   
     	$('.checklistItem .fa-times').trigger('click');
     	
         //show modal confirmation before delete
@@ -316,7 +316,7 @@ $(function(){
     $(document).on('click','.newChecklistItem',function()
     {
         //show modal to enter new item details
-         var modal_title='<span>Add Checklist</span>';
+        var modal_title='<span>Add Checklist</span>';
         $('.modal-title').html(modal_title);
         
         var modal_body='<form role="form"> ' +
@@ -331,7 +331,6 @@ $(function(){
 		               '</form> ';
 
         $('.modal-body').html(modal_body);
-        
         $('.checklistItem .fa-times').trigger('click');        //zoom out other divs to avoid overlapping
         var addToGroup=$(this).parent().prev('.sortable');
 
@@ -352,7 +351,7 @@ $(function(){
                             	var x='<div class="checklistItem" id="'+data.id+'" >'+
 		    	        				'<div class="row checklistItem-header">'+
 		    	        					'<div class="col-md-6 item-name">'+
-		    		        					data.name
+		    		        					data.name+
 		    	        					'</div>'+
 		    		        				'<div class="col-md-2 text-right">'+
 		    		        					'<i class="fa fa-lg fa-pencil"></i>'+
@@ -364,7 +363,6 @@ $(function(){
 		    			        				'<i class="fa fa-lg fa-ellipsis-h"></i>'+
 		    		        				'</div>'+
 		    	        				'</div>'+
-		    	        				
 		    	        				'<div class="row checklistItem-body">'+
 		    	        					'<div class="col-sm-12">'+
 		    	        						'<h5><strong>Deatils:</strong></h5>'+
@@ -387,9 +385,9 @@ $(function(){
                 });
     });
 
-    /* $(document).on('hidden.bs.modal','#modal', function () {
-        $(this).remove();           //remove modal from DOM on hidden
-    })*/
+    $(document).on('hidden.bs.modal','#myModal', function () {
+        $('.modal-body').empty();
+    })
 
 });
 </script>

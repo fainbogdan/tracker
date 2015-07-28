@@ -1,9 +1,11 @@
 package com.tracker.web.dao;
 
 import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
@@ -11,6 +13,8 @@ import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.tracker.web.models.Checklist;
 import com.tracker.web.models.Event;
 
 @Repository

@@ -212,3 +212,16 @@ a.link
 {
 	display: none;
 }
+
+.fa-check-circle
+{
+	color: green;
+}
+.fa-times-circle
+{
+	color: #d9534f;
+}
+.alert
+{
+    position: absolute;top:4em;left: 30%; z-index: 1000;
+}

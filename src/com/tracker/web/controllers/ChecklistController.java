@@ -1,8 +1,6 @@
 package com.tracker.web.controllers;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -27,9 +25,8 @@ public class ChecklistController {
 	
 	@RequestMapping(value="/checklist",method=RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public Checklist store(@RequestBody Checklist checklist) {
-		System.out.println(checklist.getId());
-		return checklistService.save(checklist);
+	public Checklist store(@RequestBody Map<String, String> map) {
+		return checklistService.save(map);
 	}
 
 	@RequestMapping(value="/checklist/{id}",method=RequestMethod.PUT, consumes=MediaType.APPLICATION_JSON_VALUE , produces=MediaType.APPLICATION_JSON_VALUE)
@@ -38,6 +35,14 @@ public class ChecklistController {
 	{
 		checklist.setId(id);
 		return checklistService.update(checklist);
+	}
+	
+	@RequestMapping(value="/checklistState/{id}", method=RequestMethod.PUT, consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public Map<String, Object> updateState(@RequestBody Checklist checklist, @PathVariable("id") int id) 
+	{
+		checklist.setId(id);
+		return checklistService.updateState(checklist);
 	}
 	
 	@RequestMapping(value="/checklist/{id}", method=RequestMethod.DELETE)

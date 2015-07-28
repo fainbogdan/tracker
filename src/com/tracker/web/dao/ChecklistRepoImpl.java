@@ -4,12 +4,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Conjunction;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.tracker.web.models.Checklist;
+import com.tracker.web.models.Event;
 
 @Repository
 public class ChecklistRepoImpl implements ChecklistRepo{
@@ -25,6 +30,10 @@ public class ChecklistRepoImpl implements ChecklistRepo{
 		return sessionFactory.getCurrentSession();
 	}
 	
+	@Override
+	public Checklist getChecklist(int id) {
+		return (Checklist) getCurrentSession().get(Checklist.class, id);
+	}
 
 	@Override
 	public Checklist save(Checklist checklist) {
@@ -39,6 +48,15 @@ public class ChecklistRepoImpl implements ChecklistRepo{
 		Checklist checklist=(Checklist) session.get(Checklist.class, ch.getId());
 		checklist.setName(ch.getName());
 		checklist.setDetails(ch.getDetails());
+		session.flush();
+		return checklist;
+	}
+	
+	@Override
+	public Checklist updateState(Checklist ch) {
+		Session session=getCurrentSession();
+		Checklist checklist=(Checklist) session.get(Checklist.class, ch.getId());
+		checklist.setCompleted(ch.getCompleted());
 		session.flush();
 		return checklist;
 	}
@@ -63,5 +81,22 @@ public class ChecklistRepoImpl implements ChecklistRepo{
 		}
 
 		return "recieved";
+	}	
+	
+	
+	@Override
+	public boolean arePreviousItemsDone(Checklist ch) {
+		Checklist checklist=getChecklist(ch.getId());
+		Criteria criteria=getCurrentSession().createCriteria(Checklist.class);
+		Criterion criterion1=Restrictions.eq("event", checklist.getEvent());
+		Criterion criterion2=Restrictions.isNull("completed");
+		Criterion criterion3=Restrictions.lt("item_order", checklist.getItem_order());
+		Conjunction conjunction=Restrictions.conjunction(criterion1,criterion2,criterion3);
+		criteria.add(conjunction);
+		if(criteria.list().size()==0)
+			return true;
+		else
+			return false;
 	}
+
 }
