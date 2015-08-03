@@ -3,7 +3,6 @@ package com.tracker.web.dao;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,9 +11,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import com.tracker.web.models.Checklist;
-import com.tracker.web.models.Event;
 
 @Repository
 public class ChecklistRepoImpl implements ChecklistRepo{
@@ -57,6 +54,9 @@ public class ChecklistRepoImpl implements ChecklistRepo{
 		Session session=getCurrentSession();
 		Checklist checklist=(Checklist) session.get(Checklist.class, ch.getId());
 		checklist.setCompleted(ch.getCompleted());
+		if(ch.getSkipped_note()!=null)
+			checklist.setSkipped_note(ch.getSkipped_note());
+		
 		session.flush();
 		return checklist;
 	}

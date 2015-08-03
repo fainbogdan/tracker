@@ -2,14 +2,12 @@ package com.tracker.web.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.tracker.web.dao.ChecklistRepo;
 import com.tracker.web.dao.EventRepo;
 import com.tracker.web.models.Checklist;
@@ -75,11 +73,43 @@ public class EventServiceImpl implements EventService {
 	public Event getEvent(int id) {
 		return eventRepo.getEvent(id);
 	}
+	
+	
+	@Override
+	public List<Event> getEvents() {
+		return eventRepo.getEvents();
+	}
 
 	@Override
-	public List<Event> getEvents(HttpServletRequest request) {
-		String page=request.getParameter("page");
-		return eventRepo.getEvents();
+	public Map<String, Object> eventStart(Event event) {
+		Map<String, Object> data=new HashMap<String, Object>();
+		if(eventRepo.canEventStart(event))
+		{
+			Event updatedEvent=eventRepo.eventStart(event);
+			data.put("event", updatedEvent);
+			data.put("message", "success");
+			return data;
+		}
+			
+		data.put("event", event);
+		data.put("message", "Please complete all setup items before starting event  ");
+		return data;
+	}
+	
+	@Override
+	public Map<String, Object> eventEnd(Event event) {
+		Map<String, Object> data=new HashMap<String, Object>();
+		if(eventRepo.canEventEnd(event))
+		{
+			Event updatedEvent=eventRepo.eventEnd(event);
+			data.put("event", updatedEvent);
+			data.put("message", "success");
+			return data;
+		}
+			
+		data.put("event", event);
+		data.put("message", "Please complete all prior items before ending event  ");
+		return data;
 	}
 
 }

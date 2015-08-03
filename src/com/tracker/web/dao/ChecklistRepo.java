@@ -2,9 +2,7 @@ package com.tracker.web.dao;
 
 import java.util.List;
 import java.util.Map;
-
 import com.tracker.web.models.Checklist;
-import com.tracker.web.models.Event;
 
 public interface ChecklistRepo {
 
@@ -15,4 +13,5 @@ public interface ChecklistRepo {
 	public String sort(List<Map<String, String>> newOrder);
 	public boolean arePreviousItemsDone(Checklist checklist);
 	public Checklist updateState(Checklist checklist);
+
 }

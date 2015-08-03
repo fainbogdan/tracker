@@ -52,17 +52,17 @@
 						<dl>
 							<dt><i class="fa fa-cubes"></i>  Environment</dt> <dd><c:out value="${event.getEnvironment() }" /></dd>
 							<dt><i class="fa fa-user fa-fw"></i> Created By</dt> <dd></dd>
-							<dt><i class="fa fa-calendar fa-fw"></i> Estimated Start</dt> <dd><c:out value="${event.getExpected_start() }" /></dd>
-							<dt><i class="fa fa-user fa-fw"></i> Estimated End</dt> <dd><c:out value="${event.getExpected_end() }" /></dd>
-							<dt><i class="fa fa-clock-o fa-fw"></i> Estimated Duartion</dt> <dd></dd>
+							<dt><i class="fa fa-calendar fa-fw"></i> Estimated Start</dt> <dd><c:out value="${event.getExpected_start().toString('yyyy-MM-dd HH:mm:ss') }" /></dd>
+							<dt><i class="fa fa-user fa-fw"></i> Estimated End</dt> <dd><c:out value="${event.getExpected_end().toString('yyyy-MM-dd HH:mm:ss') }" /></dd>
+							<dt><i class="fa fa-clock-o fa-fw"></i> Estimated Duartion</dt> <dd> <c:out value="${joda.time.Interval(event.getExpected_start(),event.getExpected_end()).toDuration() }" /> minutes </dd>
 						</dl>
 					</div>
 					<div class="col-md-6">
 						<dl>
 							<dt><i class="fa fa-user fa-fw"></i> Started By</dt> <dd></dd>
-							<dt><i class="fa fa-calendar fa-fw"></i> Actual Start</dt> <dd><c:out value="${event.getActual_start() }" /></dd>
-							<dt><i class="fa fa-calendar fa-fw"></i> Actual End</dt> <dd><c:out value="${event.getActual_end() }" /></dd>
-							<dt><i class="fa fa-clock-o fa-fw"></i> Actual Duration</dt><dd></dd>
+							<dt><i class="fa fa-calendar fa-fw"></i> Actual Start</dt> <dd><c:out value="${event.getActual_start().toString('yyyy-MM-dd HH:mm:ss') }" /></dd>
+							<dt><i class="fa fa-calendar fa-fw"></i> Actual End</dt> <dd><c:out value="${event.getActual_end().toString('yyyy-MM-dd HH:mm:ss') }" /></dd>
+							<dt><i class="fa fa-clock-o fa-fw"></i> Actual Duration</dt> <dd><c:out value="${Minutes.minutesBetween(event.getActual_start(),event.getActual_end()).getMinutes()%60 }" /> minutes</dd>
 						</dl>
 					</div>
 				</div>
@@ -104,7 +104,14 @@
 				</div>
 				
 				<div id="start-event">
-					<button class="btn btn-success btn-lg btn-block">Start Event</button>
+					<c:choose>
+						<c:when test="${empty event.getActual_start() }">
+							<button class="btn btn-success btn-lg btn-block" id="start_event_btn" data-loading-text="Starting event..." event_id='<c:out value="${event.getId()}"></c:out>' >Start Event</button>
+						</c:when>
+						<c:otherwise>
+							<h3 class="text-success text-center">Event started at <c:out value="${event.getActual_start().toString('yyyy-MM-dd HH:mm:ss') }" /></h3>
+						</c:otherwise>
+					</c:choose>
 				</div>
 				
 				<div id="during-event">
@@ -132,7 +139,14 @@
 				</div>
 				
 				<div id="end-event">
-					<button class="btn btn-danger btn-lg btn-block">Start Event</button>
+					<c:choose>
+						<c:when test="${empty event.getActual_end() }">
+							<button class="btn btn-danger btn-lg btn-block" id="end_event_btn" data-loading-text="Ending event..." event_id='<c:out value="${event.getId()}"></c:out>' >End Event</button>
+						</c:when>
+						<c:otherwise>
+							<h3 class="text-danger text-center">Event ended at <c:out value="${event.getActual_end().toString('yyyy-MM-dd HH:mm:ss') }" /></h3>
+						</c:otherwise>
+					</c:choose>
 				</div>
 				
 				<div id="post-event">
@@ -161,6 +175,24 @@
 			</div>
 		</div>
 	</div>
+	
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="save" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
 </body>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -171,115 +203,286 @@ $(function()
 	$('.checklist-icon').click(function()
 	{
 		var updatedIcon=$(this);
-		var newState;
+		var goToState;
 		if($(updatedIcon).hasClass('fa-check-circle'))
-			newState='N';
+			goToState='N';
 		else
-			newState='Y';
+			goToState='Y';
 		
-		$(this).addClass('fa-spinner fa-spin');
-		$.ajax({
-			url:'/tracker/checklistState/'+$(this).parents('li').attr('checklist-id'),
-			method:'put',
-			contentType:'application/json',
-			datatype:'json',
-			data:JSON.stringify({"id": $(this).parents('li').attr('checklist-id'), "completed":newState}),
-			success:function(data)
+		if(goToState=='N')
+		{
+			var modal_title='Why you want to skip this item?';
+			$('.modal-title').html(modal_title);
+			var modal_body='<form> ' +
+					            '<div class="form-group"> ' +
+						            '<label for="message-text" class="control-label">Enter your note here</label> ' +
+						            '<textarea rows="5" class="form-control" id="skipNote"></textarea> ' +
+					            '</div> ' +
+				            '</form> ';
+			$('.modal-body').html(modal_body);
+			$('#myModal').modal('show').on('click','#save',function()
 			{
-				if(data.message=="success")
+				if($('#skipNote').val().trim().length)
 				{
-					var updatedChecklist=data.checklist;
-					if(updatedChecklist.completed=="Y")
-						$(updatedIcon).removeClass('fa-circle-o fa-times-circle fa-spinner fa-spin').addClass('fa-check-circle');
-					else
-						$(updatedIcon).removeClass('fa-check-circle fa-spinner fa-spin').addClass('fa-times-circle');
+					$('#myModal').modal('hide');
+					$(updatedIcon).addClass('fa-spinner fa-spin');
+					$.ajax(
+					{
+						url:'/tracker/checklistState/'+$(updatedIcon).parents('li').attr('checklist-id'),
+						method:'put',
+						contentType:'application/json',
+						datatype:'json',
+						data:JSON.stringify({"completed":goToState, skipped_note:$('#skipNote').val().trim()}),
+						success:function(data)
+						{
+							$(updatedIcon).removeClass('fa-spinner fa-spin');
+							var updatedChecklist=data.checklist;
+							if(updatedChecklist.completed=="Y")
+								$(updatedIcon).removeClass('fa-circle-o fa-times-circle').addClass('fa-check-circle');
+							else
+								$(updatedIcon).removeClass('fa-check-circle').addClass('fa-times-circle');
+						}
+					});
 				}
 				else
+					$('#skipNote').parents('.form-group').addClass('has-error');
+			});
+		}
+		else
+		{
+			$(updatedIcon).addClass('fa-spinner fa-spin');
+			$.ajax(
+			{
+				url:'/tracker/checklistState/'+$(updatedIcon).parents('li').attr('checklist-id'),
+				method:'put',
+				contentType:'application/json',
+				datatype:'json',
+				data:JSON.stringify({"completed":goToState}),
+				success:function(data)
 				{
-					var alert='<div class="alert alert-danger alert-error"> ' +
-				                    '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
-				                    '<strong>Error!</strong> Cannot start event unless pre event items are completed ' +
-			                    '</div>';
-		            $('body').prepend(alert);
-		            setTimeout(function()
-		            {
-		                $('.alert').remove();
-		            },5000);
+					$(updatedIcon).removeClass('fa-spinner fa-spin');
+					if(data.message=="success")
+					{
+						var updatedChecklist=data.checklist;
+						if(updatedChecklist.completed=="Y")
+							$(updatedIcon).removeClass('fa-circle-o fa-times-circle').addClass('fa-check-circle');
+						else
+							$(updatedIcon).removeClass('fa-check-circle').addClass('fa-times-circle');
+					}
+					else
+					{
+						var alert='<div class="alert alert-danger alert-error" role="alert"> ' +
+					                    '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
+					                    '<strong>Error!</strong> '+data.message +
+				                    '</div>';
+			            $('body').prepend(alert);
+			            setTimeout(function(){
+			                $('.alert').fadeOut("slow",function(){
+	                			$(this).remove();
+	                		});
+			            },5000);
+					}
+				}
+			});
+		}
+	});
+	
+	$('#start_event_btn').click(function() 
+	{
+		var start_btn = $(this).button('loading');
+		$.ajax(
+		{
+			url:'/tracker/events/'+$(start_btn).attr('event_id')+'/start',
+			method:'put',
+			contentType:'application/json',
+			dataType:'json',
+			data:JSON.stringify({}),
+			success:function(data)
+			{
+				var start=data.event['actual_start'];
+				if(data.message=="success")
+					$(start_btn).parent().html('<h3 class="text-success text-center">Event started at '+start.year+'-'+start.monthOfYear+'-'+start.dayOfMonth+'   '+start.hourOfDay+':'+start.minuteOfHour+':'+start.secondOfMinute+'</h3>');
+				else
+				{
+					$(start_btn).button('reset');
+					var alert='<div class="alert alert-danger alert-error" role="alert"> ' +
+				                    ' <a href="#" class="close" data-dismiss="alert"> &times;</a> ' +
+				                    '<strong>Error!</strong> '+data.message  +
+				                '</div>';
+				    $('body').prepend(alert);
+				    setTimeout(function(){
+				        $('.alert').fadeOut("slow",function(){
+							$(this).remove();
+						});
+				    },5000);
 				}
 			}
 		});
+        
 		
-		
-	    /*var icon=$(this);
-	    var phase;
-	    var startDate;
-	    var endDate;
-	
-	    /*checking if event is started before entering inro execute phase. check if event is ended or not before ending into post events */
-	   /* $.getJSON('/checklists/'+$(icon).attr('checklist-id'), {
-	        type: 'json'
-	    }, 
-	    function(data, status, jqxhr) 
-	    {
-	        phase=data.phase;
-	
-	        var event_id ="";
-	                $.getJSON('/events/'+event_id, {
-	                    type: 'json'
-	                }, 
-	                function(data, status, jqxhr) 
-	                {
-	                    startDate=data.actual_start_ago;
-	                    endDate=data.actual_end_ago;
-	
-	                    if(phase=="execute")
-	                    {
-	                        if(startDate!='')
-	                            changeIconState(icon);            //changing state of execute phase items if event started
-	                        else
-	                        {
-	                            //displaying alert on error
-	                            var alert='<div id="alert" class="bs-example" > ' +
-	                                    '<div class="alert alert-danger alert-error"> ' +
-	                                    '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
-	                                    '<strong>Error!</strong> Cannot do this action without Completing setUp and start Event. ' +
-	                                    '</div> ' +
-	                                    '</div>';
-	                            $('body').prepend(alert);
-	                            setTimeout(function()
-	                            {
-	                                $('#alert').remove();
-	                            },5000);
-	                            return false;
-	                        }
-	                    }
-	
-	                    if(phase=="teardown")
-	                    {
-	                        if(endDate!='')     //if event has end date
-	                            changeIconState(icon);   //changing state of post event items if event ended
-	                        else
-	                        {               //if event not ended. show error
-	                            var alert='<div id="alert" class="bs-example" > ' +
-	                                    '<div class="alert alert-danger alert-error"> ' +
-	                                    '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
-	                                    '<strong>Error!</strong> Post-Event items can be done only after completing previous items and end event. ' +
-	                                    '</div> ' +
-	                                    '</div>';
-	                            $('body').prepend(alert);
-	                            setTimeout(function()
-	                            {
-	                                $('#alert').remove();
-	                            },5000);
-	                            return false;
-	                        }
-	                    }
-	                    else
-	                        changeIconState(icon);      //changing state of pre event items.
-	                });
-	    });*/
-	
+		/*if($('#pre-event .checklist-icon').hasClass('fa-circle-o'))     //check if items before start are completed or not. if not show error
+        {
+            //alert for showing error
+            var alert='<div id="alert" class="bs-example" > ' +
+                    '<div class="alert alert-danger alert-error"> ' +
+                    '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
+                    '<strong>Error!</strong> Cannot start event unless pre event items are completed ' +
+                    '</div> ' +
+                    '</div>';
+            $('body').prepend(alert);
+            setTimeout(function()
+            {
+                $('#alert').remove();
+            },5000);
+        }
+        else            //if completed send start time to database
+        {
+            $(this).hide();
+            var event_id = "";
+                    $.post( '/events/'+event_id , {
+                        _method: 'PUT',
+                        id: event_id,
+                        actual_start: moment().format('YYYY-MM-DD HH:mm:ss'),
+                        executed_by:"{{Confide::user()->id}}"
+                    } , function(data,status,jqxhr){
+                        $('#event_start_display').fadeIn();
+                        $('#event_started_ago').html(data.actual_start_ago);
+
+                    }, 'json');
+        }*/
 	});
+
+	$('#end_event_btn').click(function()
+    {
+		var end_btn = $(this).button('loading');
+		$.ajax(
+		{
+			url:'/tracker/events/'+$(end_btn).attr('event_id')+'/end',
+			method:'put',
+			contentType:'application/json',
+			dataType:'json',
+			data:JSON.stringify({}),
+			success:function(data)
+			{
+				var end=data.event['actual_end'];
+				if(data.message=="success")
+					$(end_btn).parent().html('<h3 class="text-danger text-center">Event ended at '+end.year+'-'+end.monthOfYear+'-'+end.dayOfMonth+'   '+end.hourOfDay+':'+end.minuteOfHour+':'+end.secondOfMinute+'</h3>');
+				else
+				{
+					$(end_btn).button('reset');
+					var alert='<div class="alert alert-danger alert-error" role="alert"> ' +
+				                    ' <a href="#" class="close" data-dismiss="alert"> &times;</a> ' +
+				                    '<strong>Error!</strong> '+data.message  +
+				                '</div>';
+				    $('body').prepend(alert);
+				    setTimeout(function(){
+				        $('.alert').fadeOut("slow",function(){
+							$(this).remove();
+						});
+				    },5000);
+				}
+			}
+		});
+        
+		
+		
+		
+        /*var startdate;
+        var event_id = "";
+                $.getJSON('/events/'+event_id, {        //get start time for an event
+                    type: 'json'
+                }, function(data, status, jqxhr) {
+                    startdate=data.actual_start_ago;
+
+                    if(startdate=='')       //show alert if event is not yet started
+                    {
+                        var alert='<div id="alert" class="bs-example" > ' +
+                                '<div class="alert alert-danger alert-error"> ' +
+                                '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
+                                '<strong>Error!</strong> Complete above Checklist items and start event ' +
+                                '</div> ' +
+                                '</div>';
+                        $('body').prepend(alert);
+                        setTimeout(function()
+                        {
+                            $('#alert').remove();
+                        },5000);
+                        return;
+                    }
+
+                    else    //if event is started
+                    {
+                        if($('#pre-event .checklist-icon').add($('#during-event .checklist-icon')).hasClass('fa-circle-o') || $('#pre-event .checklist-icon').add($('#during-event .checklist-icon')).hasClass('text-danger'))   //check if there are any completed or skipped items in the event
+                        {
+                            //show model to enter reason for ending the event
+                            var x='<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"> ' +
+                                    '<div class="modal-dialog"> ' +
+                                    '<div class="modal-content"> ' +
+                                    '<div class="modal-header"> ' +
+                                    '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> ' +
+                                    '<h4 class="modal-title" id="exampleModalLabel">some of above items not completed/skipped. Reason for ending:</h4> ' +
+                                    '</div> ' +
+                                    '<div class="modal-body"> ' +
+                                    '<form> ' +
+                                    '<div class="form-group"> ' +
+                                    '<label for="message-text" class="control-label">Message:</label> ' +
+                                    '<textarea class="form-control" id="message-text"></textarea> ' +
+                                    '</div> ' +
+                                    '</form> ' +
+                                    '</div> ' +
+                                    '<div class="modal-footer"> ' +
+                                    '<button type="button" class="btn btn-default" data-dismiss="modal" id="cancelnote">Cancel</button> ' +
+                                    '<button type="button" class="btn btn-primary submitNote" id="submitEventNote">Submit</button> ' +
+                                    '</div> ' +
+                                    '</div> ' +
+                                    '</div> ' +
+                                    '</div>';
+
+                            $('body').append(x);
+
+                            $('#modal').modal('show')
+                                    .on('click','#submitEventNote',function()    //event on clicking submit button of modal
+                                    {
+                                        if($.trim($('#modal textarea').val())!="")  //check if text field is modal is empty
+                                        {
+                                            var event_id = "";
+                                                    $.post( '/events/'+event_id , {     //send skipped item note to database
+                                                        _method: 'PUT',
+                                                        id: event_id,
+                                                        actual_end: moment().format('YYYY-MM-DD HH:mm:ss'),
+                                                        execution_note:$('#modal textarea').val()
+                                                    } , function(data,status,jqxhr){
+                                                        $('#event_end_display').fadeIn();
+                                                        $('#event_ended_ago').html(data.actual_end_ago);
+                                                        $('#modal').modal('hide');
+                                                        location.reload();
+                                                    }, 'json');
+                                        }
+                                        else
+                                        {
+                                            $('#modal textarea').addClass('textbox-error');     //check if text field is modal is empty. if empty display error
+                                        }
+
+                                    });
+                        }
+                        else
+                        {
+                            $(this).hide();
+                            var event_id = ";"
+                                    $.post( '/events/'+event_id , {
+                                        _method: 'PUT',
+                                        id: event_id,
+                                        actual_end: moment().format('YYYY-MM-DD HH:mm:ss')
+                                    } , function(data,status,jqxhr){
+                                        $('#event_end_display').fadeIn();
+                                        $('#event_ended_ago').html(data.actual_end_ago);
+                                    }, 'json');
+                        }
+                    }
+                });*/
+
+	});
+
 });
 	
 </script>

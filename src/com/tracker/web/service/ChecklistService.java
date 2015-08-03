@@ -13,4 +13,5 @@ public interface ChecklistService {
 	public String sort(List<Map<String, String>> newOrder);
 	public Checklist save(Map<String, String> map);
 	public Map<String, Object> updateState(Checklist checklist);
+
 }

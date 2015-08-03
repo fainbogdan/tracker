@@ -2,13 +2,9 @@ package com.tracker.web.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-
 import com.tracker.web.dao.ChecklistRepo;
 import com.tracker.web.dao.EventRepo;
 import com.tracker.web.models.Checklist;
@@ -67,7 +63,7 @@ public class ChecklistServiceImpl implements ChecklistService{
 		}
 		
 		data.put("checklist", checklistRepo.getChecklist(ch.getId()));
-		data.put("message", "Please complete all prior checklist items");
+		data.put("message", "Please complete all prior checklist items before this  ");
 		return data;
 	}
 	
@@ -81,5 +77,5 @@ public class ChecklistServiceImpl implements ChecklistService{
 	public String sort(List<Map<String, String>> newOrder) {
 		return checklistRepo.sort(newOrder);
 	}
-
+	
 }
