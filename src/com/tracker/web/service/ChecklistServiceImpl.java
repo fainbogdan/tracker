@@ -39,7 +39,7 @@ public class ChecklistServiceImpl implements ChecklistService{
 		Event event=eventRepo.getEvent(Integer.parseInt(map.get("event_id")));
 		Checklist checklist=new Checklist();
 		checklist.setName(map.get("name"));
-		checklist.setName(map.get("details"));
+		checklist.setDetails(map.get("details"));
 		checklist.setEvent(event);
 		return checklistRepo.save(checklist);
 	}

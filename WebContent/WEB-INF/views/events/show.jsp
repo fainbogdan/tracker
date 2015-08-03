@@ -1,3 +1,5 @@
+<%@page import="org.joda.time.Period"%>
+<%@page import="org.joda.time.Duration"%>
 <%@page import="org.joda.time.LocalDateTime"%>
 <%@page import="org.joda.time.DateTime"%>
 <%@page import="java.util.Date"%>
@@ -37,6 +39,7 @@
 						<i class="fa fa-exclamation-triangle fa-stack-1x"></i>
 					</c:if>
 					<c:set var="expected_start" value="${event.getExpected_start() }"></c:set>
+					<c:set var="expected_end" value="${event.getExpected_end() }"></c:set>
 					<strong class="fa-stack-1x event-date">
 					<% 
 						LocalDateTime date=new LocalDateTime(pageContext.getAttribute("expected_start"));
@@ -54,7 +57,15 @@
 							<dt><i class="fa fa-user fa-fw"></i> Created By</dt> <dd></dd>
 							<dt><i class="fa fa-calendar fa-fw"></i> Estimated Start</dt> <dd><c:out value="${event.getExpected_start().toString('yyyy-MM-dd HH:mm:ss') }" /></dd>
 							<dt><i class="fa fa-user fa-fw"></i> Estimated End</dt> <dd><c:out value="${event.getExpected_end().toString('yyyy-MM-dd HH:mm:ss') }" /></dd>
-							<dt><i class="fa fa-clock-o fa-fw"></i> Estimated Duartion</dt> <dd> <c:out value="${joda.time.Interval(event.getExpected_start(),event.getExpected_end()).toDuration() }" /> minutes </dd>
+							<dt><i class="fa fa-clock-o fa-fw"></i> Estimated Duartion</dt> 
+							<dd>
+								<%
+									LocalDateTime exp_start=new LocalDateTime(pageContext.getAttribute("expected_start"));
+									LocalDateTime exp_end=new LocalDateTime(pageContext.getAttribute("expected_end"));
+									Period exp_period=new Period(exp_start,exp_end);
+									out.print(exp_period.toStandardMinutes().getMinutes());
+								%>
+							 minutes </dd>
 						</dl>
 					</div>
 					<div class="col-md-6">
@@ -62,7 +73,17 @@
 							<dt><i class="fa fa-user fa-fw"></i> Started By</dt> <dd></dd>
 							<dt><i class="fa fa-calendar fa-fw"></i> Actual Start</dt> <dd><c:out value="${event.getActual_start().toString('yyyy-MM-dd HH:mm:ss') }" /></dd>
 							<dt><i class="fa fa-calendar fa-fw"></i> Actual End</dt> <dd><c:out value="${event.getActual_end().toString('yyyy-MM-dd HH:mm:ss') }" /></dd>
-							<dt><i class="fa fa-clock-o fa-fw"></i> Actual Duration</dt> <dd><c:out value="${Minutes.minutesBetween(event.getActual_start(),event.getActual_end()).getMinutes()%60 }" /> minutes</dd>
+							<dt><i class="fa fa-clock-o fa-fw"></i> Actual Duration</dt> 
+							<c:set var="actual_start" value="${event.getActual_start() }"></c:set>
+							<c:set var="actual_end" value="${event.getActual_end() }"></c:set>
+							<dd>
+								<%
+									LocalDateTime act_start=new LocalDateTime(pageContext.getAttribute("actual_start"));
+									LocalDateTime act_end=new LocalDateTime(pageContext.getAttribute("actual_end"));
+									Period act_period=new Period(act_start,act_end);
+									out.print(act_period.toStandardMinutes().getMinutes());
+								%>
+							 minutes </dd>
 						</dl>
 					</div>
 				</div>
@@ -82,7 +103,7 @@
 				<div id="pre-event">
 					<h3>Pre-Event Checklist</h3>
 					<ul class="list-group">
-						<c:forEach items="${event.getChecklist() }" var="checklist">
+						<c:forEach items="${event.getSortedChecklist() }" var="checklist">
 							<c:if test="${checklist.getPhase()=='setup' }">
 								<li class="list-group-item" checklist-id='<c:out value="${checklist.getId() }" />'>
 									<c:choose>
@@ -117,7 +138,7 @@
 				<div id="during-event">
 					<h3>During-Event Checklist</h3>
 					<ul class="list-group">
-						<c:forEach items="${event.getChecklist() }" var="checklist">
+						<c:forEach items="${event.getSortedChecklist() }" var="checklist">
 							<c:if test="${checklist.getPhase()=='execute' }">
 								<li class="list-group-item" checklist-id='<c:out value="${checklist.getId() }" />'>
 									<c:choose>
@@ -152,7 +173,7 @@
 				<div id="post-event">
 					<h3>Post-Event Checklist</h3>
 					<ul class="list-group">
-						<c:forEach items="${event.getChecklist() }" var="checklist">
+						<c:forEach items="${event.getSortedChecklist() }" var="checklist">
 							<c:if test="${checklist.getPhase()=='teardown' }">
 								<li class="list-group-item" checklist-id='<c:out value="${checklist.getId() }" />'>
 									<c:choose>
@@ -200,9 +221,10 @@
 <script type="text/javascript">
 $(function()
 {
-	$('.checklist-icon').click(function()
+	$(document).on('click','.checklist-icon',function()
 	{
 		var updatedIcon=$(this);
+		console.log(updatedIcon);
 		var goToState;
 		if($(updatedIcon).hasClass('fa-check-circle'))
 			goToState='N';
@@ -482,6 +504,10 @@ $(function()
                 });*/
 
 	});
+	
+	$(document).on('hidden.bs.modal','#myModal', function (e) {
+		$(this).unbind();               // removing modal from DOM to avoid caching.
+    })
 
 });
 	

@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name="checklists")
 @DynamicUpdate(value=true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Checklist {
+public class Checklist implements Comparable<Checklist>{
 
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
@@ -138,6 +138,11 @@ public class Checklist {
 
 	public void setEvent(Event event) {
 		this.event = event;
+	}
+
+	@Override
+	public int compareTo(Checklist checklist) {
+		return (this.item_order)-(checklist.getItem_order());
 	}
 	
 }
