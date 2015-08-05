@@ -5,9 +5,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.tracker.web.dao.ChecklistRepo;
 import com.tracker.web.dao.EventRepo;
 import com.tracker.web.models.Checklist;
@@ -30,7 +33,10 @@ public class EventServiceImpl implements EventService {
 		this.checklistRepo = checklistRepo;
 	}
 
-	public void save(Event event) {
+	public int save(Event event) {
+		if(event.getEvent_type().equals("emergency"))
+			event.setActual_start(new LocalDateTime());
+		
 		Checklist plan=new Checklist();
 		plan.setName("plan");
 		plan.setItem_order(1);
@@ -66,7 +72,8 @@ public class EventServiceImpl implements EventService {
 		checklist.add(approve);
 		
 		event.setChecklists(checklist);
-		eventRepo.save(event);
+		int id=eventRepo.save(event);
+		return id;
 	}
 
 	@Override
@@ -110,6 +117,11 @@ public class EventServiceImpl implements EventService {
 		data.put("event", event);
 		data.put("message", "Please complete all prior items before ending event  ");
 		return data;
+	}
+
+	@Override
+	public List<Event> getEmergenciesForToday() {
+		return eventRepo.getEmergenciesForToday();
 	}
 
 }

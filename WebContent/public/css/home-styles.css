@@ -225,3 +225,8 @@ a.link
 {
     position: absolute;top:4em;left: 30%; z-index: 1000;
 }
+.today-emergencies
+{
+	max-height: 15em;
+	overflow-y: scroll;
+}

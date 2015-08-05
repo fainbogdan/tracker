@@ -23,6 +23,7 @@
 </head>
 
 <body>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="../static/layout.jsp" %>
 <div class="container">
     <div class="page-header">
@@ -62,7 +63,18 @@
         </div>
         <div class="col-md-1"></div>
         <div class="col-md-5">
-            <!--calendar goes here -->
+        	<div class="panel panel-info">
+				  <!-- Default panel contents -->
+				  <div class="panel-heading">Events running today</div>
+				  <div class="panel-body">
+				    <p>These events may interfere with the event you create. Make sure your event doesn't fall into such environment and timings</p>
+				  </div>
+	              <ul class="list-group today-emergencies">
+		              <c:forEach items="${emergenciesForToday }" var="event">
+		                  <li class="list-group-item"><c:out value="${event.getName() }" /></li>
+		              </c:forEach>
+	              </ul> 
+            </div>
         </div>
     </div>
 </div>

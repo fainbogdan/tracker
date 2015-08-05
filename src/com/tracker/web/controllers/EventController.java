@@ -62,7 +62,10 @@ public class EventController {
 	{
 		model.addAttribute("event", new Event());
 		if(request.getServletPath().equals("/emergency"))
+		{
+			model.addAttribute("emergenciesForToday", eventService.getEmergenciesForToday());
 			return "pages/emergency";
+		}
 		else
 			return "pages/planned";
 	}
@@ -79,8 +82,8 @@ public class EventController {
 		}
 		else
 		{
-			eventService.save(event);
-			return "pages/index";
+			int id=eventService.save(event);
+			return "redirect:"+ "events/"+id;
 		}
 	}
 	

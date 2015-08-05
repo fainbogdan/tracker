@@ -1,7 +1,6 @@
 package com.tracker.web.dao;
 
 import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,9 +8,7 @@ import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
-import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDateTime;
-import org.joda.time.Minutes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -33,8 +30,9 @@ public class EventRepoImpl implements EventRepo {
 	}
 
 	@Override
-	public void save(Event event) {
-		getCurrentSession().save(event);
+	public int save(Event event) {
+		int id=(int) getCurrentSession().save(event);
+		return id;
 	}
 
 	@Override
@@ -109,6 +107,24 @@ public class EventRepoImpl implements EventRepo {
 			return true;
 		else
 			return false;
+	}
+
+	@Override
+	public List<Event> getEmergenciesForToday() {
+		Session session=getCurrentSession();
+		Criteria criteria=session.createCriteria(Event.class);
+		
+		Criterion criterion=Restrictions.eq("event_type", "emergency");
+		LocalDateTime day_start=new LocalDateTime().withTime(0, 0, 0, 0);
+		LocalDateTime day_end =new LocalDateTime().withTime(23, 59, 59, 0);
+		Criterion exp_start =Restrictions.between("expected_start", day_start, day_end);
+		Criterion exp_end=Restrictions.between("expected_end", day_start, day_end);
+		Criterion act_start=Restrictions.between("actual_start", day_start, day_end);
+		Criterion act_end=Restrictions.between("actual_end", day_start, day_end);
+		
+		Disjunction disjunction=Restrictions.disjunction(criterion,exp_start,exp_end,act_start,act_end);
+		criteria.add(disjunction);
+		return criteria.list();
 	}
 
 }
