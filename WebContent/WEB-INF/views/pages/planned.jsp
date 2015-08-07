@@ -30,7 +30,10 @@
         <h1>Planned <small> Create an Planned event</small></h1>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <!--calendar goes here -->
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
             <mvc:form role="form" method="post" commandName="event">
         		<mvc:input type="hidden" path="event_type" name="event_type" value="planned" />
                 <div class="form-group">
@@ -74,10 +77,6 @@
                     </div>
                 </div>
             </mvc:form>
-        </div>
-        <div class="col-md-1"></div>
-        <div class="col-md-5">
-            <!--calendar goes here -->
         </div>
     </div>
 </div>

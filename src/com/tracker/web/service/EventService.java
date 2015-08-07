@@ -10,5 +10,5 @@ public interface EventService {
 	public List<Event> getEvents();
 	public Map<String, Object> eventStart(Event event);
 	public Map<String, Object> eventEnd(Event event);
-	public List<Event> getEmergenciesForToday();
+	public List<Event> getEventsForToday();
 }

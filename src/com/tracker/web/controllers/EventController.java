@@ -63,7 +63,7 @@ public class EventController {
 		model.addAttribute("event", new Event());
 		if(request.getServletPath().equals("/emergency"))
 		{
-			model.addAttribute("emergenciesForToday", eventService.getEmergenciesForToday());
+			model.addAttribute("emergenciesForToday", eventService.getEventsForToday());
 			return "pages/emergency";
 		}
 		else
@@ -93,6 +93,14 @@ public class EventController {
 		model.addAttribute("event", eventService.getEvent(id));
 		return "events/show";
 	}
+	
+	
+	@RequestMapping(value="/events/{id}/json", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public Event eventInJson(@PathVariable("id") int id) {
+		return eventService.getEvent(id);
+	}
+	
 	
 	@RequestMapping(value="events/{id}/edit",method=RequestMethod.GET)
 	public String edit(Model model,@PathVariable("id") int id) {

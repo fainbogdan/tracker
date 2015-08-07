@@ -27,11 +27,12 @@ a.link
 	background-image: -webkit-linear-gradient(left, #A5C1C5 0%, #FBD871 100%);
 	background-image: linear-gradient(to right, #A5C1C5 0%, #FBD871 100%);
 	border:0.0625em solid #ebebeb;
+	padding: 2em 0 2em 0;
 }
 
-#events-header-box .page-header
+#events-header-box .fa-rocket
 {
-	border: 0em;
+	line-height: 100px;
 }
 
 #index-body .row:nth-child(2) .col-md-3
@@ -90,27 +91,18 @@ a.link
 	font-size: 1.6em;
 }
 
-.event-box-body ul
+.event-box-body
 {
 	background: white;
-	margin: 0em;
 	padding: 0.5em 0.5em 0.5em 1em;
-	color: black;
 	border-left: 0.07em solid #E0E0E0;
 	border-right: 0.07em solid #E0E0E0;
+	line-height: 200%;
 }
-
-.event-box-body li
-{
-	margin: 1em 0 1em 0;
-	list-style: none;
-}
-
 .event-box-footer
 {
 	font-size: 1.25em;
 	background:#DDDFE0;
-	color:#007DBB;
 	padding: 0.625em 0 0.625em 0;
 	border:0.0625em dashed #C2C1C1;	
 	-webkit-border-bottom-right-radius: 7px;
@@ -120,7 +112,6 @@ a.link
 	border-bottom-right-radius: 7px;
 	border-bottom-left-radius: 7px;
 }
-
 .error{
 	color: red;
 }
@@ -225,8 +216,21 @@ a.link
 {
     position: absolute;top:4em;left: 30%; z-index: 1000;
 }
-.today-emergencies
+.list-group.today-emergencies
 {
 	max-height: 15em;
-	overflow-y: scroll;
+	overflow-y: auto;
+	padding: 0 .5em 0 .5em;
+}
+.list-group.today-emergencies .emergency
+{
+	cursor: pointer;
+}
+.list-group.today-emergencies .emergency .fa-exclamation-triangle
+{
+	color: #C9302C;
+}
+.list-group.today-emergencies .emergency .fa-clock-o
+{
+	color: #286090;
 }

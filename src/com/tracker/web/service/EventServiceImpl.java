@@ -120,8 +120,8 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<Event> getEmergenciesForToday() {
-		return eventRepo.getEmergenciesForToday();
+	public List<Event> getEventsForToday() {
+		return eventRepo.getEventsForToday();
 	}
 
 }

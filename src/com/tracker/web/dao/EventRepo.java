@@ -12,5 +12,5 @@ public interface EventRepo {
 	public boolean canEventStart(Event event);
 	public boolean canEventEnd(Event event);
 	public Event eventEnd(Event event);
-	public List<Event> getEmergenciesForToday();
+	public List<Event> getEventsForToday();
 }

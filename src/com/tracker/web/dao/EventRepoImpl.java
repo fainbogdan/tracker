@@ -110,19 +110,19 @@ public class EventRepoImpl implements EventRepo {
 	}
 
 	@Override
-	public List<Event> getEmergenciesForToday() {
+	public List<Event> getEventsForToday() {
 		Session session=getCurrentSession();
 		Criteria criteria=session.createCriteria(Event.class);
 		
-		Criterion criterion=Restrictions.eq("event_type", "emergency");
 		LocalDateTime day_start=new LocalDateTime().withTime(0, 0, 0, 0);
 		LocalDateTime day_end =new LocalDateTime().withTime(23, 59, 59, 0);
-		Criterion exp_start =Restrictions.between("expected_start", day_start, day_end);
-		Criterion exp_end=Restrictions.between("expected_end", day_start, day_end);
-		Criterion act_start=Restrictions.between("actual_start", day_start, day_end);
-		Criterion act_end=Restrictions.between("actual_end", day_start, day_end);
+		Criterion criterion1 =Restrictions.between("expected_start", day_start, day_end);
+		Criterion criterion2=Restrictions.between("expected_end", day_start, day_end);
+		Criterion criterion3=Restrictions.lt("expected_start", day_start);
+		Criterion criterion4=Restrictions.gt("expected_end",day_end);
+		Conjunction conjunction=Restrictions.conjunction(criterion3,criterion4);
 		
-		Disjunction disjunction=Restrictions.disjunction(criterion,exp_start,exp_end,act_start,act_end);
+		Disjunction disjunction=Restrictions.disjunction(criterion1,criterion2,conjunction);
 		criteria.add(disjunction);
 		return criteria.list();
 	}
