@@ -1,0 +1,8 @@
+/**
+ * 
+ */
+
+(function()
+{
+	$('#events-table').dataTable();
+})();

@@ -1,9 +1,7 @@
 package com.tracker.config;
 
 import java.util.Properties;
-
 import javax.sql.DataSource;
-
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -14,14 +12,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages={"com.tracker.web.dao","com.tracker.web.service"},excludeFilters={@Filter(type=FilterType.ANNOTATION,value=EnableWebMvc.class)})
+@ComponentScan(basePackages={"com.tracker.web.dao","com.tracker.web.service", "com.tracker.integrations"},excludeFilters={@Filter(type=FilterType.ANNOTATION,value=EnableWebMvc.class)})
 public class RootConfig {
 
 	@Bean
@@ -63,5 +64,21 @@ public class RootConfig {
 		return new PersistenceExceptionTranslationPostProcessor();
 	}
 
+	@Bean
+	public JavaMailSender mailSender()
+	{
+		JavaMailSenderImpl mailSender=new JavaMailSenderImpl();
+		mailSender.setHost("smtp.gmail.com");
+		mailSender.setPort(587);
+		mailSender.setUsername("lokesh.cherukuri8@gmail.com");
+		mailSender.setPassword("Phani_3030");
+		Properties properties=new Properties();
+		properties.setProperty("mail.transport.protocol", "smtp");
+		properties.setProperty("mail.smtp.auth", "true");
+		properties.setProperty("mail.smtp.starttls.enable", "true");
+		properties.setProperty("mail.debug", "true");
+		mailSender.setJavaMailProperties(properties);
+		return mailSender;
+	}
 	
 }

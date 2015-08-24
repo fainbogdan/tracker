@@ -50,10 +50,8 @@ public class EventRepoImpl implements EventRepo {
 		Criteria criteria=getCurrentSession().createCriteria(Event.class);
 		Criterion exp_start =Restrictions.between("expected_start", week_start, week_end);
 		Criterion exp_end=Restrictions.between("expected_end", week_start, week_end);
-		Criterion act_start=Restrictions.between("actual_start", week_start, week_end);
-		Criterion act_end=Restrictions.between("actual_end", week_start, week_end);
 		
-		Disjunction expression=Restrictions.or(exp_start, exp_end, act_start, act_end);
+		Disjunction expression=Restrictions.disjunction(exp_start, exp_end);
 		criteria.add(expression);
 		return (List<Event>) criteria.list();
 	}
@@ -123,6 +121,22 @@ public class EventRepoImpl implements EventRepo {
 		Conjunction conjunction=Restrictions.conjunction(criterion3,criterion4);
 		
 		Disjunction disjunction=Restrictions.disjunction(criterion1,criterion2,conjunction);
+		criteria.add(disjunction);
+		return criteria.list();
+	}
+
+	@Override
+	public List<Event> getEventsForMonth() {
+		Session session=getCurrentSession();
+		LocalDateTime month_start=new LocalDateTime().withDayOfMonth(1);
+		LocalDateTime month_end=new LocalDateTime(month_start.dayOfMonth().withMaximumValue());
+		Criterion exp_start =Restrictions.between("expected_start", month_start, month_end);
+		Criterion exp_end=Restrictions.between("expected_end", month_start, month_end);
+		Criterion criterion1=Restrictions.lt("expected_start", month_start);
+		Criterion criterion2=Restrictions.gt("expected_end", month_end);
+		Conjunction conjunction=Restrictions.conjunction(criterion1,criterion2);
+		Disjunction disjunction=Restrictions.disjunction(exp_start,exp_end,conjunction);
+		Criteria criteria=session.createCriteria(Event.class);
 		criteria.add(disjunction);
 		return criteria.list();
 	}

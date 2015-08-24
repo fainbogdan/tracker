@@ -13,4 +13,5 @@ public interface EventRepo {
 	public boolean canEventEnd(Event event);
 	public Event eventEnd(Event event);
 	public List<Event> getEventsForToday();
+	public List<Event> getEventsForMonth();
 }

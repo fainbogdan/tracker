@@ -5,7 +5,7 @@ body{
 
 #index-container
 {
-	background: beige;
+	background: #F8F9F9;
 }
 
 #logo:hover,#myNavbar a:hover
@@ -32,7 +32,7 @@ a.link
 
 #events-header-box .fa-rocket
 {
-	line-height: 100px;
+	padding-left: 30px;
 }
 
 #index-body .row:nth-child(2) .col-md-3
@@ -222,15 +222,18 @@ a.link
 	overflow-y: auto;
 	padding: 0 .5em 0 .5em;
 }
-.list-group.today-emergencies .emergency
+.list-group.today-emergencies .event
 {
 	cursor: pointer;
 }
-.list-group.today-emergencies .emergency .fa-exclamation-triangle
+.emergency-type
 {
 	color: #C9302C;
 }
-.list-group.today-emergencies .emergency .fa-clock-o
+.planned-type
 {
 	color: #286090;
+}
+.page-header{
+	margin-top:0px;
 }

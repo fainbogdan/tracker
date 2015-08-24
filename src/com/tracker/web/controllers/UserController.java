@@ -25,6 +25,12 @@ public class UserController {
 		return "pages/register";
 	}
 	
+	@RequestMapping(value="/login", method=RequestMethod.GET)
+	public String login()
+	{
+		return "pages/login";
+	}
+	
 	@RequestMapping(value="register",method=RequestMethod.POST)
 	public String store()
 	{

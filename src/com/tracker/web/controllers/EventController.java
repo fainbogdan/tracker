@@ -1,10 +1,9 @@
 package com.tracker.web.controllers;
 
+import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.http.MediaType;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.tracker.web.models.Event;
 import com.tracker.web.service.EventService;
 
@@ -29,7 +27,7 @@ public class EventController {
 	public void setEventService(EventService eventService) {
 		this.eventService = eventService;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value="events")
 	public String index(Model model,HttpServletRequest request)
@@ -63,20 +61,26 @@ public class EventController {
 		model.addAttribute("event", new Event());
 		if(request.getServletPath().equals("/emergency"))
 		{
-			model.addAttribute("emergenciesForToday", eventService.getEventsForToday());
+			model.addAttribute("eventsForToday", eventService.getEventsForToday());
 			return "pages/emergency";
 		}
 		else
+		{
+			model.addAttribute("eventsForMonth", eventService.getEventsForMonth());
 			return "pages/planned";
+		}
 	}
 	
 	@RequestMapping(value={"emergency","planned"},method=RequestMethod.POST)
-	public String store(@Valid Event event, Errors errors,HttpServletRequest request)
+	public String store(@Valid Event event, Errors errors,Model model,HttpServletRequest request)
 	{
 		if(errors.hasErrors())
 		{
 			if(request.getServletPath().equals("/emergency"))
+			{
+				model.addAttribute("eventsForToday", eventService.getEventsForToday());
 				return "pages/emergency";
+			}
 			else
 				return "pages/planned";
 		}
@@ -99,6 +103,13 @@ public class EventController {
 	@ResponseBody
 	public Event eventInJson(@PathVariable("id") int id) {
 		return eventService.getEvent(id);
+	}
+	
+	@RequestMapping(value="/events/month", method=RequestMethod.GET)
+	@ResponseBody
+	public List<Event> getEventsForMonth()
+	{
+		return eventService.getEventsForMonth();
 	}
 	
 	

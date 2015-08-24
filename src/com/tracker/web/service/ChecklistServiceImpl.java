@@ -2,9 +2,14 @@ package com.tracker.web.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.tracker.integrations.MailService;
 import com.tracker.web.dao.ChecklistRepo;
 import com.tracker.web.dao.EventRepo;
 import com.tracker.web.models.Checklist;
@@ -16,6 +21,12 @@ public class ChecklistServiceImpl implements ChecklistService{
 
 	private ChecklistRepo checklistRepo;
 	private EventRepo eventRepo;
+	private MailService mailService;
+	
+	@Autowired
+	public void setMailService(MailService mailService) {
+		this.mailService = mailService;
+	}
 
 	@Autowired
 	public void setRepo(ChecklistRepo checklistRepo) {
@@ -51,7 +62,7 @@ public class ChecklistServiceImpl implements ChecklistService{
 
 
 	@Override
-	public Map<String, Object> updateState(Checklist ch) 
+	public Map<String, Object> updateState(Checklist ch) throws MessagingException 
 	{
 		Map<String, Object> data=new HashMap<String, Object>();
 		if(checklistRepo.arePreviousItemsDone(ch))
@@ -59,6 +70,7 @@ public class ChecklistServiceImpl implements ChecklistService{
 			Checklist updatedChecklist=checklistRepo.updateState(ch);
 			data.put("checklist", updatedChecklist);
 			data.put("message", "success");
+			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Event updated", updatedChecklist.getEvent());
 			return data;
 		}
 		

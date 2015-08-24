@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+	<definition name="base" template="/WEB-INF/views/layout/page.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/layout/header.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="pages/index" extends="base">
+		<put-attribute name="body" value="/WEB-INF/views/pages/index.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="events/index" extends="base">
+		<put-attribute name="body" value="/WEB-INF/views/events/index.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="pages/emergency" extends="base">
+		<put-attribute name="body" value="/WEB-INF/views/pages/emergency.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="pages/planned" extends="base">
+		<put-attribute name="body" value="/WEB-INF/views/pages/planned.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="events/show" extends="base">
+		<put-attribute name="body" value="/WEB-INF/views/events/show.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="events/edit" extends="base">
+		<put-attribute name="body" value="/WEB-INF/views/events/edit.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="pages/register" extends="base">
+		<put-attribute name="body" value="/WEB-INF/views/pages/register.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="pages/login" extends="base">
+		<put-attribute name="body" value="/WEB-INF/views/pages/login.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>

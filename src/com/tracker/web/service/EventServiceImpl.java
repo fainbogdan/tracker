@@ -124,4 +124,9 @@ public class EventServiceImpl implements EventService {
 		return eventRepo.getEventsForToday();
 	}
 
+	@Override
+	public List<Event> getEventsForMonth() {
+		return eventRepo.getEventsForMonth();
+	}
+
 }

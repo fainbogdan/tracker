@@ -26,6 +26,9 @@ import org.joda.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import customClasses.CustomDateSerializer;
 
 @Entity
 @Table(name="events")
@@ -108,6 +111,7 @@ public class Event {
 		this.event_type = event_type;
 	}
 
+	@JsonSerialize(using=CustomDateSerializer.class)
 	public LocalDateTime getExpected_start() {
 		return expected_start;
 	}
@@ -116,6 +120,7 @@ public class Event {
 		this.expected_start=expected_start;
 	}
 
+	@JsonSerialize(using=CustomDateSerializer.class)
 	public LocalDateTime getExpected_end() {
 		return expected_end;
 	}
@@ -124,6 +129,7 @@ public class Event {
 		this.expected_end=expected_end;
 	}
 
+	@JsonSerialize(using=CustomDateSerializer.class)
 	public LocalDateTime getActual_start() {
 		return actual_start;
 	}
@@ -132,6 +138,7 @@ public class Event {
 		this.actual_start = actual_start;
 	}
 
+	@JsonSerialize(using=CustomDateSerializer.class)
 	public LocalDateTime getActual_end() {
 		return actual_end;
 	}
@@ -176,7 +183,7 @@ public class Event {
 		return creator;
 	}
 
-	public void setUser(User creator) {
+	public void setCreator(User creator) {
 		this.creator = creator;
 	}
 

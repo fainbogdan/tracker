@@ -3,25 +3,30 @@ package com.tracker.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
+import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan("com.tracker.web.controllers")
 public class WebConfig extends WebMvcConfigurerAdapter{
-
+	
 	@Bean
-	public ViewResolver viewResolver()
+	public TilesConfigurer tilesConfigurer()
 	{
-		InternalResourceViewResolver resolver=new InternalResourceViewResolver();
-		resolver.setPrefix("/WEB-INF/views/");
-		resolver.setSuffix(".jsp");
-		resolver.setExposeContextBeansAsAttributes(true);
-		return resolver;
+		TilesConfigurer configurer=new TilesConfigurer();
+		configurer.setDefinitions(new String[] {"/WEB-INF/views/layout/tiles.xml"});
+		configurer.setCheckRefresh(true);
+		return configurer;
+	}
+	
+	@Bean
+	public TilesViewResolver tilesViewResolver()
+	{
+		return new TilesViewResolver();
 	}
 	
 	@Override

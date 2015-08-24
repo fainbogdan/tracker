@@ -1,37 +1,17 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Tracker | Home</title>
-<link rel="icon" type="image/png" href="http://paulferrett.com/fontawesome-favicon/generate.php?icon=rocket">
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <!-- Le styles -->
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <link data-require="bootstrap-css" data-semver="3.3.1" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
-    <link data-require="bootstrap@*" data-semver="3.3.2" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-	<link rel="stylesheet" href="public/css/home-styles.css">
-</head>
-
-
-<body id="index-body">
-<%@ include file="../static/layout.jsp" %>
 <div class="container" id="index-container">
 	
 	<div class="row" id="events-header-box">
-		<div class="col-lg-1 col-md-1 col-sm-1 col-xs-2"><i class="fa fa-rocket fa-4x"></i></div>
-		<div class="col-lg-11 col-md-11 col-sm-11 col-xs-10">
-			<h1>Tracker</h1>
-			<span>Track the progress of everything you do with your system's</span>
-		</div>
+		<ul class="media-list">
+		  <li class="media">
+		    <div class="media-left">
+		      <i class="fa fa-rocket fa-4x media-object"></i>
+		    </div>
+		    <div class="media-body">
+		      <h1 class="media-heading">Tracker</h1>
+		      <h5>Track the progress of everything you do with your system's</h5>
+		    </div>
+		  </li>
+		</ul>
 	</div>
 	
 	<div class="row">
@@ -45,7 +25,7 @@
 				</div>
 				<div class="event-box-body text-left text-muted">
 					Use this to create an emergency event with accelerated workflow. These events start immediately as they are created. 
-					Users can dynamic checklist items as required. Ex: Systems restart, break-fix.
+					Users can add checklist items as required. Ex: Restart, break-fix.
 				</div>
 				<div class="event-box-footer text-center">
 					<span>Start Event</span>
@@ -80,7 +60,7 @@
 					<span class="event-box-title">Execute</span>
 				</div>
 				<div class="event-box-body text-left text-muted">
-					Use this to start an event that is already created. You can also search for old events. Edit or add pre-written checklist items.
+					Use this to start an event that is already created. Search for old events. Edit or add pre-written checklist items.
 					Change the order of items. Watch or unwatch in events that are created by other users.
 				</div>
 				<div class="event-box-footer text-center">
@@ -111,8 +91,3 @@
 	</div>
 	
 </div>	
-</body>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script data-require="bootstrap" data-semver="3.3.2" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-</html>

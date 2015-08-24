@@ -11,4 +11,5 @@ public interface EventService {
 	public Map<String, Object> eventStart(Event event);
 	public Map<String, Object> eventEnd(Event event);
 	public List<Event> getEventsForToday();
+	public List<Event> getEventsForMonth();
 }

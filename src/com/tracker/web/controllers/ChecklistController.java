@@ -1,6 +1,9 @@
 package com.tracker.web.controllers;
 import java.util.List;
 import java.util.Map;
+
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -39,7 +42,7 @@ public class ChecklistController {
 	
 	@RequestMapping(value="/checklistState/{id}", method=RequestMethod.PUT, consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public Map<String, Object> updateState(@RequestBody Checklist checklist, @PathVariable("id") int id) 
+	public Map<String, Object> updateState(@RequestBody Checklist checklist, @PathVariable("id") int id) throws MessagingException 
 	{
 		checklist.setId(id);
 		return checklistService.updateState(checklist);

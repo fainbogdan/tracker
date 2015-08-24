@@ -54,6 +54,7 @@
         <mapping class="com.tracker.web.models.User" />
         <mapping class="com.tracker.web.models.Event" />
         <mapping class="com.tracker.web.models.Checklist" />
+        <mapping class="com.tracker.web.models.Role" />
         
 
     </session-factory>
