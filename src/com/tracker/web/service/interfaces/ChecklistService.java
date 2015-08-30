@@ -1,4 +1,4 @@
-package com.tracker.web.service;
+package com.tracker.web.service.interfaces;
 
 import java.util.List;
 import java.util.Map;

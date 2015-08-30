@@ -1,24 +1,25 @@
 package com.tracker.web.controllers;
 
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import com.tracker.web.models.User;
-import com.tracker.web.service.EventService;
+import com.tracker.web.service.interfaces.UserService;
 
 @Controller
 public class UserController {
 
-	private EventService service;
-
-	@Autowired
-	public void setService(EventService service) {
-		this.service = service;
-	}
+	private UserService userService;
 	
+	@Autowired
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
 	@RequestMapping(value="/register",method=RequestMethod.GET)
 	public String create(Model model) {
 		model.addAttribute("user", new User());
@@ -32,8 +33,12 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="register",method=RequestMethod.POST)
-	public String store()
+	public String store(@Valid User user, Errors errors)
 	{
-		return "pages/index";
+		if(errors.hasErrors())
+			return "pages/register";
+
+		userService.register(user);
+		return "redirect:pages/login";
 	}
 }

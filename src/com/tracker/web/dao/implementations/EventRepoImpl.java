@@ -1,6 +1,7 @@
-package com.tracker.web.dao;
+package com.tracker.web.dao.implementations;
 
 import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,6 +13,7 @@ import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.tracker.web.dao.interfaces.EventRepo;
 import com.tracker.web.models.Checklist;
 import com.tracker.web.models.Event;
 
@@ -107,6 +109,7 @@ public class EventRepoImpl implements EventRepo {
 			return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Event> getEventsForToday() {
 		Session session=getCurrentSession();
@@ -125,6 +128,7 @@ public class EventRepoImpl implements EventRepo {
 		return criteria.list();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Event> getEventsForMonth() {
 		Session session=getCurrentSession();

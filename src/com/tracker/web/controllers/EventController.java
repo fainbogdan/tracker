@@ -2,30 +2,52 @@ package com.tracker.web.controllers;
 
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.tracker.web.models.Event;
-import com.tracker.web.service.EventService;
+import com.tracker.web.service.implementations.UserServiceImpl.CustomUser;
+import com.tracker.web.service.interfaces.EventService;
+import com.tracker.web.service.interfaces.UserService;
 
 @Controller
 public class EventController {
 
 	private EventService eventService;
+	private UserService userService;
 
+	@Autowired
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+	
 	@Autowired
 	public void setEventService(EventService eventService) {
 		this.eventService = eventService;
+	}
+	
+	@ModelAttribute("loggeduser")
+	public CustomUser currentUser()
+	{
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		CustomUser customUser=(CustomUser) userService.loadUserByUsername(auth.getName());
+		return customUser;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -66,7 +88,6 @@ public class EventController {
 		}
 		else
 		{
-			model.addAttribute("eventsForMonth", eventService.getEventsForMonth());
 			return "pages/planned";
 		}
 	}

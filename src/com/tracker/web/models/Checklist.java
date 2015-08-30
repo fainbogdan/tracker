@@ -1,17 +1,24 @@
 package com.tracker.web.models;
 
 import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.joda.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -26,12 +33,26 @@ public class Checklist implements Comparable<Checklist>{
 
 	private int item_order;
 	private String name;
+	
+	@Type(type="text")
 	private String details;
+	
 	private String phase;
 	private String completed;
+	
+	@Type(type="text")
 	private String skipped_note;
-	private Date completed_on;
-	private int completed_by;
+	
+	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+	private LocalDateTime completed_on;
+	
+	@OneToOne
+	@JoinColumn(name="created_by")
+	private User creator;
+	
+	@OneToOne
+	@JoinColumn(name="completed_by")
+	private User finisher;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreationTimestamp
@@ -100,20 +121,28 @@ public class Checklist implements Comparable<Checklist>{
 		this.skipped_note = skipped_note;
 	}
 
-	public Date getCompleted_on() {
+	public LocalDateTime getCompleted_on() {
 		return completed_on;
 	}
 
-	public void setCompleted_on(Date completed_on) {
+	public void setCompleted_on(LocalDateTime completed_on) {
 		this.completed_on = completed_on;
 	}
-
-	public int getCompleted_by() {
-		return completed_by;
+	
+	public User getCreator() {
+		return creator;
 	}
 
-	public void setCompleted_by(int completed_by) {
-		this.completed_by = completed_by;
+	public void setCreator(User creator) {
+		this.creator = creator;
+	}
+
+	public User getFinisher() {
+		return finisher;
+	}
+
+	public void setFinisher(User finisher) {
+		this.finisher = finisher;
 	}
 
 	public Date getCreated_at() {

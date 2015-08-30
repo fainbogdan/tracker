@@ -1,7 +1,9 @@
 package com.tracker.config;
 
 import java.util.Properties;
+
 import javax.sql.DataSource;
+
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -17,6 +19,8 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 
@@ -76,9 +80,15 @@ public class RootConfig {
 		properties.setProperty("mail.transport.protocol", "smtp");
 		properties.setProperty("mail.smtp.auth", "true");
 		properties.setProperty("mail.smtp.starttls.enable", "true");
-		properties.setProperty("mail.debug", "true");
 		mailSender.setJavaMailProperties(properties);
 		return mailSender;
+	}
+	
+	@Bean
+	public MultipartResolver multipartResolver()
+	{
+		StandardServletMultipartResolver multipartResolver=new StandardServletMultipartResolver();
+		return multipartResolver;
 	}
 	
 }

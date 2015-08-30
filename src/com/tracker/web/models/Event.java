@@ -42,6 +42,7 @@ public class Event {
 	private String name;
 	
 	@NotBlank
+	@Type(type="text")
 	private String description;
 	
 	private String event_type;

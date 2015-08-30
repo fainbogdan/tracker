@@ -10,17 +10,26 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Transient;
+import javax.validation.constraints.Size;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.tracker.web.validations.FieldMatch;
+
 @Entity
 @Table(name="users")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "username")
+@FieldMatch(first = "password", second = "repassword",message = "The password fields must match")
 public class User{
 
 	@Id
-	@NotNull
+	@NotBlank
+	@Size(min=5,max=15)
 	@Column(name="username", unique=true)
 	private String username;
 	
@@ -28,8 +37,12 @@ public class User{
 	private String first_name;
 	@NotBlank
 	private String last_name;
-	@NotNull
+	@NotBlank
 	private String password;
+	
+	@NotBlank
+	@Transient
+	private String repassword;
 	@NotBlank
 	private String email;
 	@NotBlank
@@ -96,6 +109,14 @@ public class User{
 		this.password = password;
 	}
 
+	public String getRepassword() {
+		return repassword;
+	}
+
+	public void setRepassword(String repassword) {
+		this.repassword = repassword;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -150,5 +171,10 @@ public class User{
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+	
+	public String fullname()
+	{
+		return getFirst_name()+" "+getLast_name();
 	}
 }

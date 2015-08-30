@@ -129,7 +129,7 @@ a.link
 	vertical-align: middle;
 }
 
-.checklist-icon,.watcher-icon,.edit-checklist-icon{
+.pointer{
 	cursor: pointer;
 }
 
@@ -195,10 +195,6 @@ a.link
 {
 	margin-top: 3em;
 }
-.sortable .fa-pencil,.sortable .fa-trash-o,.sortable .fa-ellipsis-h,.sortable .fa-times
-{
-	cursor: pointer;
-}
 .checklistItem-body
 {
 	display: none;
@@ -222,10 +218,6 @@ a.link
 	overflow-y: auto;
 	padding: 0 .5em 0 .5em;
 }
-.list-group.today-emergencies .event
-{
-	cursor: pointer;
-}
 .emergency-type
 {
 	color: #C9302C;
@@ -236,4 +228,11 @@ a.link
 }
 .page-header{
 	margin-top:0px;
+	padding-bottom: 0px;
+}
+.page-header li{
+	list-style: none;
+}
+#attachedFiles,#submitFiles{
+	position:fixed;top:-2000px;
 }

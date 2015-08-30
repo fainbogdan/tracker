@@ -4,4 +4,8 @@ import org.springframework.security.web.context.AbstractSecurityWebApplicationIn
 
 public class TrackerSecurityInitializer extends AbstractSecurityWebApplicationInitializer{
 
+	@Override
+	protected boolean enableHttpSessionEventPublisher() {
+		return true;
+	}
 }

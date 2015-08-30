@@ -9,8 +9,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name="roles", uniqueConstraints=@UniqueConstraint(columnNames={"role","username"}))
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "user")
 public class Role {
 
 	@Id

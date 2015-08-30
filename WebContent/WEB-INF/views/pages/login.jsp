@@ -20,7 +20,7 @@
 				</div>
 				<div class="checkbox">
 					<label>
-						<input type="checkbox"> Remember me
+						<input type="checkbox" id="remember_me" name="remember-me"> Remember me
 					</label>
 				</div>
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

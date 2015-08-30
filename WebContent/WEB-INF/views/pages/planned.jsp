@@ -31,17 +31,29 @@
                 </div>
                 <div class="form-group">
                     <label>What is happening?</label>
-                    <sf:input type="text" path="name" class="form-control" placeholder="Title for this event"></sf:input>
+                    <sf:input type="text" path="name" class="form-control" placeholder="Title for this event" 
+                    		title="What?" 
+                    		data-content="Describe the general event. What is happening? An engine restart? A power outage?" 	
+                    		data-toggle="popover" 
+                            data-trigger="focus" />
                     <sf:errors path="name" class="text-danger"></sf:errors>
                 </div>
                 <div class="form-group">
                     <label>Environment?</label>
-                    <sf:input type="text" path="environment" class="form-control" placeholder="Possible effected area"></sf:input>
+                    <sf:input type="text" path="environment" class="form-control" placeholder="Possible effected area"
+                    		title="Where?" 
+                    		data-content="Describe what server may be affected or what locations might be impacted" 	
+                    		data-toggle="popover" 
+                            data-trigger="focus" />
                     <sf:errors path="environment" class="text-danger"></sf:errors>
                 </div>
                 <div class="form-group">
                     <label>Description?</label>
-                    <sf:textarea rows="6" path="description" class="form-control" placeholder="Additional related information"></sf:textarea>
+                    <sf:textarea rows="6" path="description" class="form-control" placeholder="Additional related information" 
+                    		title="Something more?" 
+                    		data-content="Description of actions need to be taken. Affecting patient care? System health in trouble? Etc..." 	
+                    		data-toggle="popover" 
+                            data-trigger="focus" ></sf:textarea>
                     <sf:errors path="description" class="text-danger"></sf:errors>
                 </div>
                 <div class="form-group">

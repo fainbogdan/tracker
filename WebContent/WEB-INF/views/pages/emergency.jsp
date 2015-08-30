@@ -21,17 +21,29 @@
                 </div>
                 <div class="form-group">
                     <sf:label path="name">What is happening?</sf:label>
-                    <sf:input path="name" type="text" class="form-control" placeholder="Title for this event" />
+                    <sf:input path="name" type="text" class="form-control" placeholder="Title for this event" 
+                    		title="What?" 
+                    		data-content="Describe the general event. What is happening? An engine restart? A power outage?" 	
+                    		data-toggle="popover" 
+                            data-trigger="focus" />
                     <sf:errors path="name" class="text-danger" />
                 </div>
                 <div class="form-group">
                     <sf:label path="environment">Environment?</sf:label>
-                    <sf:input path="environment" type="text" class="form-control" placeholder="Possible effected area" />
+                    <sf:input path="environment" type="text" class="form-control" placeholder="Possible effected area" 
+                    		title="Where?" 
+                    		data-content="Describe what server may be affected or what locations might be impacted" 	
+                    		data-toggle="popover" 
+                            data-trigger="focus" />
                      <sf:errors path="environment" class="text-danger" />
                 </div>
                 <div class="form-group">
                     <sf:label path="description">Description?</sf:label>
-                    <sf:textarea path="description" rows="3" class="form-control" placeholder="Additional related information"></sf:textarea>
+                    <sf:textarea path="description" rows="3" class="form-control" placeholder="Additional related information"
+                    		title="Something more?" 
+                    		data-content="Description of actions need to be taken. Affecting patient care? System health in trouble? Etc..." 	
+                    		data-toggle="popover" 
+                            data-trigger="focus" ></sf:textarea>
                      <sf:errors path="description" class="text-danger" />
                 </div>
                 <div class="form-group">
@@ -52,7 +64,7 @@
 	              	<c:choose>
 	              		<c:when test="${fn:length(eventsForToday) >0}">
 	              			<c:forEach items="${eventsForToday }" var="event">
-			                  <li class="list-group-item event" event_id='<c:out value="${event.getId() }"></c:out>'>
+			                  <li class="list-group-item event pointer" event_id='<c:out value="${event.getId() }"></c:out>'>
 			                  	<c:choose>
 			                  		<c:when test="${event.getEvent_type()=='emergency'}">
 										<i class="fa fa-exclamation-triangle emergency-type"></i>

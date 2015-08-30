@@ -9,7 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import com.tracker.web.service.UserServiceImpl;
+
+import com.tracker.web.service.implementations.UserServiceImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -30,16 +31,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http
 			.authorizeRequests()
 				.antMatchers(HttpMethod.GET, "/","/index","/register","/public/**").permitAll()
+				.antMatchers(HttpMethod.POST, "/register").permitAll()
 				.anyRequest().authenticated()
 				.and()
 			.formLogin()
 				.loginPage("/login")
 				.permitAll()
 				.and()
+			.rememberMe()
+				.tokenValiditySeconds(3600)
+				.key("rememberTracker")
+				.and()
 			.logout()
 				.permitAll()
 				.logoutUrl("/logout")
-				.logoutSuccessUrl("/");
+				.logoutSuccessUrl("/")
+				.and()
+			.sessionManagement()
+                 .maximumSessions(1)
+                 .expiredUrl("/login?expired");
 		
 	}
 }

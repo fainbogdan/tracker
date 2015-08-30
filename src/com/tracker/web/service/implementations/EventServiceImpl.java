@@ -1,4 +1,4 @@
-package com.tracker.web.service;
+package com.tracker.web.service.implementations;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,13 +8,18 @@ import java.util.Map;
 
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tracker.web.dao.ChecklistRepo;
-import com.tracker.web.dao.EventRepo;
+import com.tracker.web.dao.interfaces.ChecklistRepo;
+import com.tracker.web.dao.interfaces.EventRepo;
 import com.tracker.web.models.Checklist;
 import com.tracker.web.models.Event;
+import com.tracker.web.service.implementations.UserServiceImpl.CustomUser;
+import com.tracker.web.service.interfaces.EventService;
+import com.tracker.web.service.interfaces.UserService;
 
 @Service
 @Transactional
@@ -22,6 +27,12 @@ public class EventServiceImpl implements EventService {
 
 	private EventRepo eventRepo;
 	private ChecklistRepo checklistRepo;
+	private UserService userService;
+
+	@Autowired
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
 
 	@Autowired
 	public void setEventRepo(EventRepo eventRepo) {
@@ -31,6 +42,13 @@ public class EventServiceImpl implements EventService {
 	@Autowired
 	public void setChecklistRepo(ChecklistRepo checklistRepo) {
 		this.checklistRepo = checklistRepo;
+	}
+	
+	public CustomUser currentUser()
+	{
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		CustomUser customUser=(CustomUser) userService.loadUserByUsername(auth.getName());
+		return customUser;
 	}
 
 	public int save(Event event) {
@@ -42,6 +60,7 @@ public class EventServiceImpl implements EventService {
 		plan.setItem_order(1);
 		plan.setPhase("setup");
 		plan.setEvent(event);
+		plan.setCreator(currentUser());
 		checklistRepo.save(plan);
 		
 		Checklist process=new Checklist();
@@ -49,6 +68,7 @@ public class EventServiceImpl implements EventService {
 		process.setItem_order(2);
 		process.setPhase("execute");
 		process.setEvent(event);
+		process.setCreator(currentUser());
 		checklistRepo.save(process);
 		
 		Checklist test=new Checklist();
@@ -56,6 +76,7 @@ public class EventServiceImpl implements EventService {
 		test.setItem_order(3);
 		test.setPhase("execute");
 		test.setEvent(event);
+		test.setCreator(currentUser());
 		checklistRepo.save(test);
 		
 		Checklist approve=new Checklist();
@@ -63,6 +84,7 @@ public class EventServiceImpl implements EventService {
 		approve.setItem_order(4);
 		approve.setPhase("teardown");
 		approve.setEvent(event);
+		approve.setCreator(currentUser());
 		checklistRepo.save(approve);
 		
 		Collection<Checklist> checklist=new ArrayList<Checklist>();
@@ -72,6 +94,7 @@ public class EventServiceImpl implements EventService {
 		checklist.add(approve);
 		
 		event.setChecklists(checklist);
+		event.setCreator(currentUser());
 		int id=eventRepo.save(event);
 		return id;
 	}

@@ -18,16 +18,16 @@
 		        				</div>
 		        				<div class="col-md-2 text-right">
 		        					<c:if test="${empty checklist.getCompleted()}">
-			        					<i class="fa fa-lg fa-pencil"></i>
+			        					<i class="fa fa-lg fa-pencil pointer"></i>
 			        				</c:if>
 		        				</div>
 		        				<div class="col-md-2 text-right">
 		        					<c:if test="${empty checklist.getCompleted()}">
-			        					<i class="fa fa-lg fa-trash-o"></i>
+			        					<i class="fa fa-lg fa-trash-o pointer"></i>
 			        				</c:if>
 		        				</div>
 		        				<div class="col-md-2 text-right">
-			        				<i class="fa fa-lg fa-ellipsis-h"></i>
+			        				<i class="fa fa-lg fa-ellipsis-h pointer"></i>
 		        				</div>
 	        				</div>
 	        				
@@ -60,16 +60,16 @@
 		        				</div>
 		        				<div class="col-md-2 text-right">
 		        					<c:if test="${empty checklist.getCompleted()}">
-			        					<i class="fa fa-lg fa-pencil"></i>
+			        					<i class="fa fa-lg fa-pencil pointer"></i>
 			        				</c:if>
 		        				</div>
 		        				<div class="col-md-2 text-right">
 		        					<c:if test="${empty checklist.getCompleted()}">
-			        					<i class="fa fa-lg fa-trash-o"></i>
+			        					<i class="fa fa-lg fa-trash-o pointer"></i>
 			        				</c:if>
 		        				</div>
 		        				<div class="col-md-2 text-right">
-			        				<i class="fa fa-lg fa-ellipsis-h"></i>
+			        				<i class="fa fa-lg fa-ellipsis-h pointer"></i>
 		        				</div>
 	        				</div>
 	        				
@@ -102,16 +102,16 @@
 		        				</div>
 		        				<div class="col-md-2 text-right">
 		        					<c:if test="${empty checklist.getCompleted()}">
-			        					<i class="fa fa-lg fa-pencil"></i>
+			        					<i class="fa fa-lg fa-pencil pointer"></i>
 			        				</c:if>
 		        				</div>
 		        				<div class="col-md-2 text-right">
 		        					<c:if test="${empty checklist.getCompleted()}">
-			        					<i class="fa fa-lg fa-trash-o"></i>
+			        					<i class="fa fa-lg fa-trash-o pointer"></i>
 			        				</c:if>
 		        				</div>
 		        				<div class="col-md-2 text-right">
-			        				<i class="fa fa-lg fa-ellipsis-h"></i>
+			        				<i class="fa fa-lg fa-ellipsis-h pointer"></i>
 		        				</div>
 	        				</div>
 	        				

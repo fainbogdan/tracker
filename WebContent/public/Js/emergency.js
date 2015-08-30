@@ -5,6 +5,7 @@
 
 (function()
 {
+	$("[data-toggle=popover]").popover({ container: 'body' });
 	 $('#datetimepicker1').datetimepicker();
 	 
 	 $('li.event').on('click',function(event)

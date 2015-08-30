@@ -1,8 +1,9 @@
-package com.tracker.web.dao;
+package com.tracker.web.dao.implementations;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,6 +12,8 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.tracker.web.dao.interfaces.ChecklistRepo;
 import com.tracker.web.models.Checklist;
 
 @Repository
@@ -33,10 +36,10 @@ public class ChecklistRepoImpl implements ChecklistRepo{
 	}
 
 	@Override
-	public Checklist save(Checklist checklist) {
+	public int save(Checklist checklist) {
 		Session session=getCurrentSession();
 		int id=(int) session.save(checklist);
-		return (Checklist) session.get(Checklist.class, id);
+		return id;
 	}
 	
 	@Override
@@ -54,9 +57,10 @@ public class ChecklistRepoImpl implements ChecklistRepo{
 		Session session=getCurrentSession();
 		Checklist checklist=(Checklist) session.get(Checklist.class, ch.getId());
 		checklist.setCompleted(ch.getCompleted());
+		checklist.setCompleted_on(ch.getCompleted_on());
 		if(ch.getSkipped_note()!=null)
 			checklist.setSkipped_note(ch.getSkipped_note());
-		
+		checklist.setFinisher(ch.getFinisher());
 		session.flush();
 		return checklist;
 	}
@@ -72,7 +76,7 @@ public class ChecklistRepoImpl implements ChecklistRepo{
 	@Override
 	public String sort(List<Map<String, String>> newOrder) {
 		Session session=getCurrentSession();
-		for (Iterator iterator = newOrder.iterator(); iterator.hasNext();) {
+		for (Iterator<Map<String, String>> iterator = newOrder.iterator(); iterator.hasNext();) {
 			Map<String, String> map = (Map<String, String>) iterator.next();
 			Checklist checklist=(Checklist) session.get(Checklist.class, Integer.parseInt(map.get("id")) );
 			checklist.setItem_order( Integer.parseInt(map.get("item_order")) );

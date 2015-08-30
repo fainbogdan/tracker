@@ -40,4 +40,8 @@
 		<put-attribute name="body" value="/WEB-INF/views/pages/login.jsp"></put-attribute>
 	</definition>
 	
+	<definition name="checklists/show" extends="base">
+		<put-attribute name="body" value="/WEB-INF/views/checklists/show.jsp"></put-attribute>
+	</definition>
+	
 </tiles-definitions>

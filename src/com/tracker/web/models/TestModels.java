@@ -20,7 +20,8 @@ public class TestModels {
 		user.setPhone("4324134679");
 		user.setEmail("lokesh.cherukuri@yahoo.com");
 		user.setUsername("user");
-		user.setPassword("user");		
+		user.setPassword("user");
+		user.setRepassword("user");
 		
 		Role role=new Role();
 		role.setRole("user");

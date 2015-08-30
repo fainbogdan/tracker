@@ -4,6 +4,7 @@
 
 (function(){
 	
+	$("[data-toggle=popover]").popover({ container: 'body' });
 	$('#datetimepicker1').datetimepicker();
     $('#datetimepicker2').datetimepicker();
     $("#datetimepicker1").on("dp.change", function (e) {
