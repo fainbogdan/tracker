@@ -44,4 +44,8 @@
 		<put-attribute name="body" value="/WEB-INF/views/checklists/show.jsp"></put-attribute>
 	</definition>
 	
+	<definition name="reports/create" extends="base">
+		<put-attribute name="body" value="/WEB-INF/views/reports/create.jsp"></put-attribute>
+	</definition>
+	
 </tiles-definitions>

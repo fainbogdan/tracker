@@ -70,6 +70,7 @@ public class ChecklistServiceImpl implements ChecklistService{
 		checklist.setName(map.get("name"));
 		checklist.setDetails(map.get("details"));
 		checklist.setEvent(event);
+		checklist.setCreator(currentUser());
 		int id=checklistRepo.save(checklist);
 		return checklistRepo.getChecklist(id);
 	}

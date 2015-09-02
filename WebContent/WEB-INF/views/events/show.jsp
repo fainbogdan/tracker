@@ -80,7 +80,7 @@
 				<div id="pre-event">
 					<h3>Pre-Event Checklist</h3>
 					<ul class="list-group">
-						<c:forEach items="${event.getSortedChecklist() }" var="checklist">
+						<c:forEach items="${event.sortedChecklist() }" var="checklist">
 							<c:if test="${checklist.getPhase()=='setup' }">
 								<li class="list-group-item" checklist-id='<c:out value="${checklist.getId() }" />'>
 									<c:choose>
@@ -115,7 +115,7 @@
 				<div id="during-event">
 					<h3>During-Event Checklist</h3>
 					<ul class="list-group">
-						<c:forEach items="${event.getSortedChecklist() }" var="checklist">
+						<c:forEach items="${event.sortedChecklist() }" var="checklist">
 							<c:if test="${checklist.getPhase()=='execute' }">
 								<li class="list-group-item" checklist-id='<c:out value="${checklist.getId() }" />'>
 									<c:choose>
@@ -150,7 +150,7 @@
 				<div id="post-event">
 					<h3>Post-Event Checklist</h3>
 					<ul class="list-group">
-						<c:forEach items="${event.getSortedChecklist() }" var="checklist">
+						<c:forEach items="${event.sortedChecklist() }" var="checklist">
 							<c:if test="${checklist.getPhase()=='teardown' }">
 								<li class="list-group-item" checklist-id='<c:out value="${checklist.getId() }" />'>
 									<c:choose>

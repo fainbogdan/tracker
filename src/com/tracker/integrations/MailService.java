@@ -38,7 +38,7 @@ public class MailService {
 	}
 	
 	public String createTemplate(Event event) {
-		List<Checklist> checklists=new ArrayList<Checklist>(event.getSortedChecklist());
+		List<Checklist> checklists=new ArrayList<Checklist>(event.sortedChecklist());
 		String template=
 				"<h2>Event Name:"+ event.getName()+"</h2>"+
 				"<div>List of Items to do in this Event:</div>";

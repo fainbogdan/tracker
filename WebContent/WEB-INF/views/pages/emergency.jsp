@@ -58,7 +58,7 @@
 				  <!-- Default panel contents -->
 				  <div class="panel-heading"><i class="fa fa-calendar"></i>  Events running today</div>
 				  <div class="panel-body">
-				    <p>These events may interfere with the event you create. Make sure your event doesn't fall into such environment and timings</p>
+				    <p>These events may interfere with the event you create. Make sure your event doesn't conflict such environment and timings</p>
 				  </div>
 	              <ul class="list-group today-emergencies">
 	              	<c:choose>

@@ -2,10 +2,12 @@
 body{
 	font-size: 15px;
 }
+.navbar{margin-bottom: 0px;}
 
 #index-container
 {
 	background: #F8F9F9;
+	margin-top: 20px;
 }
 
 #logo:hover,#myNavbar a:hover
@@ -149,9 +151,9 @@ a.link
 .checklistItem
 {
     cursor: move;
-    -webkit-box-shadow: -1px -1px 3px 0px rgba(50, 50, 50, 0.75);
-    -moz-box-shadow:    -1px -1px 3px 0px rgba(50, 50, 50, 0.75);
-    box-shadow:         -1px -1px 3px 0px rgba(50, 50, 50, 0.75);
+    -webkit-box-shadow: 0 0 5px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow:    0 0 5px rgba(50, 50, 50, 0.75);
+    box-shadow:         0 0 5px rgba(50, 50, 50, 0.75);
     border: 1px solid #bcbaba;
     padding: 0.5em 0.7em 0.5em 0.5em;
     margin-bottom: 0.75em;
@@ -236,3 +238,5 @@ a.link
 #attachedFiles,#submitFiles{
 	position:fixed;top:-2000px;
 }
+.top-buffer { margin-top:20px; }
+.default-filter-group{margin-top: 15%;}

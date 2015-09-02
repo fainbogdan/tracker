@@ -46,19 +46,49 @@
 		<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
 			<dl>
 				<dt><i class="fa fa-user fa-fw"></i> Completed On</dt> 
-				<dd><c:out value="${checklist.getCompleted_on() }"></c:out> </dd>
+				<dd>
+					<c:choose>
+						<c:when test="${empty checklist.getCompleted_on() }">
+							Not started
+						</c:when>
+						<c:otherwise>
+							<c:out value="${checklist.getCompleted_on().toString('MM-dd-yyyy HH:mm:ss') }"></c:out>
+						</c:otherwise>
+					</c:choose>
+				 </dd>
 				
 				<dt><i class="fa fa-user fa-fw"></i> Completed By</dt> 
-				<dd><c:out value="${checklist.getFinisher().fullname() }"></c:out> </dd>
+				<dd>
+					<c:choose>
+						<c:when test="${empty checklist.getFinisher() }">
+							Not started
+						</c:when>
+						<c:otherwise>
+							<c:out value="${checklist.getFinisher().fullname() }"></c:out> 
+						</c:otherwise>
+					</c:choose>
+				</dd>
 			</dl>
 		</div>
+	</div>
+	<hr/>
+	<div class="row">
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 			<dl>
 				<dt><i class="fa fa-info-circle fa-fw"></i> Details</dt>
 				<dd><c:out value="${checklist.getDetails() }"></c:out></dd>
 				
 				<dt><i class="fa fa-info fa-fw"></i> Execution Note</dt> 
-				<dd><c:out value="${checklist.getSkipped_note() }"></c:out></dd>
+				<dd>
+					<c:choose>
+						<c:when test="${empty checklist.getSkipped_note() }">
+							Not Available
+						</c:when>
+						<c:otherwise>
+							<c:out value="${checklist.getSkipped_note() }"></c:out> 
+						</c:otherwise>
+					</c:choose>
+				</dd>
 			</dl>
 		</div>
 	</div>

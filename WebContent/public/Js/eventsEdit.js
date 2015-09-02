@@ -97,7 +97,7 @@ $(function(){
                         data:JSON.stringify({name:$('#newName').val(), details:$('#newDetails').val()}),
                         success:function(data)
                         {
-                        	$(editingItem).find('.item-name').text(data.name);
+                        	$(editingItem).find('.item-name a').html(data.name);
                         	$(editingItem).find('.item-details').text(data.details);
                         	$('#myModal').modal('hide');
                         }
@@ -186,16 +186,16 @@ $(function(){
                             	var x='<div class="checklistItem" id="'+data.id+'" >'+
 		    	        				'<div class="row checklistItem-header">'+
 		    	        					'<div class="col-md-6 item-name">'+
-		    		        					data.name+
+		    		        					'<a href="/tracker/checklists/'+data.id+'">'+data.name+'</a>'+
 		    	        					'</div>'+
 		    		        				'<div class="col-md-2 text-right">'+
-		    		        					'<i class="fa fa-lg fa-pencil"></i>'+
+		    		        					'<i class="fa fa-lg fa-pencil pointer"></i>'+
 		    		        				'</div>'+
 		    		        				'<div class="col-md-2 text-right">'+
-		    		        					'<i class="fa fa-lg fa-trash-o"></i>'+
+		    		        					'<i class="fa fa-lg fa-trash-o pointer"></i>'+
 		    		        				'</div>'+
 		    		        				'<div class="col-md-2 text-right">'+
-		    			        				'<i class="fa fa-lg fa-ellipsis-h"></i>'+
+		    			        				'<i class="fa fa-lg fa-ellipsis-h pointer"></i>'+
 		    		        				'</div>'+
 		    	        				'</div>'+
 		    	        				'<div class="row checklistItem-body">'+

@@ -71,7 +71,7 @@
 		</div>
 		
 		<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-			<a href="#" class="link">
+			<a href="reports/create" class="link">
 			<div class="event-box">
 				<div class="event-box-header text-center">
 					<div><i class="fa fa-file-excel-o fa-3x"></i></div>

@@ -119,13 +119,9 @@
 	{
     	if(obj.expected_end==null)
     		return obj.expected_start;
-		var start = new Date(obj.expected_start);
-		var end = new Date(obj.expected_end);
-		if((Math.abs(start - end) / 36e5)>=8)
-		{
-			var formattedStart = start.getFullYear() +"-"+ ("0" + (start.getMonth() + 1)).slice(-2) +"-"+ ("0" + start.getDate()).slice(-2);
-			return formattedStart;
-		}
+
+		if(obj.longEvent==true)
+			return obj.expected_start.slice(0,10);
 		else
 			return obj.expected_start;
 	};
@@ -134,13 +130,9 @@
 	{
 		if(obj.expected_end==null)
     		return null;
-		var start = new Date(obj.expected_start);
-		var end = new Date(obj.expected_end);
-		if((Math.abs(start - end) / 36e5)>=8)
-		{
-			var formattedEnd = end.getFullYear() +"-"+ ("0" + (end.getMonth() + 1)).slice(-2) +"-"+ ("0" + end.getDate()).slice(-2);
-			return formattedEnd;
-		}
+
+		if(obj.longEvent==true)
+			return obj.expected_end.slice(0,10);
 		else
 			return obj.expected_end;
 	};

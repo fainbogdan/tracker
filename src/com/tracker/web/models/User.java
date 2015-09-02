@@ -1,8 +1,9 @@
 package com.tracker.web.models;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -18,6 +19,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.tracker.web.validations.FieldMatch;
 
@@ -25,7 +27,12 @@ import com.tracker.web.validations.FieldMatch;
 @Table(name="users")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "username")
 @FieldMatch(first = "password", second = "repassword",message = "The password fields must match")
-public class User{
+public class User implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@NotBlank
@@ -57,10 +64,13 @@ public class User{
 	private Date updated_at;
 	
 	@OneToMany(mappedBy="creator")
-	private Collection<Event> events=new ArrayList<Event>();
+	@JsonIgnore
+	private Collection<Event> events;
 	
 	@OneToMany(mappedBy="user")
+	@JsonIgnore
 	private Collection<Role> roles;
+	
 	private boolean enabled;
 
 	public User(){
@@ -148,7 +158,7 @@ public class User{
 	public void setUpdated_at() {
 		this.updated_at = new Date();
 	}
-
+	
 	public Collection<Event> getEvents() {
 		return events;
 	}

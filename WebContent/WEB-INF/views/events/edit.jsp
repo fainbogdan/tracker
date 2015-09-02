@@ -6,14 +6,18 @@
 	    <div class="col-md-4">
 	        <h3>Setup phase</h3>
 	        <div id="sortable1" class="sortable connectedSortable"  phase='setup' event_id='<c:out value="${event.getId() }" />'>
-	        	<c:forEach items="${event.getSortedChecklist() }" var="checklist">
+	        	<c:forEach items="${event.sortedChecklist() }" var="checklist">
 	        		<c:if test="${checklist.getPhase()=='setup' }">
 	        			<div class='checklistItem' id='<c:out value="${checklist.getId() }" />'> 
 	        				<div class="row checklistItem-header">
 	        					<div class="col-md-6 item-name">
 		        					<c:choose>
-		        						<c:when test="${empty checklist.getCompleted()}"><c:out value="${checklist.getName() }" /></c:when>
-		        						<c:otherwise><strike><c:out value="${checklist.getName() }" /></strike></c:otherwise>
+		        						<c:when test="${empty checklist.getCompleted()}">
+		        							<a href='/tracker/checklists/<c:out value="${checklist.getId() }" />'><c:out value="${checklist.getName() }" /></a>
+		        						</c:when>
+		        						<c:otherwise>
+		        							<strike><a href='/tracker/checklists/<c:out value="${checklist.getId() }" />'><c:out value="${checklist.getName() }" /></a></strike>
+		        						</c:otherwise>
 		        					</c:choose>	
 		        				</div>
 		        				<div class="col-md-2 text-right">
@@ -48,14 +52,18 @@
 	    <div class="col-md-4">
 	        <h3>execute phase</h3>
 	        <div id="sortable2" class="sortable connectedSortable"  phase="execute" event_id='<c:out value="${event.getId() }" />'>
-	            <c:forEach items="${event.getSortedChecklist() }" var="checklist">
+	            <c:forEach items="${event.sortedChecklist() }" var="checklist">
 	        		<c:if test="${checklist.getPhase()=='execute' }">
 	        			<div class='checklistItem' id='<c:out value="${checklist.getId() }" />' > 
 	        				<div class="row checklistItem-header">
 	        					<div class="col-md-6 item-name">
 		        					<c:choose>
-		        						<c:when test="${empty checklist.getCompleted()}"><c:out value="${checklist.getName() }" /></c:when>
-		        						<c:otherwise><strike><c:out value="${checklist.getName() }" /></strike></c:otherwise>
+		        						<c:when test="${empty checklist.getCompleted()}">
+		        							<a href='/tracker/checklists/<c:out value="${checklist.getId() }" />'><c:out value="${checklist.getName() }" /></a>
+		        						</c:when>
+		        						<c:otherwise>
+		        							<strike><a href='/tracker/checklists/<c:out value="${checklist.getId() }" />'><c:out value="${checklist.getName() }" /></a></strike>
+		        						</c:otherwise>
 		        					</c:choose>	
 		        				</div>
 		        				<div class="col-md-2 text-right">
@@ -90,14 +98,18 @@
 	    <div class="col-md-4">
 	        <h3>teardown phase</h3>
 	        <div id="sortable3" class="sortable connectedSortable"  phase="teardown" event_id='<c:out value="${event.getId() }" />'>
-	           <c:forEach items="${event.getSortedChecklist() }" var="checklist">
+	           <c:forEach items="${event.sortedChecklist() }" var="checklist">
 	        		<c:if test="${checklist.getPhase()=='teardown' }">
 	        			<div class='checklistItem' id='<c:out value="${checklist.getId() }" />' > 
 	        				<div class="row checklistItem-header">
 	        					<div class="col-md-6 item-name">
 		        					<c:choose>
-		        						<c:when test="${empty checklist.getCompleted()}"><c:out value="${checklist.getName() }" /></c:when>
-		        						<c:otherwise><strike><c:out value="${checklist.getName() }" /></strike></c:otherwise>
+		        						<c:when test="${empty checklist.getCompleted()}">
+		        							<a href='/tracker/checklists/<c:out value="${checklist.getId() }" />'><c:out value="${checklist.getName() }" /></a>
+		        						</c:when>
+		        						<c:otherwise>
+		        							<strike><a href='/tracker/checklists/<c:out value="${checklist.getId() }" />'><c:out value="${checklist.getName() }" /></a></strike>
+		        						</c:otherwise>
 		        					</c:choose>	
 		        				</div>
 		        				<div class="col-md-2 text-right">

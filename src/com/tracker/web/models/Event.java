@@ -1,5 +1,6 @@
 package com.tracker.web.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,8 +24,10 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.LocalDateTime;
+import org.joda.time.Period;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -33,7 +36,12 @@ import customClasses.CustomDateSerializer;
 @Entity
 @Table(name="events")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Event {
+public class Event implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
@@ -78,6 +86,7 @@ public class Event {
 	private User creator;
 	
 	@OneToMany(mappedBy="event")
+	@JsonIgnore
 	private Collection<Checklist> checklist=new ArrayList<Checklist>();
 	
 	public int getId() {
@@ -196,10 +205,20 @@ public class Event {
 		this.checklist = checklist;
 	}
 	
-	public List<Checklist> getSortedChecklist() {
+	public List<Checklist> sortedChecklist() {
 		List<Checklist> list= (List<Checklist>) this.getChecklist();
 		Collections.sort(list);
 		return list;
 	}
 	
+	public boolean isLongEvent(){
+		if(expected_end==null)
+			return true;
+		
+		Period period=new Period(expected_start,expected_end);
+		if((period.toStandardMinutes().getMinutes()/60)>=8)
+			return true;
+		else
+			return false;
+	}
 }
