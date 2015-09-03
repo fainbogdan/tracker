@@ -20,10 +20,11 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.joda.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import customClasses.CustomDateSerializer;
 
 @Entity
 @Table(name="checklists")
@@ -129,6 +130,7 @@ public class Checklist implements Comparable<Checklist>, Serializable{
 		this.skipped_note = skipped_note;
 	}
 
+	@JsonSerialize(using=CustomDateSerializer.class)
 	public LocalDateTime getCompleted_on() {
 		return completed_on;
 	}
