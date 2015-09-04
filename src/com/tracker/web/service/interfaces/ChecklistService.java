@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.tracker.web.models.Checklist;
 
@@ -14,6 +16,7 @@ public interface ChecklistService {
 	public Checklist delete(int id);
 	public String sort(List<Map<String, String>> newOrder);
 	public Checklist save(Map<String, String> map);
-	public Map<String, Object> updateState(Checklist checklist) throws MessagingException;
+	public Map<String, Object> updateState(Checklist checklist,
+			HttpServletRequest request, HttpServletResponse response) throws MessagingException;
 
 }

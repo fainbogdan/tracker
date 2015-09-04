@@ -29,7 +29,6 @@ public class VerificationToken implements Serializable{
 	private boolean verified;
  
     public VerificationToken() {
-        super();
     }
     public VerificationToken(String token, User user) {
         this.token = token;

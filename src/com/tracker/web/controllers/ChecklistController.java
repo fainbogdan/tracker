@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -72,10 +74,10 @@ public class ChecklistController {
 	
 	@RequestMapping(value="/checklistState/{id}", method=RequestMethod.PUT, consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public Map<String, Object> updateState(@RequestBody Checklist checklist, @PathVariable("id") int id) throws MessagingException 
+	public Map<String, Object> updateState(@RequestBody Checklist checklist, @PathVariable("id") int id, HttpServletRequest request, HttpServletResponse response) throws MessagingException 
 	{
 		checklist.setId(id);
-		return checklistService.updateState(checklist);
+		return checklistService.updateState(checklist, request,response);
 	}
 	
 	@RequestMapping(value="/checklist/{id}", method=RequestMethod.DELETE)

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<style>
+	.completed{color: 'green'; text-decoration: line-through;}
+	.skipped{color: 'red'; text-decoration: line-through;}
+	table { border-collapse: collapse;}
+	table, td, th {border: 1px solid black;}
+</style>
+</head>
+<body>
+	<h1>Event: <span th:text="${event.getName()}">N/A</span></h1>
+	<h4 style="text-decoration: underline;">Item to do in this event:</h4>
+	<div>
+		<ul>
+	      <li th:each="checklist : ${event.sortedChecklist()}" th:text="${checklist.getName()}" th:class="${checklist.getCompleted()}=='Y' ? completed : (${checklist.getCompleted()}=='N' ? skipped) ">N/A</li>
+    	</ul>
+	</div>
+
+	<h4 style="text-decoration: underline;">Event Details</h4>
+	<table>
+		<tr>
+			<td>Event description</td>
+			<td><span th:text="${event.getDescription()}">N/A</span></td>
+		</tr>
+		
+		<tr>
+			<td>Created by</td>
+			<td><span th:text="${event.getCreator().fullname()}">N/A</span></td>
+		</tr>
+		
+		<tr>
+			<td>Environment</td>
+			<td><span th:text="${event.getEnvironment()}">N/A</span></td>
+		</tr>
+		
+		<tr>
+			<td>Expected start</td>
+			<td><span th:text="${event.getExpected_start()}">N/A</span></td>
+		</tr>
+		
+		<tr>
+			<td>Expected end</td>
+			<td><span th:text="${event.getExpected_end()}">N/A</span></td>
+		</tr>
+		
+		<tr>
+			<td>Actual start</td>
+			<td><span th:text="${event.getActual_start()}" >N/A</span></td>
+		</tr>
+		
+		<tr>
+			<td>Actual end</td>
+			<td><span th:text="${event.getActual_end()}">N/A</span></td>
+		</tr>
+	</table>
+</body>
+</html>

@@ -3,7 +3,9 @@ package com.tracker.web.controllers;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +95,7 @@ public class EventController {
 	}
 	
 	@RequestMapping(value={"emergency","planned"},method=RequestMethod.POST)
-	public String store(@Valid Event event, Errors errors,Model model,HttpServletRequest request)
+	public String store(@Valid Event event, Errors errors,Model model,  HttpServletRequest request, HttpServletResponse response) throws MessagingException
 	{
 		if(errors.hasErrors())
 		{
@@ -107,7 +109,7 @@ public class EventController {
 		}
 		else
 		{
-			int id=eventService.save(event);
+			int id=eventService.save(event, request, response);
 			return "redirect:"+ "events/"+id;
 		}
 	}
@@ -142,18 +144,18 @@ public class EventController {
 	
 	@RequestMapping(value="/events/{id}/start", method=RequestMethod.PUT,consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public Map<String, Object> eventStart(@RequestBody Event event, @PathVariable("id") int id)
+	public Map<String, Object> eventStart(@RequestBody Event event, @PathVariable("id") int id, HttpServletRequest request, HttpServletResponse response) throws MessagingException
 	{
 		event.setId(id);
-		return eventService.eventStart(event);
+		return eventService.eventStart(event, request, response);
 	}
 	
 	
 	@RequestMapping(value="/events/{id}/end", method=RequestMethod.PUT,consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public Map<String, Object> eventEnd(@RequestBody Event event, @PathVariable("id") int id)
+	public Map<String, Object> eventEnd(@RequestBody Event event, @PathVariable("id") int id, HttpServletRequest request, HttpServletResponse response) throws MessagingException
 	{
 		event.setId(id);
-		return eventService.eventEnd(event);
+		return eventService.eventEnd(event, request, response);
 	}
 }

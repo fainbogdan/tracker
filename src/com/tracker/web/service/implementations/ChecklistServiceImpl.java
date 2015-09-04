@@ -1,17 +1,18 @@
 package com.tracker.web.service.implementations;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
+import org.thymeleaf.context.WebContext;
 import com.tracker.integrations.MailService;
 import com.tracker.web.dao.interfaces.ChecklistRepo;
 import com.tracker.web.dao.interfaces.EventRepo;
@@ -29,6 +30,7 @@ public class ChecklistServiceImpl implements ChecklistService{
 	private EventRepo eventRepo;
 	private MailService mailService;
 	private UserService userService;
+	private Locale locale=new Locale("en", "US");
 	
 	@Autowired
 	public void setMailService(MailService mailService) {
@@ -82,7 +84,7 @@ public class ChecklistServiceImpl implements ChecklistService{
 
 
 	@Override
-	public Map<String, Object> updateState(Checklist ch) throws MessagingException 
+	public Map<String, Object> updateState(Checklist ch, HttpServletRequest request, HttpServletResponse response) throws MessagingException 
 	{
 		Map<String, Object> data=new HashMap<String, Object>();
 		if(checklistRepo.arePreviousItemsDone(ch))
@@ -92,7 +94,11 @@ public class ChecklistServiceImpl implements ChecklistService{
 			Checklist updatedChecklist=checklistRepo.updateState(ch);
 			data.put("checklist", updatedChecklist);
 			data.put("message", "success");
-			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Event updated", updatedChecklist.getEvent());
+			
+			final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
+			context.setVariable("event", updatedChecklist.getEvent());
+			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event updated",context);
+			
 			return data;
 		}
 		

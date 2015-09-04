@@ -3,6 +3,7 @@ package com.tracker.web.service.implementations;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -13,9 +14,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.tracker.integrations.MailService;
+import com.tracker.web.dao.interfaces.TokenRepo;
 import com.tracker.web.dao.interfaces.UserRepo;
 import com.tracker.web.models.Role;
 import com.tracker.web.models.User;
+import com.tracker.web.models.VerificationToken;
 import com.tracker.web.service.interfaces.RoleService;
 import com.tracker.web.service.interfaces.UserService;
 
@@ -25,6 +29,8 @@ public class UserServiceImpl implements UserService {
 
 	private UserRepo userRepo;
 	private RoleService roleService;
+	private TokenRepo tokenRepo;
+	private MailService mailService;
 	
 	@Autowired
 	public void setUserRepo(UserRepo userRepo) {
@@ -34,6 +40,16 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	public void setRoleService(RoleService roleService) {
 		this.roleService = roleService;
+	}
+
+	
+	public void setTokenRepo(TokenRepo tokenRepo) {
+		this.tokenRepo = tokenRepo;
+	}
+	
+	@Autowired
+	public void setMailService(MailService mailService) {
+		this.mailService = mailService;
 	}
 
 	@Override
@@ -93,6 +109,12 @@ public class UserServiceImpl implements UserService {
 		roleService.save(role);
 		roles.add(role);
 		user.setRoles(roles);
+		
+		VerificationToken token=new VerificationToken();
+		token.setToken(UUID.randomUUID().toString());
+		token.setUser(user);
+		tokenRepo.save(token);
+		
 		String username=userRepo.save(user);
 		return userRepo.findUserByUsername(username);
 	}

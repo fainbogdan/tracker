@@ -1,9 +1,7 @@
 package com.tracker.config;
 
 import java.util.Properties;
-
 import javax.sql.DataSource;
-
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -22,6 +20,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 
 @Configuration
@@ -89,6 +89,25 @@ public class RootConfig {
 	{
 		StandardServletMultipartResolver multipartResolver=new StandardServletMultipartResolver();
 		return multipartResolver;
+	}
+	
+	@Bean
+	public ServletContextTemplateResolver emailTemplateResolver()
+	{
+		ServletContextTemplateResolver resolver=new ServletContextTemplateResolver();
+		resolver.setPrefix("/WEB-INF/templates/");
+		resolver.setSuffix(".html");
+		resolver.setTemplateMode("HTML5");
+		resolver.setOrder(1);
+		return resolver;
+	}
+	
+	@Bean
+	@Autowired
+	public SpringTemplateEngine thymeleafTemplateEngine(ServletContextTemplateResolver templateResolver){
+		SpringTemplateEngine templateEngine=new SpringTemplateEngine();
+		templateEngine.setTemplateResolver(templateResolver);
+		return templateEngine;
 	}
 	
 }

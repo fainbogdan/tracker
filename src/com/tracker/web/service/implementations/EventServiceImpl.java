@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +17,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.context.WebContext;
 
+import com.tracker.integrations.MailService;
 import com.tracker.web.dao.interfaces.ChecklistRepo;
 import com.tracker.web.dao.interfaces.EventRepo;
 import com.tracker.web.models.Checklist;
@@ -28,7 +35,14 @@ public class EventServiceImpl implements EventService {
 	private EventRepo eventRepo;
 	private ChecklistRepo checklistRepo;
 	private UserService userService;
+	private MailService mailService;
+	private Locale locale=new Locale("en", "US");
 
+	@Autowired
+	public void setMailService(MailService mailService) {
+		this.mailService = mailService;
+	}
+	
 	@Autowired
 	public void setUserService(UserService userService) {
 		this.userService = userService;
@@ -51,7 +65,7 @@ public class EventServiceImpl implements EventService {
 		return customUser;
 	}
 
-	public int save(Event event) {
+	public int save(Event event,HttpServletRequest request, HttpServletResponse response) throws MessagingException {
 		if(event.getEvent_type().equals("emergency"))
 			event.setActual_start(new LocalDateTime());
 		
@@ -96,6 +110,9 @@ public class EventServiceImpl implements EventService {
 		event.setChecklists(checklist);
 		event.setCreator(currentUser());
 		int id=eventRepo.save(event);
+		final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
+		context.setVariable("event", eventRepo.getEvent(id));
+		mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event created",context);
 		return id;
 	}
 
@@ -111,13 +128,18 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public Map<String, Object> eventStart(Event event) {
+	public Map<String, Object> eventStart(Event event,HttpServletRequest request, HttpServletResponse response) throws MessagingException {
 		Map<String, Object> data=new HashMap<String, Object>();
 		if(eventRepo.canEventStart(event))
 		{
 			Event updatedEvent=eventRepo.eventStart(event);
 			data.put("event", updatedEvent);
 			data.put("message", "success");
+			
+			final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
+			context.setVariable("event", updatedEvent);
+			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event started",context);
+			
 			return data;
 		}
 			
@@ -127,13 +149,18 @@ public class EventServiceImpl implements EventService {
 	}
 	
 	@Override
-	public Map<String, Object> eventEnd(Event event) {
+	public Map<String, Object> eventEnd(Event event,HttpServletRequest request, HttpServletResponse response) throws MessagingException {
 		Map<String, Object> data=new HashMap<String, Object>();
 		if(eventRepo.canEventEnd(event))
 		{
 			Event updatedEvent=eventRepo.eventEnd(event);
 			data.put("event", updatedEvent);
 			data.put("message", "success");
+			
+			final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
+			context.setVariable("event", updatedEvent);
+			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event ended",context);
+			
 			return data;
 		}
 			
