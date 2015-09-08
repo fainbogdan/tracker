@@ -27,14 +27,14 @@ public class MailService {
 		this.templateEngine = templateEngine;
 	}
 
-	public void sendEmail(String to, String subject, WebContext context) throws MessagingException
+	public void sendEmail(String to, String subject, WebContext context,String template) throws MessagingException
 	{
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
 		helper.setTo(to);
 		helper.setFrom("lokesh.cherukuri8@gmail.com");
 		helper.setSubject(subject);
-		String content=templateEngine.process("eventUpdate", context);
+		String content=templateEngine.process(template, context);
 		helper.setText(content, true);
 		mailSender.send(mimeMessage);
 	}

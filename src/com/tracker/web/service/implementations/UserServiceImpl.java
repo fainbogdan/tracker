@@ -3,8 +3,11 @@ package com.tracker.web.service.implementations;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
+import java.util.Locale;
 
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +16,17 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.thymeleaf.context.WebContext;
 
 import com.tracker.integrations.MailService;
-import com.tracker.web.dao.interfaces.TokenRepo;
 import com.tracker.web.dao.interfaces.UserRepo;
 import com.tracker.web.models.Role;
 import com.tracker.web.models.User;
 import com.tracker.web.models.VerificationToken;
 import com.tracker.web.service.interfaces.RoleService;
+import com.tracker.web.service.interfaces.TokenService;
 import com.tracker.web.service.interfaces.UserService;
 
 @Service
@@ -29,8 +35,9 @@ public class UserServiceImpl implements UserService {
 
 	private UserRepo userRepo;
 	private RoleService roleService;
-	private TokenRepo tokenRepo;
+	private TokenService tokenService;
 	private MailService mailService;
+	private Locale locale=new Locale("en", "US");
 	
 	@Autowired
 	public void setUserRepo(UserRepo userRepo) {
@@ -42,9 +49,9 @@ public class UserServiceImpl implements UserService {
 		this.roleService = roleService;
 	}
 
-	
-	public void setTokenRepo(TokenRepo tokenRepo) {
-		this.tokenRepo = tokenRepo;
+	@Autowired
+	public void setTokenRepo(TokenService tokenService) {
+		this.tokenService = tokenService;
 	}
 	
 	@Autowired
@@ -101,7 +108,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User register(User user) {
+	public User register(User user, HttpServletRequest request, HttpServletResponse response) throws MessagingException {
 		List<Role> roles=new ArrayList<Role>();
 		Role role=new Role();
 		role.setRole("user");
@@ -110,13 +117,30 @@ public class UserServiceImpl implements UserService {
 		roles.add(role);
 		user.setRoles(roles);
 		
-		VerificationToken token=new VerificationToken();
-		token.setToken(UUID.randomUUID().toString());
-		token.setUser(user);
-		tokenRepo.save(token);
+		VerificationToken token=tokenService.saveToken(user);
+		final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
+		String confirmationUrl = "";
+		if (request.getServerPort() == 80  || request.getServerPort() == 443 )
+			confirmationUrl= request.getScheme() + "://" +request.getServerName() + request.getContextPath();
+		    else
+		    	confirmationUrl= request.getScheme() + "://" +request.getServerName() + ":" + request.getServerPort() +request.getContextPath();
 		
-		String username=userRepo.save(user);
-		return userRepo.findUserByUsername(username);
+		confirmationUrl+= "/regitrationConfirm?token=" + token.getToken();
+		context.setVariable("confirmationUrl", confirmationUrl);
+		mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event updated",context,"userActivation");
+		
+		User registeredUser=userRepo.save(user);
+		return registeredUser;
+	}
+	
+	@Override
+	public void accountActivation(String tokenValue){
+		VerificationToken token= tokenService.getToken(tokenValue);
+		if(token!=null)
+		{
+			User user=token.getUser();
+			userRepo.accountActivation(user);
+		}
 	}
 
 }

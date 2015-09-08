@@ -32,6 +32,9 @@ public class TestModels {
 		roles.add(role);
 		user.setRoles(roles);
 		
+		VerificationToken token=new VerificationToken();
+		token.setToken("dgfhj");
+		
 		Configuration configuration = new Configuration().configure();
 	    StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
 	    SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
@@ -39,6 +42,7 @@ public class TestModels {
 		session.beginTransaction();
 		session.save(user);
 		session.save(role);
+		session.save(token);
 		session.getTransaction().commit();
 		session.close();
 		

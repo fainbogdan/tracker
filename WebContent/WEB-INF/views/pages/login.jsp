@@ -3,7 +3,7 @@
 <div class="container">
 	<sf:form role="form" action="login" method="post">
 		<c:if test="${param.error != null}">
-			<p class="text-danger text-center">Invalid username and password</p>
+			<p class="text-danger text-center">Invalid username or password</p>
 		</c:if>
 		<c:if test="${param.logout != null}">
 			<p>You have been logged out</p>

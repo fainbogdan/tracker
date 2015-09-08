@@ -48,4 +48,8 @@
 		<put-attribute name="body" value="/WEB-INF/views/reports/create.jsp"></put-attribute>
 	</definition>
 	
+	<definition name="accountRecovery" extends="base">
+		<put-attribute name="body" value="/WEB-INF/views/pages/accountRecovery.jsp"></put-attribute>
+	</definition>
+	
 </tiles-definitions>

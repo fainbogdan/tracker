@@ -97,7 +97,7 @@ public class ChecklistServiceImpl implements ChecklistService{
 			
 			final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
 			context.setVariable("event", updatedChecklist.getEvent());
-			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event updated",context);
+			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event updated",context,"eventUpdate");
 			
 			return data;
 		}

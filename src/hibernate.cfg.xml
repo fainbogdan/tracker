@@ -58,6 +58,7 @@
         <mapping class="com.tracker.web.models.Event" />
         <mapping class="com.tracker.web.models.Checklist" />
         <mapping class="com.tracker.web.models.Role" />
+        <mapping class="com.tracker.web.models.VerificationToken" />
 
     </session-factory>
 
