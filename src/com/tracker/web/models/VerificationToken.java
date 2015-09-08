@@ -26,14 +26,12 @@ public class VerificationToken implements Serializable{
     @OneToOne
     @JoinColumn(name="username")
     private User user;
-	private boolean verified;
- 
+     
     public VerificationToken() {
     }
     public VerificationToken(String token, User user) {
         this.token = token;
         this.user = user;
-        this.setVerified(false);
     }
     
 	public int getId() {
@@ -53,12 +51,6 @@ public class VerificationToken implements Serializable{
 	}
 	public void setUser(User user) {
 		this.user = user;
-	}
-	public boolean isVerified() {
-		return verified;
-	}
-	public void setVerified(boolean verified) {
-		this.verified = verified;
 	}
     
 }

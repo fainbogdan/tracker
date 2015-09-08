@@ -23,6 +23,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.LocalDateTime;
 import org.joda.time.Period;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

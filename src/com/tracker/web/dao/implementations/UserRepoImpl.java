@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.tracker.web.dao.interfaces.UserRepo;
 import com.tracker.web.models.User;
+import com.tracker.web.models.VerificationToken;
 
 @Repository
 public class UserRepoImpl implements UserRepo {
@@ -30,9 +31,24 @@ public class UserRepoImpl implements UserRepo {
 	}
 
 	@Override
-	public String save(User user) {
-		getCurrentSession().save(user);
-		return user.getUsername();
+	public User save(User user) {
+		String username=(String) getCurrentSession().save(user);
+		return findUserByUsername(username);
+	}
+	
+	@Override
+	public User update(User user) {
+		return null;
+	}
+	
+	@Override
+	public User accountActivation(User user){
+		Session session=getCurrentSession();
+		User user2=(User) session.get(User.class, user.getUsername());
+		user2.setEnabled(true);
+		user2.setRepassword(user.getPassword());
+		session.flush();
+		return user2;
 	}
 
 }

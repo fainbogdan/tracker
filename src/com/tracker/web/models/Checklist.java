@@ -28,7 +28,6 @@ import customClasses.CustomDateSerializer;
 
 @Entity
 @Table(name="checklists")
-@DynamicUpdate(value=true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Checklist implements Comparable<Checklist>, Serializable{
 

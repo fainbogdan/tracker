@@ -112,7 +112,7 @@ public class EventServiceImpl implements EventService {
 		int id=eventRepo.save(event);
 		final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
 		context.setVariable("event", eventRepo.getEvent(id));
-		mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event created",context);
+		mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event created",context,"eventUpdate");
 		return id;
 	}
 
@@ -138,7 +138,7 @@ public class EventServiceImpl implements EventService {
 			
 			final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
 			context.setVariable("event", updatedEvent);
-			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event started",context);
+			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event started",context,"eventUpdate");
 			
 			return data;
 		}
@@ -159,7 +159,7 @@ public class EventServiceImpl implements EventService {
 			
 			final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
 			context.setVariable("event", updatedEvent);
-			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event ended",context);
+			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event ended",context,"eventUpdate");
 			
 			return data;
 		}
