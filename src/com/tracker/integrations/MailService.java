@@ -3,9 +3,11 @@ package com.tracker.integrations;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -27,6 +29,7 @@ public class MailService {
 		this.templateEngine = templateEngine;
 	}
 
+	@Async
 	public void sendEmail(String to, String subject, WebContext context,String template) throws MessagingException
 	{
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
