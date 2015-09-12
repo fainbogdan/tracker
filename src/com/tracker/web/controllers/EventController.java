@@ -109,8 +109,8 @@ public class EventController {
 		}
 		else
 		{
-			int id=eventService.save(event, request, response);
-			return "redirect:"+ "events/"+id;
+			Event savedEvent=eventService.save(event, request, response);
+			return "redirect:"+ "events/"+savedEvent.getId();
 		}
 	}
 	

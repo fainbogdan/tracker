@@ -65,7 +65,7 @@ public class EventServiceImpl implements EventService {
 		return customUser;
 	}
 
-	public int save(Event event,HttpServletRequest request, HttpServletResponse response) throws MessagingException {
+	public Event save(Event event,HttpServletRequest request, HttpServletResponse response) throws MessagingException {
 		if(event.getEvent_type().equals("emergency"))
 			event.setActual_start(new LocalDateTime());
 		
@@ -109,11 +109,11 @@ public class EventServiceImpl implements EventService {
 		
 		event.setChecklists(checklist);
 		event.setCreator(currentUser());
-		int id=eventRepo.save(event);
+		Event savedEvent=eventRepo.save(event);
 		final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
-		context.setVariable("event", eventRepo.getEvent(id));
+		context.setVariable("event", savedEvent);
 		mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event created",context,"eventUpdate");
-		return id;
+		return savedEvent;
 	}
 
 	@Override

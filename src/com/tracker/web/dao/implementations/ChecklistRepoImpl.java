@@ -36,10 +36,10 @@ public class ChecklistRepoImpl implements ChecklistRepo{
 	}
 
 	@Override
-	public int save(Checklist checklist) {
+	public Checklist save(Checklist checklist) {
 		Session session=getCurrentSession();
 		int id=(int) session.save(checklist);
-		return id;
+		return getChecklist(id);
 	}
 	
 	@Override

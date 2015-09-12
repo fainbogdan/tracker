@@ -5,7 +5,7 @@ import com.tracker.web.models.Event;
 
 public interface EventRepo {
 	
-	public int save(Event event);
+	public Event save(Event event);
 	public Event getEvent(int id);
 	public List<Event> getEvents();
 	public Event eventStart(Event event);

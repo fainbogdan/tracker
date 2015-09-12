@@ -29,7 +29,7 @@ public class MailService {
 		this.templateEngine = templateEngine;
 	}
 
-	@Async
+	
 	public void sendEmail(String to, String subject, WebContext context,String template) throws MessagingException
 	{
 		MimeMessage mimeMessage = mailSender.createMimeMessage();

@@ -8,4 +8,5 @@ public interface UserRepo {
 	public User save(User user);
 	public User update(User user);
 	public User accountActivation(User user);
+	public User findUserByEmail(String email);
 }

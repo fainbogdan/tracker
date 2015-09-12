@@ -116,10 +116,4 @@ public class RootConfig {
 		return templateEngine;
 	}
 	
-	@Bean
-	public AuthenticationFailureHandler trackerAuthFailureHandler(){
-		SimpleUrlAuthenticationFailureHandler handler=new SimpleUrlAuthenticationFailureHandler();
-		return handler;
-	}
-	
 }

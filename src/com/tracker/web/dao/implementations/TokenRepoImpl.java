@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.tracker.web.dao.interfaces.TokenRepo;
+import com.tracker.web.models.User;
 import com.tracker.web.models.VerificationToken;
 
 @Repository
@@ -32,7 +33,16 @@ private SessionFactory sessionFactory;
 	}
 	
 	@Override
-	public VerificationToken getToken(String tokenValue){
+	public VerificationToken getTokenByUser(User user){
+		Session session=getCurrentSession();
+		Criteria criteria=session.createCriteria(VerificationToken.class);
+		Criterion criterion=Restrictions.eq("user", user);
+		criteria.add(criterion);
+		return (VerificationToken) criteria.list().get(0);
+	}
+
+	@Override
+	public VerificationToken getTokenByValue(String tokenValue) {
 		Session session=getCurrentSession();
 		Criteria criteria=session.createCriteria(VerificationToken.class);
 		Criterion criterion=Restrictions.eq("token", tokenValue);
