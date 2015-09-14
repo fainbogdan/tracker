@@ -151,9 +151,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User accountRecovery(Map<String, String> inputs, HttpServletRequest request, HttpServletResponse response) throws MessagingException {
 		User user=userRepo.findUserByEmail(inputs.get("email"));
-		VerificationToken token=tokenService.getTokenByUser(user);
 		if(user!=null){
 			//send activation link
+			VerificationToken token=tokenService.getTokenByUser(user);
 			final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
 			String confirmationUrl = "";
 			if (request.getServerPort() == 80  || request.getServerPort() == 443 )

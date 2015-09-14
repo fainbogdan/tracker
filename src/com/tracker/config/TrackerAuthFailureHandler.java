@@ -1,11 +1,10 @@
 package com.tracker.config;
 
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
@@ -20,9 +19,14 @@ public class TrackerAuthFailureHandler extends SimpleUrlAuthenticationFailureHan
 			throws IOException, ServletException {
 		
 		if(exception.getClass().isAssignableFrom(DisabledException.class)){
-			request.setAttribute("loginException", "accountDisabled");
+			request.getSession().setAttribute("send_activation_link", "Your account is not yet activated."
+					+ " Click activation link sent to your email or request link again.");
 			super.setDefaultFailureUrl("/accountRecovery");
 		}		
+		if(exception.getClass().isAssignableFrom(BadCredentialsException.class)){
+			request.getSession().setAttribute("login_error", "Incorrect username or password");
+			super.setDefaultFailureUrl("/login?error");
+		}
 		
 		super.onAuthenticationFailure(request, response, exception);
 	}

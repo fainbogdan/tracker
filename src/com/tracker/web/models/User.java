@@ -42,10 +42,12 @@ public class User implements Serializable{
 	@NotBlank
 	private String last_name;
 	@NotBlank
+	@JsonIgnore
 	private String password;
 	
 	@NotBlank
 	@Transient
+	@JsonIgnore
 	private String repassword;
 	@NotBlank
 	private String email;

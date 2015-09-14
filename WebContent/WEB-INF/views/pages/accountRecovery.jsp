@@ -7,9 +7,14 @@
         <h1 class="text-center">Account recovery</h1>
     </div>
     
-    <c:if test="${not empty error }">
-    	<c:out value="${error }"></c:out>
-    </c:if>
+    <%
+		if(session.getAttribute("send_activation_link") !=null){
+			String error=(String) session.getAttribute("send_activation_link");
+			String content="<h4 class='text-danger text-center'>"+error+"</h4>";
+			session.removeAttribute("send_activation_link");
+			out.print(content);
+		}
+	%>
     
 	<form role="form" method="post" action="accountRecovery">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
