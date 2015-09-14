@@ -1,13 +1,27 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="sf" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <div class="container">
+	<c:if test="${not empty message }">
+    	<h4 class="text-center"> <c:out value="${message }"></c:out> </h4>
+    </c:if>
+    
 	<sf:form role="form" action="login" method="post">
-		<c:if test="${param.error != null}">
-			<p class="text-danger text-center">Invalid username or password</p>
+		 
+		<c:if test="${param.error !=null}">
+			<%
+				if(session.getAttribute("login_error") !=null){
+					String error=(String) session.getAttribute("login_error");
+					String content="<h4 class='text-danger text-center'>"+error+"</h4>";
+					session.removeAttribute("login_error");
+					out.print(content);
+				}
+			 %>
 		</c:if>
+		 
 		<c:if test="${param.logout != null}">
-			<p>You have been logged out</p>
+			<h4>You have been logged out</h4>
 		</c:if>
+		
 		<div class="row">
 			<div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-12 col-xs-12">
 				<div class="form-group">

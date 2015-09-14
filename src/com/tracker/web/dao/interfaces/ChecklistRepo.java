@@ -7,7 +7,7 @@ import com.tracker.web.models.Checklist;
 public interface ChecklistRepo {
 
 	public Checklist getChecklist(int id);
-	public int save(Checklist checklist);
+	public Checklist save(Checklist checklist);
 	public Checklist update(Checklist checklist);
 	public Checklist delete(int id);
 	public String sort(List<Map<String, String>> newOrder);

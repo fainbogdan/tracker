@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.tracker.web.models.Event;
 
 public interface EventService {
-	public int save(Event event, HttpServletRequest request, HttpServletResponse response) throws MessagingException;
+	public Event save(Event event, HttpServletRequest request, HttpServletResponse response) throws MessagingException;
 	public Event getEvent(int id);
 	public List<Event> getEvents();
 	public Map<String, Object> eventStart(Event event,HttpServletRequest request, HttpServletResponse response) throws MessagingException;

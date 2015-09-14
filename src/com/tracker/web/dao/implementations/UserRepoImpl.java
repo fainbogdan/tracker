@@ -1,7 +1,13 @@
 package com.tracker.web.dao.implementations;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -49,6 +55,20 @@ public class UserRepoImpl implements UserRepo {
 		user2.setRepassword(user.getPassword());
 		session.flush();
 		return user2;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public User findUserByEmail(String email) {
+		Session session=getCurrentSession();
+		Criteria criteria=session.createCriteria(User.class);
+		Criterion criterion=Restrictions.eq("email", email);
+		criteria.add(criterion);
+		List<User> users=new ArrayList<User>(criteria.list());
+		if(users.size()>0)
+			return users.get(0);
+		else
+			return null;
 	}
 
 }

@@ -14,11 +14,11 @@ import com.tracker.web.service.implementations.UserServiceImpl;
 
 @Configuration
 @EnableWebSecurity
-@ComponentScan(basePackageClasses=UserServiceImpl.class)
+@ComponentScan(basePackageClasses={UserServiceImpl.class,TrackerAuthFailureHandler.class})
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
-	//@Autowired
-	//private TrackerAuthFailureHandler trackerAuthFailureHandler;
+	@Autowired
+	private TrackerAuthFailureHandler trackerAuthFailureHandler;
 	
 	@Autowired
 	private UserDetailsService userDetailsService;
@@ -33,14 +33,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-				.antMatchers(HttpMethod.GET, "/", "/index", "/register", "/regitrationConfirm", "/public/**").permitAll()
+				.antMatchers(HttpMethod.GET, "/", "/index", "/register", "/regitrationConfirm","/accountRecovery", "/public/**").permitAll()
+				.antMatchers(HttpMethod.POST, "/accountRecovery").permitAll()
 				.antMatchers(HttpMethod.POST, "/register").permitAll()
 				.anyRequest().authenticated()
 				.and()
 			.formLogin()
 				.loginPage("/login")
+				.loginPage("/login?error")
 				.permitAll()
-				//.failureHandler(trackerAuthFailureHandler())
+				.failureHandler(trackerAuthFailureHandler)
 				.and()
 			.rememberMe()
 				.tokenValiditySeconds(3600)
