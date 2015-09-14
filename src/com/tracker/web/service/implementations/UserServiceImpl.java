@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
@@ -117,30 +118,56 @@ public class UserServiceImpl implements UserService {
 		roles.add(role);
 		user.setRoles(roles);
 		
-		VerificationToken token=tokenService.saveToken(user);
-		final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
-		String confirmationUrl = "";
-		if (request.getServerPort() == 80  || request.getServerPort() == 443 )
-			confirmationUrl= request.getScheme() + "://" +request.getServerName() + request.getContextPath();
-		    else
-		    	confirmationUrl= request.getScheme() + "://" +request.getServerName() + ":" + request.getServerPort() +request.getContextPath();
-		
-		confirmationUrl+= "/regitrationConfirm?token=" + token.getToken();
-		context.setVariable("confirmationUrl", confirmationUrl);
-		mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event updated",context,"userActivation");
-		
+		tokenService.saveToken(user);
 		User registeredUser=userRepo.save(user);
+		
+		if(registeredUser!=null){
+			final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
+			String confirmationUrl = "";
+			if (request.getServerPort() == 80  || request.getServerPort() == 443 )
+				confirmationUrl= request.getScheme() + "://" +request.getServerName() + request.getContextPath();
+			    else
+			    	confirmationUrl= request.getScheme() + "://" +request.getServerName() + ":" + request.getServerPort() +request.getContextPath();
+			
+			confirmationUrl+= "/regitrationConfirm?token=" + tokenService.getTokenByUser(registeredUser);
+			context.setVariable("confirmationUrl", confirmationUrl);
+			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event updated",context,"userActivation");
+		}
+		
 		return registeredUser;
 	}
 	
 	@Override
 	public void accountActivation(String tokenValue){
-		VerificationToken token= tokenService.getToken(tokenValue);
+		VerificationToken token= tokenService.getTokenByValue(tokenValue);
 		if(token!=null)
 		{
 			User user=token.getUser();
 			userRepo.accountActivation(user);
 		}
+	}
+
+
+	@Override
+	public User accountRecovery(Map<String, String> inputs, HttpServletRequest request, HttpServletResponse response) throws MessagingException {
+		User user=userRepo.findUserByEmail(inputs.get("email"));
+		if(user!=null){
+			//send activation link
+			VerificationToken token=tokenService.getTokenByUser(user);
+			final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
+			String confirmationUrl = "";
+			if (request.getServerPort() == 80  || request.getServerPort() == 443 )
+				confirmationUrl= request.getScheme() + "://" +request.getServerName() + request.getContextPath();
+			    else
+			    	confirmationUrl= request.getScheme() + "://" +request.getServerName() + ":" + request.getServerPort() +request.getContextPath();
+			
+			confirmationUrl+= "/regitrationConfirm?token=" + token.getToken();
+			context.setVariable("confirmationUrl", confirmationUrl);
+			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event updated",context,"userActivation");
+			return user;
+		}
+		
+		return null;
 	}
 
 }

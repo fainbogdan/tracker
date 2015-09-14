@@ -1,10 +1,11 @@
 package com.tracker.web.controllers;
 
+import java.util.Map;
+
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.tracker.web.models.User;
-import com.tracker.web.models.VerificationToken;
 import com.tracker.web.service.interfaces.UserService;
 
 @Controller
@@ -34,7 +34,7 @@ public class UserController {
 		return "pages/register";
 	}
 	
-	@RequestMapping(value="/login", method=RequestMethod.GET)
+	@RequestMapping(value={"/login","/login?error"}, method=RequestMethod.GET)
 	public String login()
 	{
 		return "pages/login";
@@ -58,8 +58,22 @@ public class UserController {
 		return "redirect:/login";
 	}
 	
-	@RequestMapping(value="/accountRecovery")
-	public String accountRecovery(){
+	@RequestMapping(value="/accountRecovery", method=RequestMethod.GET)
+	public String getAccountRecovery(){
 		return "pages/accountRecovery";
+	}
+	
+	@RequestMapping(value="/accountRecovery", method=RequestMethod.POST)
+	public String postAccountRecovery(@RequestParam Map<String,String> inputs, Model model, HttpServletRequest request, HttpServletResponse response) throws MessagingException{
+		User user=userService.accountRecovery(inputs,request,response);
+		if(user==null){
+			model.addAttribute("error", "This email is not associated with any account");
+			return "pages/accountRecovery";
+		}
+		else {
+			model.addAttribute("message", "Activation link sent to your email");
+			return "pages/login";
+		}
+
 	}
 }

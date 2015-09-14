@@ -33,7 +33,12 @@ public class TokenServiceImpl implements TokenService {
 	}
 	
 	@Override
-	public VerificationToken getToken(String tokenValue){
-		return tokenRepo.getToken(tokenValue);
+	public VerificationToken getTokenByUser(User user){
+		return tokenRepo.getTokenByUser(user);
+	}
+
+	@Override
+	public VerificationToken getTokenByValue(String tokenValue) {
+		return tokenRepo.getTokenByValue(tokenValue);
 	}
 }

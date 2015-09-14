@@ -5,5 +5,6 @@ import com.tracker.web.models.VerificationToken;
 
 public interface TokenService {
 	public VerificationToken saveToken(User user);
-	public VerificationToken getToken(String tokenValue);
+	public VerificationToken getTokenByUser(User user);
+	public VerificationToken getTokenByValue(String tokenValue);
 }

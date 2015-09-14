@@ -32,9 +32,9 @@ public class EventRepoImpl implements EventRepo {
 	}
 
 	@Override
-	public int save(Event event) {
+	public Event save(Event event) {
 		int id=(int) getCurrentSession().save(event);
-		return id;
+		return getEvent(id);
 	}
 
 	@Override
