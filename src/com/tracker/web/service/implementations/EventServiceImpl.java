@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
 import com.tracker.integrations.MailService;
@@ -37,7 +38,13 @@ public class EventServiceImpl implements EventService {
 	private UserService userService;
 	private MailService mailService;
 	private Locale locale=new Locale("en", "US");
+	private TemplateEngine templateEngine;
 
+	@Autowired
+	public void setTemplateEngine(TemplateEngine templateEngine) {
+		this.templateEngine = templateEngine;
+	}
+	
 	@Autowired
 	public void setMailService(MailService mailService) {
 		this.mailService = mailService;
@@ -112,7 +119,8 @@ public class EventServiceImpl implements EventService {
 		Event savedEvent=eventRepo.save(event);
 		final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
 		context.setVariable("event", savedEvent);
-		mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event created",context,"eventUpdate");
+		String content=templateEngine.process("eventUpdate", context);
+		mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event created",content);
 		return savedEvent;
 	}
 
@@ -138,8 +146,8 @@ public class EventServiceImpl implements EventService {
 			
 			final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
 			context.setVariable("event", updatedEvent);
-			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event started",context,"eventUpdate");
-			
+			String content=templateEngine.process("eventUpdate", context);
+			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event started",content);			
 			return data;
 		}
 			
@@ -159,8 +167,8 @@ public class EventServiceImpl implements EventService {
 			
 			final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
 			context.setVariable("event", updatedEvent);
-			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event ended",context,"eventUpdate");
-			
+			String content=templateEngine.process("eventUpdate", context);
+			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event ended",content);			
 			return data;
 		}
 			

@@ -17,6 +17,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
 import com.tracker.integrations.MailService;
@@ -37,6 +38,12 @@ public class UserServiceImpl implements UserService {
 	private TokenService tokenService;
 	private MailService mailService;
 	private Locale locale=new Locale("en", "US");
+	private TemplateEngine templateEngine;
+	
+	@Autowired
+	public void setTemplateEngine(TemplateEngine templateEngine) {
+		this.templateEngine = templateEngine;
+	}
 	
 	@Autowired
 	public void setUserRepo(UserRepo userRepo) {
@@ -129,7 +136,8 @@ public class UserServiceImpl implements UserService {
 			
 			url+= "/regitrationConfirm?token=" + tokenService.getTokenByUser(registeredUser).getToken();
 			context.setVariable("url", url);
-			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Activate account",context,"userActivation");
+			String content=templateEngine.process("userActivation", context);
+			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Registration complete",content);
 		}
 		
 		return registeredUser;
@@ -166,14 +174,15 @@ public class UserServiceImpl implements UserService {
 				url+= "/regitrationConfirm?token=" + token.getToken();
 				context.setVariable("url", url);
 				System.out.println("activation url:"+ url);
-				mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Activate account",context,"userActivation");
+				String content=templateEngine.process("userActivation", context);
+				mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Activate account",content);
 			}
 			else 
 			{
 				url+= "/passwordReset?token=" + token.getToken();
 				context.setVariable("url", url);
-				System.out.println("password url:"+ url);
-				mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Password Reset",context,"userActivation");
+				String content=templateEngine.process("userActivation", context);
+				mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Password reset",content);
 			}
 			
 			return user;

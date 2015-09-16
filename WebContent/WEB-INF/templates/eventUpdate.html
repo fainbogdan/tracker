@@ -10,7 +10,7 @@
 </head>
 <body>
 	<h1>Event: <span th:text="${event.getName()}">N/A</span></h1>
-	<h4 style="text-decoration: underline;">Item to do in this event:</h4>
+	<h4 style="text-decoration: underline;">Items to do in this event:</h4>
 	<div>
 		<ul>
 	      <li th:each="checklist : ${event.sortedChecklist()}" th:text="${checklist.getName()}" th:class="${checklist.getCompleted()}=='Y' ? completed : (${checklist.getCompleted()}=='N' ? skipped) ">N/A</li>
