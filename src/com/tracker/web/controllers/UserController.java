@@ -6,6 +6,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,16 +17,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.tracker.web.models.User;
+import com.tracker.web.models.VerificationToken;
+import com.tracker.web.service.interfaces.TokenService;
 import com.tracker.web.service.interfaces.UserService;
 
 @Controller
 public class UserController {
 
 	private UserService userService;
+	private TokenService tokenService;
 	
 	@Autowired
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+	
+	@Autowired
+	public void setTokenService(TokenService tokenService) {
+		this.tokenService = tokenService;
 	}
 
 	@RequestMapping(value="/register",method=RequestMethod.GET)
@@ -53,9 +62,17 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/regitrationConfirm")
-	public String accountActivation(@RequestParam("token") String tokenValue){
-		userService.accountActivation(tokenValue);	
-		return "redirect:/login";
+	public String accountActivation(@RequestParam("token") String tokenValue, RedirectAttributes redirectAttributes){
+		User activatedUser=userService.accountActivation(tokenValue);
+		if(activatedUser!=null){
+			redirectAttributes.addFlashAttribute("message", "Account activated. Login now");
+			return "redirect:/login";
+		}
+		else{
+			redirectAttributes.addFlashAttribute("message", "Invalid URL. Try again or request new link");
+			return "redirect:/accountRecovery";
+		}
+		
 	}
 	
 	@RequestMapping(value="/accountRecovery", method=RequestMethod.GET)
@@ -63,17 +80,67 @@ public class UserController {
 		return "pages/accountRecovery";
 	}
 	
+	@RequestMapping(value="/forgotPassword", method=RequestMethod.GET)
+	public String forgotPassword(RedirectAttributes redirectAttributes){
+		redirectAttributes.addFlashAttribute("message", "Request password reset link");
+		return "redirect:/accountRecovery";
+	}
+	
 	@RequestMapping(value="/accountRecovery", method=RequestMethod.POST)
 	public String postAccountRecovery(@RequestParam Map<String,String> inputs, Model model, HttpServletRequest request, HttpServletResponse response) throws MessagingException{
-		User user=userService.accountRecovery(inputs,request,response);
-		if(user==null){
-			model.addAttribute("error", "This email is not associated with any account");
-			return "pages/accountRecovery";
+		if(inputs.get("email").length()>1 && inputs.get("recover")!=null){
+			User user=userService.accountRecovery(inputs,request,response);
+			if(user==null){
+				model.addAttribute("message", "This email is not associated with any account");
+				return "pages/accountRecovery";
+			}
+			else {
+				model.addAttribute("message", "Requested link sent to your email");
+				return "pages/login";
+			}
 		}
 		else {
-			model.addAttribute("message", "Activation link sent to your email");
+			model.addAttribute("message", "Email and request option needed");
+			return "pages/accountRecovery";
+		}
+		
+	}
+	
+	@RequestMapping(value="/passwordReset", method=RequestMethod.GET)
+	public String passwordReset(@RequestParam(value="token", required=false) String tokenValue, Model model){
+		if(tokenValue==null){
+			model.addAttribute("message", "Use reset link sent to your email. Request again if needed");
+			return "pages/accountRecovery";
+		}
+		
+		VerificationToken token=tokenService.getTokenByValue(tokenValue);
+		if(token!=null){
+			model.addAttribute("token", token.getToken());
+			return "pages/passwordReset";
+		}
+		else{
+			model.addAttribute("message", "Invalid reset link. Try again or request new link");
 			return "pages/login";
 		}
-
+	}
+	
+	@RequestMapping(value="/passwordReset", method=RequestMethod.POST)
+	public String passwordReset(@RequestParam Map<String,String> inputs, Model model){
+		if(inputs.get("password").length()>0 && inputs.get("repassword").length()>0 && inputs.get("password").equals(inputs.get("repassword"))){
+			User user=userService.resetpassword(inputs);
+			if(user!=null){
+				model.addAttribute("message", "password changed. Login with your new Credentials");
+				return "pages/login";
+			}
+			else{
+				model.addAttribute("message", "Something went wrong. try again");
+				return "pages/accountRecovery";
+			}
+		}
+		else{
+			model.addAttribute("token", inputs.get("token"));
+			model.addAttribute("message", "Password & Confirm password should match");
+			return "pages/passwordReset";
+		}
 	}
 }

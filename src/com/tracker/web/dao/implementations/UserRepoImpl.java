@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import com.tracker.web.dao.interfaces.UserRepo;
 import com.tracker.web.models.User;
-import com.tracker.web.models.VerificationToken;
 
 @Repository
 public class UserRepoImpl implements UserRepo {
@@ -69,6 +68,16 @@ public class UserRepoImpl implements UserRepo {
 			return users.get(0);
 		else
 			return null;
+	}
+
+	@Override
+	public User resetpassword(User user,String password) {
+		Session session=getCurrentSession();
+		User existingUser=(User) session.get(User.class, user.getUsername());
+		existingUser.setPassword(password);
+		existingUser.setRepassword(password);
+		session.flush();
+		return existingUser;
 	}
 
 }

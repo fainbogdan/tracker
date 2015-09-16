@@ -17,8 +17,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.thymeleaf.context.WebContext;
 
 import com.tracker.integrations.MailService;
@@ -123,51 +121,77 @@ public class UserServiceImpl implements UserService {
 		
 		if(registeredUser!=null){
 			final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
-			String confirmationUrl = "";
+			String url = "";
 			if (request.getServerPort() == 80  || request.getServerPort() == 443 )
-				confirmationUrl= request.getScheme() + "://" +request.getServerName() + request.getContextPath();
+				url= request.getScheme() + "://" +request.getServerName() + request.getContextPath();
 			    else
-			    	confirmationUrl= request.getScheme() + "://" +request.getServerName() + ":" + request.getServerPort() +request.getContextPath();
+			    	url= request.getScheme() + "://" +request.getServerName() + ":" + request.getServerPort() +request.getContextPath();
 			
-			confirmationUrl+= "/regitrationConfirm?token=" + tokenService.getTokenByUser(registeredUser);
-			context.setVariable("confirmationUrl", confirmationUrl);
-			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event updated",context,"userActivation");
+			url+= "/regitrationConfirm?token=" + tokenService.getTokenByUser(registeredUser).getToken();
+			context.setVariable("url", url);
+			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Activate account",context,"userActivation");
 		}
 		
 		return registeredUser;
 	}
 	
 	@Override
-	public void accountActivation(String tokenValue){
+	public User accountActivation(String tokenValue){
 		VerificationToken token= tokenService.getTokenByValue(tokenValue);
 		if(token!=null)
 		{
 			User user=token.getUser();
-			userRepo.accountActivation(user);
+			User activatedUser=userRepo.accountActivation(user);
+			return activatedUser;
 		}
+		return null;
 	}
 
 
 	@Override
 	public User accountRecovery(Map<String, String> inputs, HttpServletRequest request, HttpServletResponse response) throws MessagingException {
 		User user=userRepo.findUserByEmail(inputs.get("email"));
-		if(user!=null){
-			//send activation link
-			VerificationToken token=tokenService.getTokenByUser(user);
+		if(user!=null)
+		{
+			VerificationToken token=tokenService.update(user);
 			final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
-			String confirmationUrl = "";
+			String url = "";
 			if (request.getServerPort() == 80  || request.getServerPort() == 443 )
-				confirmationUrl= request.getScheme() + "://" +request.getServerName() + request.getContextPath();
-			    else
-			    	confirmationUrl= request.getScheme() + "://" +request.getServerName() + ":" + request.getServerPort() +request.getContextPath();
+				url= request.getScheme() + "://" +request.getServerName() + request.getContextPath();
+			else
+				url= request.getScheme() + "://" +request.getServerName() + ":" + request.getServerPort() +request.getContextPath();
 			
-			confirmationUrl+= "/regitrationConfirm?token=" + token.getToken();
-			context.setVariable("confirmationUrl", confirmationUrl);
-			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event updated",context,"userActivation");
+			if(inputs.get("recover").equals("activation"))
+			{
+				url+= "/regitrationConfirm?token=" + token.getToken();
+				context.setVariable("url", url);
+				System.out.println("activation url:"+ url);
+				mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Activate account",context,"userActivation");
+			}
+			else 
+			{
+				url+= "/passwordReset?token=" + token.getToken();
+				context.setVariable("url", url);
+				System.out.println("password url:"+ url);
+				mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Password Reset",context,"userActivation");
+			}
+			
 			return user;
 		}
-		
-		return null;
+		else
+			return null;
+	}
+
+	@Override
+	public User resetpassword(Map<String, String> inputs) {
+		VerificationToken token=tokenService.getTokenByValue(inputs.get("token"));
+		if(token!=null){
+			User user=userRepo.resetpassword(token.getUser(),inputs.get("password"));
+			return user;
+		}
+		else {
+			return null;
+		}
 	}
 
 }

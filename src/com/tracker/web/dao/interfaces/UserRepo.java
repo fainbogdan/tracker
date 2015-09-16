@@ -9,4 +9,5 @@ public interface UserRepo {
 	public User update(User user);
 	public User accountActivation(User user);
 	public User findUserByEmail(String email);
+	public User resetpassword(User user,String string);
 }

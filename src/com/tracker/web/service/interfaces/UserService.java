@@ -13,6 +13,7 @@ import com.tracker.web.models.User;
 public interface UserService extends UserDetailsService {
 
 	public User register(User user, HttpServletRequest request, HttpServletResponse response) throws MessagingException;
-	public void accountActivation(String tokenValue);
+	public User accountActivation(String tokenValue);
 	public User accountRecovery(Map<String, String> inputs, HttpServletRequest request, HttpServletResponse response) throws MessagingException;
+	public User resetpassword(Map<String, String> inputs);
 }

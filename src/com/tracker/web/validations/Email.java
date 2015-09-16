@@ -9,18 +9,12 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-@Target({ElementType.TYPE,ElementType.ANNOTATION_TYPE})
+@Target({ElementType.TYPE,ElementType.ANNOTATION_TYPE,ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = FieldMatchValidator.class)
+@Constraint(validatedBy = EmailValidator.class)
 @Documented
-public @interface FieldMatch {
-	String message() default "{com.tracker.web.validations.fieldmatch}";
-
+public @interface Email {
+	String message() default "{Email}";
     Class<?>[] groups() default {};
-
     Class<? extends Payload>[] payload() default {};
-
-	String first();
-
-	String second();
 }

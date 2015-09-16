@@ -16,6 +16,10 @@
 		}
 	%>
     
+    <c:if test="${not empty message }">
+    	<h4 class="text-center text-danger"> <c:out value="${message }"></c:out> </h4>
+    </c:if>
+    
 	<form role="form" method="post" action="accountRecovery">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<div class="row">
@@ -26,6 +30,7 @@
 		</div>
 		<div class="row">
 			<div class="form-group col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-12 col-xs-12">
+				<label>Request</label>
 				<label class="radio-inline"><input type="radio" name="recover" value="activation">Activation link</label>
 				<label class="radio-inline"><input type="radio" name="recover" value="password">Reset password link</label>
 			</div>

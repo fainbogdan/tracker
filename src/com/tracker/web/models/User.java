@@ -3,6 +3,7 @@ package com.tracker.web.models;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,18 +13,21 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.tracker.web.validations.FieldMatch;
+import com.tracker.web.validations.Email;
+import com.tracker.web.validations.PasswordMatch;
 
 @Entity
 @Table(name="users")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "username")
-@FieldMatch(first = "password", second = "repassword",message = "The password fields must match")
+@PasswordMatch(password = "password", repassword = "repassword",message = "The password fields must match")
 public class User implements Serializable{
 
 	/**
@@ -32,7 +36,6 @@ public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@NotBlank
 	@Size(min=5,max=15)
 	@Column(name="username", unique=true)
 	private String username;
@@ -49,7 +52,8 @@ public class User implements Serializable{
 	@Transient
 	@JsonIgnore
 	private String repassword;
-	@NotBlank
+	
+	@Email(message="use company email address")
 	private String email;
 	@NotBlank
 	private String phone;

@@ -1,6 +1,10 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="sf" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <div class="container">
+	<div class="page-header">
+        <h1 class="text-center">Tracker Login</h1>
+    </div>
+    
 	<c:if test="${not empty message }">
     	<h4 class="text-center"> <c:out value="${message }"></c:out> </h4>
     </c:if>
@@ -45,7 +49,7 @@
 				<button type="submit" class="btn btn-primary btn-block"><i class="fa fa-lock"></i> Sign in to Tracker</button>
 			</div>
 			<div class="text-center col-lg-12 col-md-12 col-sm-12 col-xs-12">
-				<a href="#">Forgot Password?</a>
+				<a href="forgotPassword">Forgot Password?</a>
 			</div>
 		</div>
 	</sf:form>
