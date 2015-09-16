@@ -3,16 +3,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
+
 import com.tracker.integrations.MailService;
 import com.tracker.web.dao.interfaces.ChecklistRepo;
 import com.tracker.web.dao.interfaces.EventRepo;
@@ -31,6 +35,12 @@ public class ChecklistServiceImpl implements ChecklistService{
 	private MailService mailService;
 	private UserService userService;
 	private Locale locale=new Locale("en", "US");
+	private TemplateEngine templateEngine;
+	
+	@Autowired
+	public void setTemplateEngine(TemplateEngine templateEngine) {
+		this.templateEngine = templateEngine;
+	}
 	
 	@Autowired
 	public void setMailService(MailService mailService) {
@@ -96,7 +106,8 @@ public class ChecklistServiceImpl implements ChecklistService{
 			
 			final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
 			context.setVariable("event", updatedChecklist.getEvent());
-			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event updated",context,"eventUpdate");
+			String content=templateEngine.process("eventUpdate", context);
+			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event updated",content);
 			
 			return data;
 		}
