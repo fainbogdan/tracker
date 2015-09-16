@@ -29,7 +29,7 @@ public class MailService {
 		this.templateEngine = templateEngine;
 	}
 
-	
+	@Async
 	public void sendEmail(String to, String subject, WebContext context,String template) throws MessagingException
 	{
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -37,6 +37,7 @@ public class MailService {
 		helper.setTo(to);
 		helper.setFrom("lokesh.cherukuri8@gmail.com");
 		helper.setSubject(subject);
+		System.out.println("content");
 		String content=templateEngine.process(template, context);
 		helper.setText(content, true);
 		mailSender.send(mimeMessage);

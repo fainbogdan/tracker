@@ -52,4 +52,8 @@
 		<put-attribute name="body" value="/WEB-INF/views/pages/accountRecovery.jsp"></put-attribute>
 	</definition>
 	
+	<definition name="pages/passwordReset" extends="base">
+		<put-attribute name="body" value="/WEB-INF/views/pages/passwordReset.jsp"></put-attribute>
+	</definition>
+	
 </tiles-definitions>

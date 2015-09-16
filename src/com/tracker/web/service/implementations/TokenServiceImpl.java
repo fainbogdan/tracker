@@ -28,8 +28,17 @@ public class TokenServiceImpl implements TokenService {
 		VerificationToken token=new VerificationToken();
 		token.setToken(UUID.randomUUID().toString());
 		token.setUser(user);
-		tokenRepo.save(token);
-		return token;
+		VerificationToken updatedToken=tokenRepo.save(token);
+		return updatedToken;
+	}
+	
+	@Override
+	public VerificationToken update(User user) {
+		VerificationToken token=new VerificationToken();
+		token.setToken(UUID.randomUUID().toString());
+		token.setUser(user);
+		VerificationToken updatedToken=tokenRepo.update(token);
+		return updatedToken;
 	}
 	
 	@Override
