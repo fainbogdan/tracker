@@ -63,10 +63,19 @@ public class UserController {
 	
 	@RequestMapping(value="/regitrationConfirm")
 	public String accountActivation(@RequestParam("token") String tokenValue, RedirectAttributes redirectAttributes){
-		User activatedUser=userService.accountActivation(tokenValue);
-		if(activatedUser!=null){
-			redirectAttributes.addFlashAttribute("message", "Account activated. Login now");
-			return "redirect:/login";
+		VerificationToken token=tokenService.getTokenByValue(tokenValue);
+		if(token!=null)
+		{
+			User activatedUser=userService.accountActivation(token);
+			if(activatedUser!=null){
+				redirectAttributes.addFlashAttribute("message", "Account activated. Login now");
+				return "redirect:/login";
+			}
+			else{
+				redirectAttributes.addFlashAttribute("message", "Invalid URL. Try again or request new link");
+				return "redirect:/accountRecovery";
+			}
+			
 		}
 		else{
 			redirectAttributes.addFlashAttribute("message", "Invalid URL. Try again or request new link");
@@ -89,15 +98,27 @@ public class UserController {
 	@RequestMapping(value="/accountRecovery", method=RequestMethod.POST)
 	public String postAccountRecovery(@RequestParam Map<String,String> inputs, Model model, HttpServletRequest request, HttpServletResponse response) throws MessagingException{
 		if(inputs.get("email").length()>1 && inputs.get("recover")!=null){
-			User user=userService.accountRecovery(inputs,request,response);
-			if(user==null){
+			User user=userService.findUserByEmail(inputs.get("email"));
+			if(user!=null)
+			{
+				User recoveredUser=userService.accountRecovery(inputs,request,response);
+				if(recoveredUser!=null)
+				{
+					model.addAttribute("message", "Requested link sent to your email");
+					return "pages/login";
+				}
+				else
+				{
+					model.addAttribute("message", "This email is not associated with any account");
+					return "pages/accountRecovery";
+				}
+			}
+			else
+			{
 				model.addAttribute("message", "This email is not associated with any account");
 				return "pages/accountRecovery";
 			}
-			else {
-				model.addAttribute("message", "Requested link sent to your email");
-				return "pages/login";
-			}
+			
 		}
 		else {
 			model.addAttribute("message", "Email and request option needed");

@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
 		public Collection<? extends GrantedAuthority> getAuthorities() {
 			List<GrantedAuthority> authorities =
 					new ArrayList<GrantedAuthority>();
-					authorities.add(new SimpleGrantedAuthority("user"));
+					authorities.addAll(getRoles());
 			
 			return authorities;
 		}
@@ -143,16 +143,17 @@ public class UserServiceImpl implements UserService {
 		return registeredUser;
 	}
 	
+	
 	@Override
-	public User accountActivation(String tokenValue){
-		VerificationToken token= tokenService.getTokenByValue(tokenValue);
-		if(token!=null)
-		{
-			User user=token.getUser();
-			User activatedUser=userRepo.accountActivation(user);
-			return activatedUser;
-		}
-		return null;
+	public User findUserByEmail(String email) {
+		return userRepo.findUserByEmail(email);
+	}
+	
+	@Override
+	public User accountActivation(VerificationToken token){
+		User user=token.getUser();
+		User activatedUser=userRepo.accountActivation(user);
+		return activatedUser;
 	}
 
 

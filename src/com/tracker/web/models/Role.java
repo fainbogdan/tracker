@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.security.core.GrantedAuthority;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -20,7 +21,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name="roles", uniqueConstraints=@UniqueConstraint(columnNames={"role","username"}))
 @DynamicUpdate(value=true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "user")
-public class Role implements Serializable{
+public class Role implements Serializable,GrantedAuthority{
 
 	/**
 	 * 
@@ -59,6 +60,11 @@ public class Role implements Serializable{
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	@Override
+	public String getAuthority() {
+		return role;
 	}
 	
 }

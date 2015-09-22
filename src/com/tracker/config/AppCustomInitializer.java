@@ -10,7 +10,7 @@ import javax.servlet.ServletException;
 import org.springframework.orm.hibernate4.support.OpenSessionInViewFilter;
 import org.springframework.web.WebApplicationInitializer;
 
-public class TrackerInitializer implements WebApplicationInitializer {
+public class AppCustomInitializer implements WebApplicationInitializer {
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {

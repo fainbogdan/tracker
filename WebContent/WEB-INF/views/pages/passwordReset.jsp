@@ -7,6 +7,10 @@
         <h1 class="text-center">Reset password</h1>
     </div>
     
+    <c:if test="${not empty message }">
+    	<h4 class="text-center text-danger"> <c:out value="${message }"></c:out> </h4>
+    </c:if>
+    
     <form role="form" method="post" action="passwordReset">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<input type="hidden" name="token" value='<c:out value="${token }" /> '/>

@@ -88,6 +88,7 @@ public class User implements Serializable{
 		this.email=user.email;
 		this.phone=user.phone;
 		this.enabled=user.enabled;
+		this.roles=user.roles;
 	}
 
 	public String getUsername() {
