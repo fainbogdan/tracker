@@ -36,6 +36,8 @@
 	<script src='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.3.2/fullcalendar.min.js'></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
 	<script src="/tracker/public/Js/default.js"></script>
+	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Proxima+Nova|sans-serif">
+	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto|serif">
 </head>
 <body>
 <div id="header">

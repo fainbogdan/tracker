@@ -1,8 +1,13 @@
 @CHARSET "ISO-8859-1";
 body{
-	font-size: 15px;
+	font-size: 16px;
+	font-family: "Proxima Nova", sans-serif;
+	color: black;
 }
 .navbar{margin-bottom: 0px;}
+h1,h2,h3,h4{
+	font-family: "Roboto", serif;
+}
 
 #index-container
 {
@@ -18,6 +23,7 @@ body{
 a.link
 {
 	text-decoration: none;
+	color: black;
 }
 
 #events-header-box
@@ -61,7 +67,7 @@ a.link
 	-webkit-box-shadow: 0em 0.0625em 0.5em 0em rgba(50, 50, 50, 0.75);
 	-moz-box-shadow:    0em 0.0625em 0.5em 0em rgba(50, 50, 50, 0.75);
 	box-shadow:         0em 0.0625em 0.5em 0em rgba(50, 50, 50, 0.75);
-	border: none;
+	border: 1px solid #B2B2B2;
 }
 
 .event-box-header
@@ -240,3 +246,22 @@ a.link
 }
 .top-buffer { margin-top:20px; }
 .default-filter-group{margin-top: 15%;}
+
+
+
+
+
+
+
+
+
+@media (min-width: 1200px){
+	.container {
+	    width: 1170px;
+	}
+}
+@media (max-width: 1199px){
+	.container {
+	    width: 100%;
+	}
+}

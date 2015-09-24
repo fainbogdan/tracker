@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -70,7 +71,7 @@ public class User implements Serializable{
 	@JsonIgnore
 	private Collection<Event> events;
 	
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user",fetch=FetchType.EAGER)
 	@JsonIgnore
 	private Collection<Role> roles;
 	
