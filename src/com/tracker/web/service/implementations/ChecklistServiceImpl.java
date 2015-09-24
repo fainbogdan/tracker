@@ -3,21 +3,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-
 import org.joda.time.LocalDateTime;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
-
-import com.tracker.integrations.MailService;
+import com.tracker.integrations.EmailMessage;
 import com.tracker.web.dao.interfaces.ChecklistRepo;
 import com.tracker.web.dao.interfaces.EventRepo;
 import com.tracker.web.models.Checklist;
@@ -32,19 +30,19 @@ public class ChecklistServiceImpl implements ChecklistService{
 
 	private ChecklistRepo checklistRepo;
 	private EventRepo eventRepo;
-	private MailService mailService;
 	private UserService userService;
 	private Locale locale=new Locale("en", "US");
 	private TemplateEngine templateEngine;
+	private RabbitTemplate rabbitTemplate;
+
+	@Autowired
+	public void setRabbitTemplate(RabbitTemplate rabbitTemplate) {
+		this.rabbitTemplate = rabbitTemplate;
+	}
 	
 	@Autowired
 	public void setTemplateEngine(TemplateEngine templateEngine) {
 		this.templateEngine = templateEngine;
-	}
-	
-	@Autowired
-	public void setMailService(MailService mailService) {
-		this.mailService = mailService;
 	}
 
 	@Autowired
@@ -106,8 +104,10 @@ public class ChecklistServiceImpl implements ChecklistService{
 			
 			final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
 			context.setVariable("event", updatedChecklist.getEvent());
+			String[] recievers={"lokesh.cherukuri8@gmail.com"};
 			String content=templateEngine.process("eventUpdate", context);
-			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event updated",content);
+			EmailMessage emailMessage=new EmailMessage(content, recievers, "Tracker : Event updated");
+			rabbitTemplate.convertAndSend(emailMessage);
 			
 			return data;
 		}

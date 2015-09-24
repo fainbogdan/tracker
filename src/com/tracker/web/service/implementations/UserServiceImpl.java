@@ -5,22 +5,19 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
-
-import com.tracker.integrations.MailService;
+import com.tracker.integrations.EmailMessage;
 import com.tracker.web.dao.interfaces.UserRepo;
 import com.tracker.web.models.Role;
 import com.tracker.web.models.User;
@@ -36,9 +33,14 @@ public class UserServiceImpl implements UserService {
 	private UserRepo userRepo;
 	private RoleService roleService;
 	private TokenService tokenService;
-	private MailService mailService;
 	private Locale locale=new Locale("en", "US");
 	private TemplateEngine templateEngine;
+	private RabbitTemplate rabbitTemplate;
+
+	@Autowired
+	public void setRabbitTemplate(RabbitTemplate rabbitTemplate) {
+		this.rabbitTemplate = rabbitTemplate;
+	}
 	
 	@Autowired
 	public void setTemplateEngine(TemplateEngine templateEngine) {
@@ -58,11 +60,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	public void setTokenRepo(TokenService tokenService) {
 		this.tokenService = tokenService;
-	}
-	
-	@Autowired
-	public void setMailService(MailService mailService) {
-		this.mailService = mailService;
 	}
 
 	@Override
@@ -137,7 +134,9 @@ public class UserServiceImpl implements UserService {
 			url+= "/regitrationConfirm?token=" + tokenService.getTokenByUser(registeredUser).getToken();
 			context.setVariable("url", url);
 			String content=templateEngine.process("userActivation", context);
-			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Registration complete",content);
+			String[] recievers={"lokesh.cherukuri8@gmail.com"};
+			EmailMessage emailMessage=new EmailMessage(content, recievers, "Tracker : Account confirmation");
+			rabbitTemplate.convertAndSend(emailMessage);
 		}
 		
 		return registeredUser;
@@ -176,14 +175,18 @@ public class UserServiceImpl implements UserService {
 				context.setVariable("url", url);
 				System.out.println("activation url:"+ url);
 				String content=templateEngine.process("userActivation", context);
-				mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Activate account",content);
+				String[] recievers={"lokesh.cherukuri8@gmail.com"};
+				EmailMessage emailMessage=new EmailMessage(content, recievers, "Tracker : Account Activation");
+				rabbitTemplate.convertAndSend(emailMessage);
 			}
 			else 
 			{
 				url+= "/passwordReset?token=" + token.getToken();
 				context.setVariable("url", url);
 				String content=templateEngine.process("userActivation", context);
-				mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Password reset",content);
+				String[] recievers={"lokesh.cherukuri8@gmail.com"};
+				EmailMessage emailMessage=new EmailMessage(content, recievers, "Tracker : Password reset");
+				rabbitTemplate.convertAndSend(emailMessage);
 			}
 			
 			return user;

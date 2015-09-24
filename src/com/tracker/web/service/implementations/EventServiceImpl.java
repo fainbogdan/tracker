@@ -6,12 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.joda.time.LocalDateTime;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,8 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
-
-import com.tracker.integrations.MailService;
+import com.tracker.integrations.EmailMessage;
 import com.tracker.web.dao.interfaces.ChecklistRepo;
 import com.tracker.web.dao.interfaces.EventRepo;
 import com.tracker.web.models.Checklist;
@@ -36,18 +34,18 @@ public class EventServiceImpl implements EventService {
 	private EventRepo eventRepo;
 	private ChecklistRepo checklistRepo;
 	private UserService userService;
-	private MailService mailService;
 	private Locale locale=new Locale("en", "US");
 	private TemplateEngine templateEngine;
+	private RabbitTemplate rabbitTemplate;
+
+	@Autowired
+	public void setRabbitTemplate(RabbitTemplate rabbitTemplate) {
+		this.rabbitTemplate = rabbitTemplate;
+	}
 
 	@Autowired
 	public void setTemplateEngine(TemplateEngine templateEngine) {
 		this.templateEngine = templateEngine;
-	}
-	
-	@Autowired
-	public void setMailService(MailService mailService) {
-		this.mailService = mailService;
 	}
 	
 	@Autowired
@@ -117,10 +115,13 @@ public class EventServiceImpl implements EventService {
 		event.setChecklists(checklist);
 		event.setCreator(currentUser());
 		Event savedEvent=eventRepo.save(event);
+		
 		final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
 		context.setVariable("event", savedEvent);
+		String[] recievers={"lokesh.cherukuri8@gmail.com"};
 		String content=templateEngine.process("eventUpdate", context);
-		mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event created",content);
+		EmailMessage emailMessage=new EmailMessage(content, recievers, "Tracker : Event created");
+		rabbitTemplate.convertAndSend(emailMessage);
 		return savedEvent;
 	}
 
@@ -146,8 +147,10 @@ public class EventServiceImpl implements EventService {
 			
 			final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
 			context.setVariable("event", updatedEvent);
+			String[] recievers={"lokesh.cherukuri8@gmail.com"};
 			String content=templateEngine.process("eventUpdate", context);
-			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event started",content);			
+			EmailMessage emailMessage=new EmailMessage(content, recievers, "Tracker : Event started");
+			rabbitTemplate.convertAndSend(emailMessage);			
 			return data;
 		}
 			
@@ -167,8 +170,10 @@ public class EventServiceImpl implements EventService {
 			
 			final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
 			context.setVariable("event", updatedEvent);
+			String[] recievers={"lokesh.cherukuri8@gmail.com"};
 			String content=templateEngine.process("eventUpdate", context);
-			mailService.sendEmail("lokesh.cherukuri8@gmail.com", "Tracker : Event ended",content);			
+			EmailMessage emailMessage=new EmailMessage(content, recievers, "Tracker : Event ended");
+			rabbitTemplate.convertAndSend(emailMessage);			
 			return data;
 		}
 			
