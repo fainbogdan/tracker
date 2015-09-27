@@ -91,7 +91,6 @@ public class Event implements Serializable{
 	private Collection<Checklist> checklist=new ArrayList<Checklist>();
 	
 	private boolean approved;
-	private boolean archived;
 	
 	public Event(){}
 	
@@ -217,14 +216,6 @@ public class Event implements Serializable{
 
 	public void setApproved(boolean approved) {
 		this.approved = approved;
-	}
-
-	public boolean isArchived() {
-		return archived;
-	}
-
-	public void setArchived(boolean archived) {
-		this.archived = archived;
 	}
 
 	public List<Checklist> sortedChecklist() {

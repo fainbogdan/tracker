@@ -155,7 +155,6 @@ public class EventRepoImpl implements EventRepo {
 		String userGrp= user.getGrp();
 		Criteria criteria=session.createCriteria(Event.class)
 				.add(Restrictions.eq("approved", false))
-				.add(Restrictions.eq("archived", false))
 				.createCriteria("creator")
 				.add(Restrictions.eq("grp", userGrp));
 		return criteria.list();
@@ -171,9 +170,6 @@ public class EventRepoImpl implements EventRepo {
 			break;
 		case "reject":
 			session.delete(event);
-			break;
-		case "archive":
-			event.setArchived(true);
 			break;
 		default:
 			break;

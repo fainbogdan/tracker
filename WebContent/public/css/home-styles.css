@@ -58,8 +58,8 @@ h1,h2,h3,h4{
 	position:absolute;
     top:0px;
     bottom: 0px;
-    width: 175px;
-    right:-175px;
+    width: 100px;
+    right:-100px;
     background: #EBECED;
 }
 #notificationItems .notificationItem .options i{
@@ -74,7 +74,7 @@ h1,h2,h3,h4{
 }
 #notificationItems .notificationItem:hover .options
 {
-    right:0px;
+    right:25px;
 	transition: all 0.5s ease;
 }
 #notification-model .modal-body{

@@ -65,11 +65,9 @@
 	        	 $('#notification-model.modal').modal('hide');
 	        	 
 		   		 if($(icon).hasClass('fa-check-circle-o'))
-		   			 $(icon).removeClass('col-sm-3 fa-check-circle-o').addClass('col-sm-12 fa-spinner fa-spin').siblings().remove();
+		   			 $(icon).removeClass('col-sm-6 fa-check-circle-o').addClass('col-sm-12 fa-spinner fa-spin').siblings().remove();
 		   		 else if($(icon).hasClass('fa-times-circle-o'))
-		   			 $(icon).removeClass('col-sm-3 fa-times-circle-o').addClass('col-sm-12 fa-spinner fa-spin').siblings().remove();
-		   		 else
-		   			 $(icon).removeClass('col-sm-3 fa-dot-circle-o').addClass('col-sm-12 fa-spinner fa-spin').siblings().remove();
+		   			 $(icon).removeClass('col-sm-6 fa-times-circle-o').addClass('col-sm-12 fa-spinner fa-spin').siblings().remove();
 		   		 
 		   		 var id=$(icon).attr('data-eventId');
 		   		 var action=$(icon).attr('data-action');
@@ -125,9 +123,8 @@
 								 	'<h4> <a href="/tracker/events/'+event.id+'" target="_blank">'+event.name+'</a> </h4>'+
 								 	'<span>'+event.description+'</span>'+
 								 	'<div class="options row">'+
-								 		'<i data-eventId="'+event.id+'" data-action="approve" class="col-sm-3 text-center fa fa-check-circle-o fa-2x text-success pointer notificationAction"></i>'+ 
-								 		'<i data-eventId="'+event.id+'" data-action="reject" class="col-sm-3 text-center fa fa-times-circle-o fa-2x text-danger pointer notificationAction"></i>'+ 
-								 		'<i data-eventId="'+event.id+'" data-action="archive" class="col-sm-3 text-center fa fa-dot-circle-o fa-2x text-muted pointer notificationAction"></i>'+
+								 		'<i data-eventId="'+event.id+'" data-action="approve" class="col-sm-6 text-center fa fa-check-circle-o fa-2x text-success pointer notificationAction"></i>'+ 
+								 		'<i data-eventId="'+event.id+'" data-action="reject" class="col-sm-6 text-center fa fa-times-circle-o fa-2x text-danger pointer notificationAction"></i>'+ 
 								 	'</div>'+
 							 	'</li>'+
 						      	'<li class="divider"></li>';
