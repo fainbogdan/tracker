@@ -6,9 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.joda.time.LocalDateTime;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
+
 import com.tracker.integrations.EmailMessage;
 import com.tracker.web.dao.interfaces.ChecklistRepo;
 import com.tracker.web.dao.interfaces.EventRepo;
@@ -190,6 +193,17 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public List<Event> getEventsForMonth() {
 		return eventRepo.getEventsForMonth();
+	}
+	
+
+	@Override
+	public List<Event> getEventsToApprove(CustomUser user) {
+		return eventRepo.getEventsToApprove(user);
+	}
+
+	@Override
+	public Event approve(Map<String,String> action) {
+		return eventRepo.approve(action);
 	}
 
 }

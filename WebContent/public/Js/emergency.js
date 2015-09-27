@@ -17,6 +17,9 @@
 			method:'get',
 			contentType:'application/json',
 			dataType:'json',
+			beforeSend: function (xhr) {
+	    		 xhr.setRequestHeader($("meta[name='_csrf_header']").attr("content"), $("meta[name='_csrf']").attr("content"));
+	    	},
 			success:function(data)
 			{
 				var modal_title='';

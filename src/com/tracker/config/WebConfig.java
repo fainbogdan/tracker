@@ -1,19 +1,30 @@
 package com.tracker.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
+
+import com.tracker.web.controllers.LoggedUserInterceptor;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan("com.tracker.web.controllers")
 public class WebConfig extends WebMvcConfigurerAdapter{
 	
+	private LoggedUserInterceptor loggedUserInterceptor;
+	
+	@Autowired
+	public void setLoggedUserInterceptor(LoggedUserInterceptor loggedUserInterceptor) {
+		this.loggedUserInterceptor = loggedUserInterceptor;
+	}
+
 	@Bean
 	public TilesConfigurer tilesConfigurer()
 	{
@@ -33,6 +44,11 @@ public class WebConfig extends WebMvcConfigurerAdapter{
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer)
 	{
 		configurer.enable();
+	}
+	
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(loggedUserInterceptor);
 	}
 	
 }

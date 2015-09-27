@@ -2,10 +2,12 @@ package com.tracker.web.controllers;
 
 import java.util.List;
 import java.util.Map;
+
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.http.MediaType;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tracker.web.models.Event;
@@ -156,4 +159,23 @@ public class EventController {
 		event.setId(id);
 		return eventService.eventEnd(event, request, response);
 	}
+	
+
+	@RequestMapping(value="/events/eventsToApprove", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<Event> eventsToApprove(@RequestParam("user") String username){
+		CustomUser user= (CustomUser) userService.loadUserByUsername(username);
+		if(user!=null){
+			return eventService.getEventsToApprove(user);
+		}
+		return null;
+	}
+	
+	@RequestMapping(value="/events/{id}/approve",method=RequestMethod.PUT,consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public Event approve(@RequestBody Map<String,String> action){
+		return eventService.approve(action);
+	}
+	
+	
 }
