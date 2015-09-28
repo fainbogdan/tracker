@@ -9,7 +9,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class<?>[] {RootConfig.class,SecurityConfig.class,RabbitMQConfiguration.class};
+		return new Class<?>[] {RootConfig.class,SecurityConfig.class,RabbitMQConfiguration.class,MethodSecurityConfig.class};
 	}
 
 	@Override

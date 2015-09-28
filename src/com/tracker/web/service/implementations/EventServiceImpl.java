@@ -12,12 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.joda.time.LocalDateTime;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
+
 import com.tracker.integrations.EmailMessage;
 import com.tracker.web.dao.interfaces.ChecklistRepo;
 import com.tracker.web.dao.interfaces.EventRepo;
@@ -190,6 +192,18 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public List<Event> getEventsForMonth() {
 		return eventRepo.getEventsForMonth();
+	}
+	
+
+	@PreAuthorize("hasRole('ROLE_LEAD')")
+	@Override
+	public List<Event> getEventsToApprove(CustomUser user) {
+		return eventRepo.getEventsToApprove(user);
+	}
+
+	@Override
+	public Event approve(Map<String,String> action) {
+		return eventRepo.approve(action);
 	}
 
 }

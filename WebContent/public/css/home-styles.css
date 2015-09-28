@@ -4,20 +4,80 @@ body{
 	font-family: "Proxima Nova", sans-serif;
 	color: black;
 }
-.navbar{margin-bottom: 0px;}
+.navbar{margin-bottom: 3px;}
 h1,h2,h3,h4{
 	font-family: "Roboto", serif;
 }
-
-#index-container
-{
+.dropdown-menu{
+	padding: 0px;
+}
+#index-container{
 	background: #F8F9F9;
 	margin-top: 20px;
 }
-
-#logo:hover,#myNavbar a:hover
-{
+#logo:hover,#myNavbar a:hover{
 	color: #337ab7;
+}
+.navbar .btn-link{
+	text-decoration: none;
+	text-transform: capitalize;
+	font-size: 16px;
+	outline: none;
+}
+#accountItems, #notificationItems{
+	margin-top: 10px;
+}
+#notificationItems .dropdown-menu{
+	width: 500px;
+}
+#notificationItems .notificationItem, #accountItems .accountItem{
+	padding: 0px 20px;
+}
+#accountItems .dropdown-menu .accountItem{
+	white-space: nowrap;
+}
+#accountItems .dropdown-menu, #notificationItems .dropdown-menu{
+    border-top: none;
+    margin-top: 5px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+.badge-notify{
+   background:red;
+   position:relative;
+   left: -10px;
+   font-size: 10px;
+   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+#notificationItems .notificationItem{
+	position: relative;
+	overflow: hidden;
+}
+#notificationItems .notificationItem .options{
+	position:absolute;
+    top:0px;
+    bottom: 0px;
+    width: 100px;
+    right:-100px;
+    background: #EBECED;
+}
+#notificationItems .notificationItem .options i{
+	line-height: 200%;
+}
+#notificationItems .divider{
+	margin: 0px;
+	padding: 0px;
+}
+#notificationItems .notificationItem:hover{
+	background: #EBECED;
+}
+#notificationItems .notificationItem:hover .options
+{
+    right:25px;
+	transition: all 0.5s ease;
+}
+#notification-model .modal-body{
+	padding-bottom: 0px;
 }
 
 a.link

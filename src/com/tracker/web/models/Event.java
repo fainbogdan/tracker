@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,6 +18,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -83,7 +87,12 @@ public class Event implements Serializable{
 	private User creator;
 	
 	@OneToMany(mappedBy="event")
+	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
 	private Collection<Checklist> checklist=new ArrayList<Checklist>();
+	
+	private boolean approved;
+	
+	public Event(){}
 	
 	public int getId() {
 		return id;
@@ -201,6 +210,14 @@ public class Event implements Serializable{
 		this.checklist = checklist;
 	}
 	
+	public boolean isApproved() {
+		return approved;
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
+	}
+
 	public List<Checklist> sortedChecklist() {
 		List<Checklist> list= (List<Checklist>) this.getChecklist();
 		Collections.sort(list);
@@ -217,4 +234,5 @@ public class Event implements Serializable{
 		else
 			return false;
 	}
+	
 }

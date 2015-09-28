@@ -1,6 +1,7 @@
 package com.tracker.web.dao.implementations;
 
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import com.tracker.web.dao.interfaces.EventRepo;
 import com.tracker.web.models.Checklist;
 import com.tracker.web.models.Event;
+import com.tracker.web.service.implementations.UserServiceImpl.CustomUser;
 
 @Repository
 public class EventRepoImpl implements EventRepo {
@@ -143,6 +145,38 @@ public class EventRepoImpl implements EventRepo {
 		Criteria criteria=session.createCriteria(Event.class);
 		criteria.add(disjunction);
 		return criteria.list();
+	}
+	
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Event> getEventsToApprove(CustomUser user) {
+		Session session=getCurrentSession();
+		String userGrp= user.getGrp();
+		Criteria criteria=session.createCriteria(Event.class)
+				.add(Restrictions.eq("approved", false))
+				.createCriteria("creator")
+				.add(Restrictions.eq("grp", userGrp));
+		return criteria.list();
+	}
+
+	@Override
+	public Event approve(Map<String,String> action) {
+		Session session=getCurrentSession();
+		Event event=(Event) session.get(Event.class, Integer.parseInt(action.get("id")));
+		switch (action.get("action")) {
+		case "approve":
+			event.setApproved(true);
+			break;
+		case "reject":
+			session.delete(event);
+			break;
+		default:
+			break;
+		}
+		
+		session.flush();
+		return event;
 	}
 
 }

@@ -76,6 +76,9 @@ public class User implements Serializable{
 	private Collection<Role> roles;
 	
 	private boolean enabled;
+	
+	private String grp;
+	private String dpt;
 
 	public User(){
 		
@@ -90,6 +93,8 @@ public class User implements Serializable{
 		this.phone=user.phone;
 		this.enabled=user.enabled;
 		this.roles=user.roles;
+		this.grp=user.grp;
+		this.dpt=user.dpt;
 	}
 
 	public String getUsername() {
@@ -188,6 +193,22 @@ public class User implements Serializable{
 		this.enabled = enabled;
 	}
 	
+	public String getGrp() {
+		return grp;
+	}
+
+	public void setGrp(String grp) {
+		this.grp = grp;
+	}
+
+	public String getDpt() {
+		return dpt;
+	}
+
+	public void setDpt(String dpt) {
+		this.dpt = dpt;
+	}
+
 	public String fullname()
 	{
 		return getFirst_name()+" "+getLast_name();

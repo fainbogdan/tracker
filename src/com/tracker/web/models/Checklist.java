@@ -69,6 +69,8 @@ public class Checklist implements Comparable<Checklist>, Serializable{
 	
 	@ManyToOne
 	private Event event;
+	
+	public Checklist(){}
 
 	public int getId() {
 		return id;
