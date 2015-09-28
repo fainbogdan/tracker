@@ -11,18 +11,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
 
-import com.tracker.web.controllers.LoggedUserInterceptor;
+import com.tracker.web.controllers.EventsApprovalInterceptor;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan("com.tracker.web.controllers")
 public class WebConfig extends WebMvcConfigurerAdapter{
 	
-	private LoggedUserInterceptor loggedUserInterceptor;
+	private EventsApprovalInterceptor eventsApprovalInterceptor;
 	
 	@Autowired
-	public void setLoggedUserInterceptor(LoggedUserInterceptor loggedUserInterceptor) {
-		this.loggedUserInterceptor = loggedUserInterceptor;
+	public void setLoggedUserInterceptor(EventsApprovalInterceptor eventsApprovalInterceptor) {
+		this.eventsApprovalInterceptor = eventsApprovalInterceptor;
 	}
 
 	@Bean
@@ -48,7 +48,7 @@ public class WebConfig extends WebMvcConfigurerAdapter{
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(loggedUserInterceptor);
+		registry.addInterceptor(eventsApprovalInterceptor);
 	}
 	
 }

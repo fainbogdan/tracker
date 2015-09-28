@@ -71,7 +71,7 @@
 		   		 
 		   		 var id=$(icon).attr('data-eventId');
 		   		 var action=$(icon).attr('data-action');
-		   		 
+		   		
 		   		 $.ajax({
 		   			 url:'/tracker/events/'+id+'/approve',
 		   			 method:'put',
@@ -98,11 +98,9 @@
 	 });//notification action completed
 	 
 	 
-	 setInterval(function(){ 
-		 
-		 getEventsToApprove();
-	 
-	 }, 180000);
+	 var interval=setInterval(function(){ 
+					 getEventsToApprove();
+				 }, 180000);
 	 
 	 function getEventsToApprove() {
 		 var username=$('input[name="username"]').val();
@@ -113,6 +111,10 @@
 			 beforeSend: function (xhr) {
 	    		 xhr.setRequestHeader($("meta[name='_csrf_header']").attr("content"), $("meta[name='_csrf']").attr("content"));
 	    	 },
+	    	 error: function (xhr, ajaxOptions, thrownError) {
+    	        if(xhr.status==403)
+    	        	clearInterval(interval);
+    	      },
 			 success:function(events){
 				 $('#notificationItems .dropdown-menu').empty();
 				 $('.badge').remove();

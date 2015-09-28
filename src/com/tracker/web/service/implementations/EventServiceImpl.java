@@ -6,14 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.joda.time.LocalDateTime;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -196,6 +195,7 @@ public class EventServiceImpl implements EventService {
 	}
 	
 
+	@PreAuthorize("hasRole('ROLE_LEAD')")
 	@Override
 	public List<Event> getEventsToApprove(CustomUser user) {
 		return eventRepo.getEventsToApprove(user);

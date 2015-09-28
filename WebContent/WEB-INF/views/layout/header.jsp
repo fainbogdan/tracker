@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -22,7 +23,7 @@
             	
             	<li  class="dropdown" id="notificationItems">
 				  <button class="btn btn-link notification-bell">
-				    <i class="fa fa-bell fa-lg"></i>
+				    Notifications
 				  </button>
 				  <c:if test="${fn:length(eventsToApprove) ne 0}">
 				  	<span class="badge badge-notify"> 
