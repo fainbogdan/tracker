@@ -34,11 +34,7 @@ public class ReportRepoImpl implements ReportRepo {
 		Session session=getCurrentSession();
 		FullTextSession fullTextSession=Search.getFullTextSession(session);
 		QueryBuilder queryBuilder=fullTextSession.getSearchFactory().buildQueryBuilder().forEntity(Event.class).get();
-		Query luceneQuery=queryBuilder
-							.keyword()
-							.onFields("name","description")
-							.matching(keyword)
-							.createQuery();
+		Query luceneQuery=queryBuilder.keyword().onFields("name","description").matching(keyword).createQuery();
 		org.hibernate.Query hibernateQuery=fullTextSession.createFullTextQuery(luceneQuery, Event.class);
 		return hibernateQuery.list();
 	}

@@ -133,7 +133,7 @@ a.link
 .event-box-header
 {
 	color: white;
-	padding: 1.5em 0 1em 0;
+	padding: 0.8em 0 0.2em 0;
 }
 
 .col-md-3:nth-child(1) .event-box-header
@@ -156,7 +156,7 @@ a.link
 
 .event-box-title
 {
-	font-size: 1.6em;
+	font-size: 1.5em;
 }
 
 .event-box-body
@@ -165,7 +165,8 @@ a.link
 	padding: 0.5em 0.5em 0.5em 1em;
 	border-left: 0.07em solid #E0E0E0;
 	border-right: 0.07em solid #E0E0E0;
-	line-height: 200%;
+	line-height: 180%;
+	text-align:justify;
 }
 .event-box-footer
 {

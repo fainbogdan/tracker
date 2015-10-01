@@ -68,7 +68,7 @@ $(function(){
     	var editingItem=$(this).parents('.checklistItem');                  //get editing items details and place in modal text boxes
         //display modal for editing
         var modal_title='<span>Edit Checklist</span>';
-        $('.modal-title').html(modal_title);
+        $('#myModal .modal-title').html(modal_title);
         
         var modal_body='<form role="form"> ' +
 			               '<div class="form-group"> ' +
@@ -81,7 +81,7 @@ $(function(){
 			               '</div> ' +
 		               '</form> ';
 
-        $('.modal-body').html(modal_body);
+        $('#myModal .modal-body').html(modal_body);
         $('.checklistItem .fa-times').trigger('click');        //while editing zoomout other checklist items, to avoid overlapping
         $('#myModal').modal('show')
                 .on('click','#save',function()              //on clicking submit to finish editing
@@ -121,10 +121,10 @@ $(function(){
     	
         //show modal confirmation before delete
         var modal_title='<span>Delete Checklist</span>';
-        $('.modal-title').html(modal_title);
+        $('#myModal .modal-title').html(modal_title);
         
         var modal_body='Are you sure? Do you want to delete </br><li>' +$(deletingItem).find('.item-name').text().trim()+ '</li>';
-        $('.modal-body').html(modal_body);
+        $('#myModal .modal-body').html(modal_body);
         $('#myModal').modal('show')
                 .on('click', '#save', function (e) {
                     //send deleted data to database
@@ -149,7 +149,7 @@ $(function(){
     {
         //show modal to enter new item details
         var modal_title='<span>Add Checklist</span>';
-        $('.modal-title').html(modal_title);
+        $('#myModal .modal-title').html(modal_title);
         
         var modal_body='<form role="form"> ' +
 			               '<div class="form-group"> ' +
@@ -162,7 +162,7 @@ $(function(){
 			               '</div> ' +
 		               '</form> ';
 
-        $('.modal-body').html(modal_body);
+        $('#myModal .modal-body').html(modal_body);
         $('.checklistItem .fa-times').trigger('click');        //zoom out other divs to avoid overlapping
         var addToGroup=$(this).parent().prev('.sortable');
 

@@ -3,7 +3,7 @@
 	$('#attachments').on('click',function(event){
 		 event.preventDefault();
 		 var modal_title='<span><i class="fa fa-cloud-upload"></i> Upload attachments</span>';
-	        $('.modal-title').html(modal_title);
+	        $('#myModal .modal-title').html(modal_title);
 	        
 	        var modal_body='<div class="row">'+
 								'<div class="col-lg-4 col-md-4 col-sm-4 col-xs 12">'+
@@ -17,7 +17,7 @@
 								'</div>'+
 							'</div>';
 
-	        $('.modal-body').html(modal_body);
+	        $('#myModal .modal-body').html(modal_body);
 	        $('#myModal').modal('show');
 	});
 	
