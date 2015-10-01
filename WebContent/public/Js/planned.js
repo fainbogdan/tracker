@@ -88,7 +88,7 @@
 		            			modal_title+='<i class="fa fa-clock-o planned-type"></i>';
 	                			
 		                	modal_title+='<span> '+data.name+'</span>';
-		    		        $('.modal-title').html(modal_title);
+		    		        $('#myModal .modal-title').html(modal_title);
 		    		        
 		    		        var modal_body='<table class="table table-bordered">'+
 		                                '<tr><td><b>Event Name</b></td> <td><a href="/tracker/events/'+data.id+'">'+data.name+'</a></td></tr>'+
@@ -104,7 +104,7 @@
 		                    	modal_body+='<tr><td><b> Actual end</b></td> <td>'+data.actual_end+'</td></tr>';
 		                    	modal_body+='</table>';
 		                    
-		                    $('.modal-body').html(modal_body);
+		                    $('#myModal .modal-body').html(modal_body);
 		    		        $('#myModal').modal('show');
 		                }
 	              });

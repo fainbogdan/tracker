@@ -17,18 +17,18 @@
 		if(goToState=='N')
 		{
 			var modal_title='Why you want to skip this item?';
-			$('.modal-title').html(modal_title);
+			$('#myModal .modal-title').html(modal_title);
 			var modal_body='<form> ' +
 					            '<div class="form-group"> ' +
 						            '<label for="message-text" class="control-label">Enter your note here</label> ' +
 						            '<textarea rows="5" class="form-control" id="skipNote"></textarea> ' +
 					            '</div> ' +
 				            '</form> ';
-			$('.modal-body').html(modal_body);
+			$('#myModal .modal-body').html(modal_body);
 			$('#myModal').modal('show').on('click','#save',function()
 			{
 				if($('#skipNote').val().trim().length)
-				{
+				{console.log("cicked");
 					$('#myModal').modal('hide');
 					$(updatedIcon).addClass('fa-spinner fa-spin');
 					$.ajax(
@@ -169,44 +169,6 @@
 		});
 	});
 	
-	/*$('.checklist-details').on('click',function()
-	{
-		 var checklist_id=$(this).attr('event_id');
-		 $.ajax({
-			url:'/tracker/events/'+event_id+'/json' ,
-			method:'get',
-			contentType:'application/json',
-			dataType:'json',
-			success:function(data)
-			{
-				var modal_title='<span>Checklist details</span>';
-		        $('.modal-title').html(modal_title);
-		        var modal_body='<table class="table table-bordered">'+
-					                '<tr><td><b>Event Name</b></td> <td><a href="/tracker/events/'+data.id+'">'+data.name+'</a></td></tr>'+
-					                '<tr><td><b>Event description</b></td> <td>'+data.description+'</td></tr>'+
-					                '<tr><td><b> Event type</b></td> <td>'+data.event_type+'</td></tr>'+
-					                '<tr><td><b> Environment</b></td> <td>'+data.environment+'</td></tr>'+
-					                '<tr><td><b> expected start</b></td> <td>'+data.expected_start+'</td></tr>';
-			    
-               if(data.expected_end!=null)
-			    	modal_body+='<tr><td><b> Expected end</b></td> <td>'+data.expected_end+'</td></tr>';
-				if(data.actual_start!=null)
-			    	modal_body+='<tr><td><b> Actual start</b></td> <td>'+data.actual_start+'</td></tr>';
-			    if(data.actual_end!=null)
-			    	modal_body+='<tr><td><b> Actual end</b></td> <td>'+data.actual_end+'</td></tr>';
-			    modal_body+='</table>';
-
-		        $('.modal-body').html(modal_body);
-		        $('#myModal').modal('show')
-			}
-		 });
-		
-        $('.modal-title').html(modal_title);
-        
-        var modal_body='Are you sure? Do you want to delete </br><li>' +$(deletingItem).find('.item-name').text().trim()+ '</li>';
-        $('.modal-body').html(modal_body);
-        $('#myModal').modal('show')
-	});*/
 	
 	$(document).on('hidden.bs.modal','#myModal', function (e) {
 		$(this).unbind();               // unbing clicks from closed modals
