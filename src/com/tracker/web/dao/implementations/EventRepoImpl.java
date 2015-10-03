@@ -10,6 +10,7 @@ import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
+import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -47,10 +48,7 @@ public class EventRepoImpl implements EventRepo {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Event> getEvents() {
-		LocalDateTime week_start=new LocalDateTime().minusMonths(6);
-		LocalDateTime week_end =new LocalDateTime().plusMonths(6);
-		
+	public List<Event> getEvents(LocalDateTime week_start, LocalDateTime week_end) {
 		Criteria criteria=getCurrentSession().createCriteria(Event.class);
 		Criterion exp_start =Restrictions.between("expected_start", week_start, week_end);
 		Criterion exp_end=Restrictions.between("expected_end", week_start, week_end);
@@ -65,6 +63,7 @@ public class EventRepoImpl implements EventRepo {
 		Session session=getCurrentSession();
 		Event updatedEvent=(Event) session.get(Event.class, event.getId());
 		updatedEvent.setActual_start(new LocalDateTime());
+		updatedEvent.setExecuter(event.getExecuter());
 		session.flush();
 		return updatedEvent;
 	}

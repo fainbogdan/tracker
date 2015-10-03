@@ -165,8 +165,7 @@ a.link
 	padding: 0.5em 0.5em 0.5em 1em;
 	border-left: 0.07em solid #E0E0E0;
 	border-right: 0.07em solid #E0E0E0;
-	line-height: 180%;
-	text-align:justify;
+	line-height: 160%;
 }
 .event-box-footer
 {
@@ -307,11 +306,6 @@ a.link
 }
 .top-buffer { margin-top:20px; }
 .default-filter-group{margin-top: 15%;}
-
-
-
-
-
 
 
 

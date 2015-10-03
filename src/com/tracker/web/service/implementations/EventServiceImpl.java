@@ -132,10 +132,9 @@ public class EventServiceImpl implements EventService {
 		return eventRepo.getEvent(id);
 	}
 	
-	
 	@Override
-	public List<Event> getEvents() {
-		return eventRepo.getEvents();
+	public List<Event> getEvents(LocalDateTime week_start, LocalDateTime week_end) {
+		return eventRepo.getEvents(week_start,week_end);
 	}
 
 	@Override
@@ -143,6 +142,7 @@ public class EventServiceImpl implements EventService {
 		Map<String, Object> data=new HashMap<String, Object>();
 		if(eventRepo.canEventStart(event))
 		{
+			event.setExecuter(currentUser());
 			Event updatedEvent=eventRepo.eventStart(event);
 			data.put("event", updatedEvent);
 			data.put("message", "success");

@@ -23,7 +23,7 @@
 					<div><i class="fa fa-exclamation-triangle fa-3x"></i></div>
 					<span class="event-box-title">Emergency</span>
 				</div>
-				<div class="event-box-body text-left">
+				<div class="event-box-body text-justify text-muted">
 					Use this option to create an emergency event, such as a critical system restart or a break-fix change that is occurring immediately.
 					 This will place you into an accelerated workflow such event. Don't create planned event here.
 				</div>
@@ -41,7 +41,7 @@
 					<div><i class="fa fa-calendar fa-3x"></i></div>
 					<span class="event-box-title">Planned</span>
 				</div>
-				<div class="event-box-body text-left">
+				<div class="event-box-body text-justify text-muted">
 					Use this option if you need to schedule a planned event. 
 					This gives you the ability to pre-plan system outages and scheduled work, 
 					including the creation of procedure checklists. Some default checklist items are created for you.
@@ -60,7 +60,7 @@
 					<div><i class="fa fa-power-off fa-3x"></i></div>
 					<span class="event-box-title">Execute</span>
 				</div>
-				<div class="event-box-body text-left">
+				<div class="event-box-body text-justify text-muted">
 					Start acting on a planned event. This will bring you to the event tracking page and allow you to follow any defined checklists related to the event.
 					 Edit, add & re-order checklist items.
 					 Watch, unwatch events that are created by other users.
@@ -79,8 +79,8 @@
 					<div><i class="fa fa-file-excel-o fa-3x"></i></div>
 					<span class="event-box-title">Reports</span>
 				</div>
-				<div class="event-box-body text-left">
-					Use this option to create weekly, monthly or custom reports of events done. Search for events, 
+				<div class="event-box-body text-justify text-muted">
+					Use this option to create weekly, monthly or custom reports of events in system. Search for events, 
 					apply filters on search results. Download reports in excel format. Don't use this to start events, 
 					they are not sorted in order of time.
 				</div>

@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -72,7 +73,9 @@ public class Event implements Serializable{
 	@NotBlank
 	private String environment;
 	
-	private int executed_by;
+	@ManyToOne
+	@JoinColumn(name="executed_by")
+	private User executer;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreationTimestamp
@@ -170,12 +173,12 @@ public class Event implements Serializable{
 		this.environment = environment;
 	}
 
-	public int getExecuted_by() {
-		return executed_by;
+	public User getExecuter() {
+		return executer;
 	}
 
-	public void setExecuted_by(int executed_by) {
-		this.executed_by = executed_by;
+	public void setExecuter(User executer) {
+		this.executer = executer;
 	}
 
 	public Date getCreated_at() {
@@ -227,12 +230,16 @@ public class Event implements Serializable{
 	public boolean isLongEvent(){
 		if(expected_end==null)
 			return true;
-		
-		Period period=new Period(expected_start,expected_end);
-		if((period.toStandardMinutes().getMinutes()/60)>=8)
+		try{
+			Period period=new Period(expected_start,expected_end);
+			if((period.toStandardMinutes().getMinutes()/60)>=8)
+				return true;
+			else
+				return false;
+		}catch(Exception e){
 			return true;
-		else
-			return false;
+		}
+		
 	}
 	
 }

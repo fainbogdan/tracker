@@ -37,28 +37,37 @@
 							<dt><i class="fa fa-clock-o fa-fw"></i> Estimated Duartion</dt> 
 							<dd>
 								<%
-									LocalDateTime exp_start=new LocalDateTime(pageContext.getAttribute("expected_start"));
-									LocalDateTime exp_end=new LocalDateTime(pageContext.getAttribute("expected_end"));
-									Period exp_period=new Period(exp_start,exp_end);
-									out.print(exp_period.toStandardMinutes().getMinutes()/24/60 + " days " + exp_period.toStandardMinutes().getMinutes()/60%24 + " hours " + exp_period.toStandardMinutes().getMinutes()%60+" minutes");
+									try{
+										LocalDateTime exp_start=new LocalDateTime(pageContext.getAttribute("expected_start"));
+										LocalDateTime exp_end=new LocalDateTime(pageContext.getAttribute("expected_end"));
+										Period exp_period=new Period(exp_start,exp_end);
+										out.print(exp_period.toStandardMinutes().getMinutes()/24/60 + " days " + exp_period.toStandardMinutes().getMinutes()/60%24 + " hours " + exp_period.toStandardMinutes().getMinutes()%60+" minutes");
+									}catch(Exception e){
+										out.print("Long event");
+									}
+									
 								%>
 							 </dd>
 						</dl>
 					</div>
 					<div class="col-md-6">
 						<dl>
-							<dt><i class="fa fa-user fa-fw"></i> Started By</dt> <dd></dd>
-							<dt><i class="fa fa-calendar fa-fw"></i> Actual Start</dt> <dd><c:out value="${event.getActual_start().toString('MM-dd-yyyy HH:mm:ss') }" /></dd>
-							<dt><i class="fa fa-calendar fa-fw"></i> Actual End</dt> <dd><c:out value="${event.getActual_end().toString('MM-dd-yyyy HH:mm:ss') }" /></dd>
+							<dt><i class="fa fa-user fa-fw"></i> Started By</dt> <dd><c:out value="${event.getExecuter().fullname() }" >N/A</c:out></dd>
+							<dt><i class="fa fa-calendar fa-fw"></i> Actual Start</dt> <dd><c:out value="${event.getActual_start().toString('MM-dd-yyyy HH:mm:ss') }" >N/A</c:out></dd>
+							<dt><i class="fa fa-calendar fa-fw"></i> Actual End</dt> <dd><c:out value="${event.getActual_end().toString('MM-dd-yyyy HH:mm:ss') }" >N/A</c:out></dd>
 							<dt><i class="fa fa-clock-o fa-fw"></i> Actual Duration</dt> 
 							<c:set var="actual_start" value="${event.getActual_start() }"></c:set>
 							<c:set var="actual_end" value="${event.getActual_end() }"></c:set>
 							<dd>
 								<%
-									LocalDateTime act_start=new LocalDateTime(pageContext.getAttribute("actual_start"));
-									LocalDateTime act_end=new LocalDateTime(pageContext.getAttribute("actual_end"));
-									Period act_period=new Period(act_start,act_end);
-									out.print(act_period.toStandardMinutes().getMinutes()/24/60 + " days " + act_period.toStandardMinutes().getMinutes()/60%24 + " hours " + act_period.toStandardMinutes().getMinutes()%60+" minutes");
+									try{
+										LocalDateTime act_start=new LocalDateTime(pageContext.getAttribute("actual_start"));
+										LocalDateTime act_end=new LocalDateTime(pageContext.getAttribute("actual_end"));
+										Period act_period=new Period(act_start,act_end);
+										out.print(act_period.toStandardMinutes().getMinutes()/24/60 + " days " + act_period.toStandardMinutes().getMinutes()/60%24 + " hours " + act_period.toStandardMinutes().getMinutes()%60+" minutes");
+									}catch(Exception e){
+										out.print("Long event");
+									}
 								%>
 							 </dd>
 						</dl>
