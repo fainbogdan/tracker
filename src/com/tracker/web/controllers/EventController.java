@@ -1,13 +1,18 @@
 package com.tracker.web.controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
+
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
+import org.joda.time.DateTimeConstants;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.support.PagedListHolder;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -51,30 +56,33 @@ public class EventController {
 		return customUser;
 	}
 
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value="events")
 	public String index(Model model,HttpServletRequest request)
 	{
-		int page=1;
+		LocalDateTime week_start=null;
+		LocalDateTime week_end=null;
+		
+		int page=0;
 		if(request.getParameter("page")!=null)
 			page=Integer.parseInt(request.getParameter("page"));
-		PagedListHolder<Event> eventsList=(PagedListHolder<Event>) request.getSession().getAttribute("eventList");
-		if(eventsList==null)
-		{
-			eventsList=new PagedListHolder<Event>(eventService.getEvents());
-			eventsList.setPageSize(10);
-			request.getSession().setAttribute("eventList", eventsList);
-			model.addAttribute("currentPage", page);
-			model.addAttribute("pageCount", eventsList.getPageCount());
-			model.addAttribute("events",eventsList.getPageList());
+		
+		week_start=new LocalDateTime().withDayOfWeek(DateTimeConstants.MONDAY).plusWeeks(page);
+		week_end =week_start.plusDays(6);
+		
+		if(request.getParameter("expected_start")!=null && request.getParameter("expected_end")!=null){
+			SimpleDateFormat dateFormat=new SimpleDateFormat("MM/dd/yyyy HH:mm a");
+			try {
+				week_start=new LocalDateTime(dateFormat.parseObject(request.getParameter("expected_start")));
+				week_end =new LocalDateTime(dateFormat.parseObject(request.getParameter("expected_end")));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 		}
-		else
-		{
-			eventsList.setPage(page);
-			model.addAttribute("currentPage", page);
-			model.addAttribute("pageCount", eventsList.getPageCount());
-			model.addAttribute("events",eventsList.getPageList());
-		}	
+			
+		model.addAttribute("page",page);
+		model.addAttribute("fromDate", week_start);
+		model.addAttribute("toDate", week_end);
+		model.addAttribute("events", eventService.getEvents(week_start,week_end));
 		return "events/index";
 	}
 	
