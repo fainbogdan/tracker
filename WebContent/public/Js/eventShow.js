@@ -7,7 +7,6 @@
 	$(document).on('click','.checklist-icon',function()
 	{
 		var updatedIcon=$(this);
-		console.log(updatedIcon);
 		var goToState;
 		if($(updatedIcon).hasClass('fa-check-circle'))
 			goToState='N';
@@ -28,7 +27,7 @@
 			$('#myModal').modal('show').on('click','#save',function()
 			{
 				if($('#skipNote').val().trim().length)
-				{console.log("cicked");
+				{
 					$('#myModal').modal('hide');
 					$(updatedIcon).addClass('fa-spinner fa-spin');
 					$.ajax(
@@ -43,12 +42,8 @@
 						data:JSON.stringify({"completed":goToState, skipped_note:$('#skipNote').val().trim()}),
 						success:function(data)
 						{
-							$(updatedIcon).removeClass('fa-spinner fa-spin');
-							var updatedChecklist=data.checklist;
-							if(updatedChecklist.completed=="Y")
-								$(updatedIcon).removeClass('fa-circle-o fa-times-circle').addClass('fa-check-circle');
-							else
-								$(updatedIcon).removeClass('fa-check-circle').addClass('fa-times-circle');
+							var checklist=data.checklist;
+							changeChecklistState(checklist.id, checklist.completed);
 						}
 					});
 				}
@@ -71,28 +66,22 @@
 				data:JSON.stringify({"completed":goToState}),
 				success:function(data)
 				{
-					$(updatedIcon).removeClass('fa-spinner fa-spin');
-					if(data.message=="success")
-					{
-						var updatedChecklist=data.checklist;
-						if(updatedChecklist.completed=="Y")
-							$(updatedIcon).removeClass('fa-circle-o fa-times-circle').addClass('fa-check-circle');
-						else
-							$(updatedIcon).removeClass('fa-check-circle').addClass('fa-times-circle');
-					}
-					else
+					var checklist=data.checklist;
+					if(data.message!="success")
 					{
 						var alert='<div class="alert alert-danger alert-error" role="alert"> ' +
 					                    '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
 					                    '<strong>Error!</strong> '+data.message +
 				                    '</div>';
-			            $('body').prepend(alert);
-			            setTimeout(function(){
-			                $('.alert').fadeOut("slow",function(){
-	                			$(this).remove();
-	                		});
-			            },5000);
+				        $('body').prepend(alert);
+				        setTimeout(function(){
+				            $('.alert').fadeOut("slow",function(){
+				    			$(this).remove();
+				    		});
+				        },5000);
 					}
+					
+					changeChecklistState(checklist.id, checklist.completed);
 				}
 			});
 		}
@@ -169,6 +158,38 @@
 		});
 	});
 	
+	function changeChecklistState(id,state) {
+		var icon = $('.checklist-'+id);
+
+		icon.removeClass('fa-spinner fa-spin fa-check-circle fa-circle-o fa-times-circle text-success text-danger');
+
+		if (state == 'Y') {
+			icon.addClass('fa-check-circle text-success');
+		} else if (state == 'N') {
+			icon.addClass('fa-times-circle text-danger');
+		} else {
+			icon.addClass('fa-circle-o');
+		}
+	}
+	
+	setInterval(function() {
+		$.ajax({
+			url:'/tracker/events/'+$('input[name="event_id"]').val()+'/json',
+			method:'get',
+			dataType:'json',
+			beforeSend: function (xhr) {
+				 xhr.setRequestHeader($("meta[name='_csrf_header']").attr("content"), $("meta[name='_csrf']").attr("content"));
+         	},
+			success:function(data)
+			{
+				var checklists=data.checklist;
+				$(checklists).each(function(index,checklist) {
+					changeChecklistState(checklist.id, checklist.completed);
+				});
+			}
+		});
+		
+	}, 3000);
 	
 	$(document).on('hidden.bs.modal','#myModal', function (e) {
 		$(this).unbind();               // unbing clicks from closed modals
