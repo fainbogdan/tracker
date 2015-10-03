@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tracker.web.models.Checklist;
+import com.tracker.web.models.Event;
 import com.tracker.web.service.implementations.UserServiceImpl.CustomUser;
 import com.tracker.web.service.interfaces.ChecklistService;
 import com.tracker.web.service.interfaces.UserService;
@@ -56,6 +57,12 @@ public class ChecklistController {
 		model.addAttribute("loggeduser", currentUser());
 		model.addAttribute("checklist", checklistService.getChecklist(id));
 		return "checklists/show";
+	}
+	
+	@RequestMapping(value="/checklists/{id}/json", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public Checklist checklistInJson(@PathVariable("id") int id) {
+		return checklistService.getChecklist(id);
 	}
 	
 	@RequestMapping(value="/checklist",method=RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)

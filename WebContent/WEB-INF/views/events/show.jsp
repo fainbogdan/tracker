@@ -7,6 +7,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 	<div class="container">
+		<input type="hidden" name="event_id" value='<c:out value="${event.getId() }"></c:out>'>
 		<div class="row">
 			<div class="col-md-6">
 				
@@ -94,13 +95,13 @@
 								<li class="list-group-item" checklist-id='<c:out value="${checklist.getId() }" />'>
 									<c:choose>
 										<c:when test="${checklist.getCompleted() eq 'Y' }">
-											<i class="fa fa-check-circle fa-2x fa-fw checklist-icon pointer"></i>
+											<i class='fa fa-check-circle fa-2x fa-fw checklist-icon pointer checklist-<c:out  value="${checklist.getId() }"></c:out> '></i>
 										</c:when>
 										<c:when test="${checklist.getCompleted() eq 'N' }">
-											<i class="fa fa-times-circle fa-2x fa-fw checklist-icon pointer"></i>
+											<i class='fa fa-times-circle fa-2x fa-fw checklist-icon pointer checklist-<c:out  value="${checklist.getId() }"></c:out> '></i>
 										</c:when>
 										<c:otherwise>
-											<i class="fa fa-circle-o fa-2x fa-fw checklist-icon pointer"></i>
+											<i class='fa fa-circle-o fa-2x fa-fw checklist-icon pointer checklist-<c:out  value="${checklist.getId() }"></c:out> '></i>
 										</c:otherwise>
 									</c:choose>
 									<a href='/tracker/checklists/<c:out value="${checklist.getId() }" />'><c:out value="${checklist.getName() }" /></a>
@@ -110,13 +111,13 @@
 					</ul>
 				</div>
 				
-				<div id="start-event">
+				<div id="start-event text-center">
 					<c:choose>
 						<c:when test="${empty event.getActual_start() }">
 							<button class="btn btn-success btn-lg btn-block" id="start_event_btn" data-loading-text="Starting event..." event_id='<c:out value="${event.getId()}"></c:out>' >Start Event</button>
 						</c:when>
 						<c:otherwise>
-							<h3 class="text-success text-center">Event started at <c:out value="${event.getActual_start().toString('MM-dd-yyyy HH:mm:ss') }" /></h3>
+							<h3 class="text-success">Event started at <c:out value="${event.getActual_start().toString('MM-dd-yyyy HH:mm:ss') }" /></h3>
 						</c:otherwise>
 					</c:choose>
 				</div>
@@ -129,13 +130,13 @@
 								<li class="list-group-item" checklist-id='<c:out value="${checklist.getId() }" />'>
 									<c:choose>
 										<c:when test="${checklist.getCompleted() eq 'Y' }">
-											<i class="fa fa-check-circle fa-2x fa-fw checklist-icon pointer"></i>
+											<i class='fa fa-check-circle fa-2x fa-fw checklist-icon pointer checklist-<c:out  value="${checklist.getId() }"></c:out> '></i>
 										</c:when>
 										<c:when test="${checklist.getCompleted() eq 'N' }">
-											<i class="fa fa-times-circle fa-2x fa-fw checklist-icon pointer"></i>
+											<i class='fa fa-times-circle fa-2x fa-fw checklist-icon pointer checklist-<c:out  value="${checklist.getId() }"></c:out> '></i>
 										</c:when>
 										<c:otherwise>
-											<i class="fa fa-circle-o fa-2x fa-fw checklist-icon pointer"></i>
+											<i class='fa fa-circle-o fa-2x fa-fw checklist-icon pointer checklist-<c:out  value="${checklist.getId() }"></c:out> '></i>
 										</c:otherwise>
 									</c:choose>
 									<a href='/tracker/checklists/<c:out value="${checklist.getId() }" />'><c:out value="${checklist.getName() }" /></a>
@@ -164,13 +165,13 @@
 								<li class="list-group-item" checklist-id='<c:out value="${checklist.getId() }" />'>
 									<c:choose>
 										<c:when test="${checklist.getCompleted() eq 'Y' }">
-											<i class="fa fa-check-circle fa-2x fa-fw checklist-icon pointer"></i>
+											<i class='fa fa-check-circle fa-2x fa-fw checklist-icon pointer checklist-<c:out  value="${checklist.getId() }"></c:out> '></i>
 										</c:when>
 										<c:when test="${checklist.getCompleted() eq 'N' }">
-											<i class="fa fa-times-circle fa-2x fa-fw checklist-icon pointer"></i>
+											<i class='fa fa-times-circle fa-2x fa-fw checklist-icon pointer checklist-<c:out  value="${checklist.getId() }"></c:out> '></i>
 										</c:when>
 										<c:otherwise>
-											<i class="fa fa-circle-o fa-2x fa-fw checklist-icon pointer"></i>
+											<i class='fa fa-circle-o fa-2x fa-fw checklist-icon pointer checklist-<c:out  value="${checklist.getId() }"></c:out> '></i>
 										</c:otherwise>
 									</c:choose>
 									<a href='/tracker/checklists/<c:out value="${checklist.getId() }" />'><c:out value="${checklist.getName() }" /></a>
