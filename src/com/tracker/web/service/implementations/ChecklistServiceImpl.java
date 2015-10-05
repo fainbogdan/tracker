@@ -94,26 +94,34 @@ public class ChecklistServiceImpl implements ChecklistService{
 	public Map<String, Object> updateState(Checklist ch, HttpServletRequest request, HttpServletResponse response) throws MessagingException 
 	{
 		Map<String, Object> data=new HashMap<String, Object>();
-		if(checklistRepo.arePreviousItemsDone(ch))
-		{
-			ch.setFinisher(currentUser());
-			ch.setCompleted_on(new LocalDateTime());
-			Checklist updatedChecklist=checklistRepo.updateState(ch);
-			data.put("checklist", updatedChecklist);
-			data.put("message", "success");
-			
-			final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
-			context.setVariable("event", updatedChecklist.getEvent());
-			String[] recievers={"lokesh.cherukuri8@gmail.com"};
-			String content=templateEngine.process("eventUpdate", context);
-			EmailMessage emailMessage=new EmailMessage(content, recievers, "Tracker : Event updated");
-			rabbitTemplate.convertAndSend(emailMessage);
-			
-			return data;
+		if(checklistRepo.getChecklist(ch.getId()).getEvent().isApproved()){
+			if(checklistRepo.arePreviousItemsDone(ch))
+			{
+				ch.setFinisher(currentUser());
+				ch.setCompleted_on(new LocalDateTime());
+				Checklist updatedChecklist=checklistRepo.updateState(ch);
+				data.put("checklist", updatedChecklist);
+				data.put("message", "success");
+				
+				final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
+				context.setVariable("event", updatedChecklist.getEvent());
+				String[] recievers={"lokesh.cherukuri8@gmail.com"};
+				String content=templateEngine.process("eventUpdate", context);
+				EmailMessage emailMessage=new EmailMessage(content, recievers, "Tracker : Event updated");
+				rabbitTemplate.convertAndSend(emailMessage);
+				
+				return data;
+			}
+			else{
+				data.put("checklist", checklistRepo.getChecklist(ch.getId()));
+				data.put("message", "Please complete all prior checklist items before this  ");
+			}
+		}
+		else{
+			data.put("checklist", checklistRepo.getChecklist(ch.getId()));
+			data.put("message", "Event not yet approved. contact manager ");
 		}
 		
-		data.put("checklist", checklistRepo.getChecklist(ch.getId()));
-		data.put("message", "Please complete all prior checklist items before this  ");
 		return data;
 	}
 	

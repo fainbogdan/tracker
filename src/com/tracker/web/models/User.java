@@ -1,6 +1,7 @@
 package com.tracker.web.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -8,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -69,16 +71,20 @@ public class User implements Serializable{
 	
 	@OneToMany(mappedBy="creator")
 	@JsonIgnore
-	private Collection<Event> events;
+	private Collection<Event> events=new ArrayList<Event>();
 	
 	@OneToMany(mappedBy="user",fetch=FetchType.EAGER)
 	@JsonIgnore
-	private Collection<Role> roles;
+	private Collection<Role> roles=new ArrayList<Role>();
 	
 	private boolean enabled;
 	
 	private String grp;
 	private String dpt;
+	
+	@ManyToMany(mappedBy="watchers")
+	@JsonIgnore
+	private Collection<Event> watchingEvents=new ArrayList<Event>();
 
 	public User(){
 		
@@ -209,8 +215,41 @@ public class User implements Serializable{
 		this.dpt = dpt;
 	}
 
+	public Collection<Event> getWatchingEvents() {
+		return watchingEvents;
+	}
+
+	public void setWatchingEvents(Collection<Event> watchingEvents) {
+		this.watchingEvents = watchingEvents;
+	}
+
 	public String fullname()
 	{
 		return getFirst_name()+" "+getLast_name();
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((username == null) ? 0 : username.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		User other = (User) obj;
+		if (username == null) {
+			if (other.username != null)
+				return false;
+		} else if (!username.equals(other.username))
+			return false;
+		return true;
+	}
+
 }

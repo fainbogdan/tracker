@@ -26,7 +26,7 @@ function sort()
     });
 }
 	
-$(function(){
+(function(){
 	
 	$('.sortable').sortable({
 	    connectWith: ".connectedSortable",
@@ -100,7 +100,17 @@ $(function(){
                         	$(editingItem).find('.item-name a').html(data.name);
                         	$(editingItem).find('.item-details').text(data.details);
                         	$('#myModal').modal('hide');
-                        }
+                        	var alert='<div class="alert alert-success" role="alert"> ' +
+				    				        '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
+				    				        '<strong>All changes made to this event committed successfully</strong>'+
+				    				    '</div>';
+				    				$('body').prepend(alert);
+				    				setTimeout(function(){
+				    					$('.alert').fadeOut("slow",function(){
+				    						$(this).remove();
+				    					});
+				    				},5000);
+				    	}
                     });
                 });
     });
@@ -140,6 +150,16 @@ $(function(){
                     	
                     }).done(function(){
                     	sort();
+                    	var alert='<div class="alert alert-success" role="alert"> ' +
+								        '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
+								        '<strong>All changes made to this event committed successfully</strong>'+
+								    '</div>';
+								$('body').prepend(alert);
+								setTimeout(function(){
+									$('.alert').fadeOut("slow",function(){
+										$(this).remove();
+									});
+								},5000);
                     });
                 });
     });
@@ -210,6 +230,16 @@ $(function(){
 			                        $(addToGroup).append(x);
 			                        sort();
 			                        $('#myModal').modal('hide');
+			                        var alert='<div class="alert alert-success" role="alert"> ' +
+						    				        '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
+						    				        '<strong>All changes made to this event committed successfully</strong>'+
+						    				    '</div>';
+						    				$('body').prepend(alert);
+						    				setTimeout(function(){
+						    					$('.alert').fadeOut("slow",function(){
+						    						$(this).remove();
+						    					});
+						    				},5000);
                             }
                         });
                     }
@@ -225,4 +255,4 @@ $(function(){
     });
 
 
-});
+})();

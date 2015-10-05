@@ -3,11 +3,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -21,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.tracker.web.models.Checklist;
-import com.tracker.web.models.Event;
 import com.tracker.web.service.implementations.UserServiceImpl.CustomUser;
 import com.tracker.web.service.interfaces.ChecklistService;
 import com.tracker.web.service.interfaces.UserService;
