@@ -44,6 +44,17 @@
 						{
 							var checklist=data.checklist;
 							changeChecklistState(checklist.id, checklist.completed);
+
+							var alert='<div class="alert alert-success" role="alert"> ' +
+									        '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
+									        '<strong>All changes made to this event committed successfully</strong>'+
+									    '</div>';
+									$('body').prepend(alert);
+									setTimeout(function(){
+										$('.alert').fadeOut("slow",function(){
+											$(this).remove();
+										});
+									},5000);
 						}
 					});
 				}
@@ -71,7 +82,7 @@
 					{
 						var alert='<div class="alert alert-danger alert-error" role="alert"> ' +
 					                    '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
-					                    '<strong>Error!</strong> '+data.message +
+					                    '<strong>Error!</strong>  '+data.message +'     '+
 				                    '</div>';
 				        $('body').prepend(alert);
 				        setTimeout(function(){
@@ -80,8 +91,20 @@
 				    		});
 				        },5000);
 					}
-					
-					changeChecklistState(checklist.id, checklist.completed);
+					else{
+						changeChecklistState(checklist.id, checklist.completed);
+
+						var alert='<div class="alert alert-success" role="alert"> ' +
+								        '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
+								        '<strong>All changes made to this event committed successfully</strong>'+
+								    '</div>';
+								$('body').prepend(alert);
+								setTimeout(function(){
+									$('.alert').fadeOut("slow",function(){
+										$(this).remove();
+									});
+								},5000);
+					}
 				}
 			});
 		}
@@ -194,6 +217,39 @@
 	$(document).on('hidden.bs.modal','#myModal', function (e) {
 		$(this).unbind();               // unbing clicks from closed modals
     });
+	
+	
+	$(document).on('click','.watcher-icon',function(){
+		var icon=$(this);
+		var url="";
+		if( $(this).attr('data-status')=="nwatching" )
+			url="/addWatcher";
+		else
+			url="/removeWatcher";
+		
+		$.ajax({
+			url:'/tracker/events/'+$('input[name="event_id"]').val()+url,
+			method:'post',
+			dataType:'json',
+			beforeSend: function (xhr) {
+				 xhr.setRequestHeader($("meta[name='_csrf_header']").attr("content"), $("meta[name='_csrf']").attr("content"));
+         	},
+			success:function(status)
+			{
+				if(status==true){
+					$(icon).prev('message').text("You are watching this event");
+					$(icon).removeClass('fa-eye fa-eye-slash').addClass('fa-eye');
+					$(icon).attr('data-status','watching');
+				}
+				else if(status==false){
+					$(icon).prev('message').text("You are not watching this event");
+					$(icon).removeClass('fa-eye fa-eye-slash').addClass('fa-eye-slash');
+					$(icon).attr('data-status','nwatching');
+				}
+			}
+		});
+	});
+	
 
 })();
 	

@@ -26,7 +26,17 @@
 					</strong>
 				</span>
 				<h1><c:out value="${event.getName() }"></c:out></h1>
-				<span>You are Watching this event <i class="fa fa-eye fa-lg watcher-icon pointer"></i></span>
+				<span>
+					<message>You are watching this event</message> 
+					<c:choose>
+						<c:when test="${amIWatching }">
+							<i class="fa fa-eye fa-lg watcher-icon pointer" data-status="watching"></i>
+						</c:when>
+						<c:otherwise>
+							<i class="fa fa-eye-slash fa-lg watcher-icon pointer" data-status="nwatching"></i>
+						</c:otherwise>
+					</c:choose>
+				</span>
 				<hr/>
 				<div class="row">
 					<div class="col-md-6">

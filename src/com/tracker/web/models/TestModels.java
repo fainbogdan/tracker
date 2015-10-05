@@ -44,7 +44,6 @@ public class TestModels {
 		session.beginTransaction();
 		session.save(user);
 		session.save(role);
-		session.save(token);
 		session.getTransaction().commit();
 		session.close();
 		

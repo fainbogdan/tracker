@@ -2,7 +2,6 @@ package com.tracker.web.dao.implementations;
 
 import java.util.List;
 import java.util.Map;
-
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,11 +9,9 @@ import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
-import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import com.tracker.web.dao.interfaces.EventRepo;
 import com.tracker.web.models.Checklist;
 import com.tracker.web.models.Event;
@@ -176,6 +173,34 @@ public class EventRepoImpl implements EventRepo {
 		
 		session.flush();
 		return event;
+	}
+
+	@Override
+	public boolean addWatcher(int event_id, CustomUser currentUser) {
+		Session session=getCurrentSession();
+		Event event=(Event) session.get(Event.class, event_id);
+		event.getWatchers().add(currentUser);
+		session.flush();
+		return amIWatching(event_id, currentUser);
+	}
+
+	@Override
+	public boolean removeWatcher(int event_id, CustomUser currentUser) {
+		Session session=getCurrentSession();
+		Event event=(Event) session.get(Event.class, event_id);
+		event.getWatchers().remove(currentUser);
+		session.flush();
+		return amIWatching(event_id, currentUser);
+	}
+
+	@Override
+	public boolean amIWatching(int event_id,CustomUser currentUser) {
+		Session session=getCurrentSession();
+		Event event=(Event) session.get(Event.class, event_id);
+		if(event.getWatchers().contains(currentUser))
+			return true;
+		
+		return false;
 	}
 
 }

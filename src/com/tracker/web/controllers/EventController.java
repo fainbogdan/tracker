@@ -78,7 +78,7 @@ public class EventController {
 				e.printStackTrace();
 			}
 		}
-			
+		
 		model.addAttribute("page",page);
 		model.addAttribute("fromDate", week_start);
 		model.addAttribute("toDate", week_end);
@@ -124,7 +124,9 @@ public class EventController {
 	@RequestMapping(value="/events/{id}",method=RequestMethod.GET)
 	public String show(@PathVariable("id") int id,Model model)
 	{
-		model.addAttribute("event", eventService.getEvent(id));
+		Event event= eventService.getEvent(id);
+		model.addAttribute("event",event);
+		model.addAttribute("amIWatching", eventService.amIWatching(event.getId()));
 		return "events/show";
 	}
 	
@@ -182,5 +184,20 @@ public class EventController {
 		return eventService.approve(action);
 	}
 	
+	@RequestMapping(value="events/{id}/addWatcher", produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public boolean addWatcher(@PathVariable("id") int event_id) {
+		return eventService.addWatcher(event_id);	
+	}
+	
+	@RequestMapping(value="events/{id}/removeWatcher", produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public boolean removeWatcher(@PathVariable("id") int event_id) {
+		return eventService.removeWatcher(event_id);	
+	}
+	
+	public boolean amIWatching(int event_id){
+		return eventService.amIWatching(event_id);
+	}
 	
 }

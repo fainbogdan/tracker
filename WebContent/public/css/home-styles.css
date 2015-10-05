@@ -306,6 +306,9 @@ a.link
 }
 .top-buffer { margin-top:20px; }
 .default-filter-group{margin-top: 15%;}
+.alert .close{
+	margin-left:20px
+}
 
 
 

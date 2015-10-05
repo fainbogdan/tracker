@@ -22,4 +22,7 @@ public interface EventService {
 	public List<Event> getEventsForMonth();
 	public List<Event> getEventsToApprove(CustomUser user);
 	public Event approve(Map<String, String> action);
+	public boolean addWatcher(int event_id);
+	public boolean amIWatching(int event_id);
+	public boolean removeWatcher(int event_id);
 }

@@ -21,4 +21,7 @@ public interface EventRepo {
 	public List<Event> getEventsForMonth();
 	public List<Event> getEventsToApprove(CustomUser user);
 	public Event approve(Map<String, String> action);
+	public boolean addWatcher(int event_id, CustomUser currentUser);
+	public boolean amIWatching(int event_id, CustomUser currentUser);
+	public boolean removeWatcher(int event_id, CustomUser currentUser);
 }

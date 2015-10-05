@@ -13,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -30,6 +32,7 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.Period;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -94,6 +97,11 @@ public class Event implements Serializable{
 	private Collection<Checklist> checklist=new ArrayList<Checklist>();
 	
 	private boolean approved;
+	
+	@ManyToMany
+	@JoinTable(name="events_watchers", joinColumns=@JoinColumn(name="event_id"), inverseJoinColumns=@JoinColumn(name="watcher_id"))
+	@JsonIgnore
+	private Collection<User> watchers=new ArrayList<User>();
 	
 	public Event(){}
 	
@@ -209,16 +217,24 @@ public class Event implements Serializable{
 		return checklist;
 	}
 
-	public void setChecklists(Collection<Checklist> checklist) {
+	public void setChecklist(Collection<Checklist> checklist) {
 		this.checklist = checklist;
 	}
-	
+
 	public boolean isApproved() {
 		return approved;
 	}
 
 	public void setApproved(boolean approved) {
 		this.approved = approved;
+	}
+
+	public Collection<User> getWatchers() {
+		return watchers;
+	}
+
+	public void setWatchers(Collection<User> watchers) {
+		this.watchers = watchers;
 	}
 
 	public List<Checklist> sortedChecklist() {
