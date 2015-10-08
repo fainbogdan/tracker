@@ -10,7 +10,7 @@
 	 
 	 $('li.event').on('click',function(event)
 	 {
-		 var event_id=$(this).attr('event_id');
+		 var event_id=$(this).attr('data-event_id');
 		 event.preventDefault();
 		 $.ajax({
 			url:'/tracker/events/'+event_id+'/json' ,

@@ -13,6 +13,7 @@
 		else
 			goToState='Y';
 		
+		//if checking an item as done
 		if(goToState=='N')
 		{
 			var modal_title='Why you want to skip this item?';
@@ -26,103 +27,97 @@
 			$('#myModal .modal-body').html(modal_body);
 			$('#myModal').modal('show').on('click','#save',function()
 			{
+				//if user entered skip note
 				if($('#skipNote').val().trim().length)
 				{
 					$('#myModal').modal('hide');
 					$(updatedIcon).addClass('fa-spinner fa-spin');
 					$.ajax(
 					{
-						url:'/tracker/checklistState/'+$(updatedIcon).parents('li').attr('checklist-id'),
+						url:'/tracker/checklistState/'+$(updatedIcon).parents('li').attr('data-checklist-id'),
 						method:'put',
 						contentType:'application/json',
 						datatype:'json',
 						 beforeSend: function (xhr) {
 	                    	    xhr.setRequestHeader($("meta[name='_csrf_header']").attr("content"), $("meta[name='_csrf']").attr("content"));
 	                    },
-						data:JSON.stringify({"completed":goToState, skipped_note:$('#skipNote').val().trim()}),
+						error: function (xhr, ajaxOptions, thrownError) {
+							if(xhr.status==403){	//if unauthorized, remove spinner and show alert
+								$(updatedIcon).removeClass('fa-spinner fa-spin');
+								systemFailureAlert("Sorry! Unauthorized to work on this. Contact Manager ");
+			    	        }
+			    	    },
+						data:JSON.stringify({id:$(updatedIcon).parents('li').attr('data-checklist-id'),"completed":goToState, skipped_note:$('#skipNote').val().trim()}),
 						success:function(data)
-						{
+						{		//if success. change item state and show alert
 							var checklist=data.checklist;
 							changeChecklistState(checklist.id, checklist.completed);
-
-							var alert='<div class="alert alert-success" role="alert"> ' +
-									        '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
-									        '<strong>All changes made to this event committed successfully</strong>'+
-									    '</div>';
-									$('body').prepend(alert);
-									setTimeout(function(){
-										$('.alert').fadeOut("slow",function(){
-											$(this).remove();
-										});
-									},5000);
+							systemSuccessAlert("All changes made to this event committed successfully");
 						}
 					});
 				}
-				else
+				else{
+					//if user did not enter skip note
 					$('#skipNote').parents('.form-group').addClass('has-error');
+				}
 			});
 		}
-		else
+		else	//if unchecking an item
 		{
 			$(updatedIcon).addClass('fa-spinner fa-spin');
 			$.ajax(
 			{
-				url:'/tracker/checklistState/'+$(updatedIcon).parents('li').attr('checklist-id'),
+				url:'/tracker/checklistState/'+$(updatedIcon).parents('li').attr('data-checklist-id'),
 				method:'put',
 				contentType:'application/json',
 				datatype:'json',
 				beforeSend: function (xhr) {
 					 xhr.setRequestHeader($("meta[name='_csrf_header']").attr("content"), $("meta[name='_csrf']").attr("content"));
              	},
-				data:JSON.stringify({"completed":goToState}),
+       	      	error: function (xhr, ajaxOptions, thrownError) {
+					if(xhr.status==403){	//if unauthorized, remove spinner and show alert
+						$(updatedIcon).removeClass('fa-spinner fa-spin');
+						systemFailureAlert("Sorry! Unauthorized to work on this. Contact Manager ");
+	    	        }
+	    	    },
+				data:JSON.stringify({id:$(updatedIcon).parents('li').attr('data-checklist-id'),"completed":goToState}),
 				success:function(data)
 				{
 					var checklist=data.checklist;
-					if(data.message!="success")
+					if(data.message=="success")
 					{
-						var alert='<div class="alert alert-danger alert-error" role="alert"> ' +
-					                    '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
-					                    '<strong>Error!</strong>  '+data.message +'     '+
-				                    '</div>';
-				        $('body').prepend(alert);
-				        setTimeout(function(){
-				            $('.alert').fadeOut("slow",function(){
-				    			$(this).remove();
-				    		});
-				        },5000);
+						changeChecklistState(checklist.id, checklist.completed);
+						systemSuccessAlert("All changes made to this event committed successfully");
 					}
 					else{
-						changeChecklistState(checklist.id, checklist.completed);
-
-						var alert='<div class="alert alert-success" role="alert"> ' +
-								        '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
-								        '<strong>All changes made to this event committed successfully</strong>'+
-								    '</div>';
-								$('body').prepend(alert);
-								setTimeout(function(){
-									$('.alert').fadeOut("slow",function(){
-										$(this).remove();
-									});
-								},5000);
+						$(updatedIcon).removeClass('fa-spinner fa-spin');
+						systemFailureAlert(data.message);
 					}
 				}
 			});
 		}
 	});
 	
+	
 	$('#start_event_btn').click(function() 
 	{
 		var start_btn = $(this).button('loading');
 		$.ajax(
 		{
-			url:'/tracker/events/'+$(start_btn).attr('event_id')+'/start',
+			url:'/tracker/events/'+$(start_btn).attr('data-event_id')+'/start',
 			method:'put',
 			contentType:'application/json',
 			dataType:'json',
 			beforeSend: function (xhr) {
 				 xhr.setRequestHeader($("meta[name='_csrf_header']").attr("content"), $("meta[name='_csrf']").attr("content"));
          	},
-			data:JSON.stringify({}),
+			data:JSON.stringify({id:$(start_btn).attr('data-event_id')}),
+			error: function (xhr, ajaxOptions, thrownError) {
+				if(xhr.status==403){	//if unauthorized, remove spinner and show alert
+					$(start_btn).button('reset');
+					systemFailureAlert("Sorry! Unauthorized to work on this. Contact Manager ");
+    	        }
+    	    },
 			success:function(data)
 			{
 				if(data.message=="success")
@@ -130,16 +125,7 @@
 				else
 				{
 					$(start_btn).button('reset');
-					var alert='<div class="alert alert-danger alert-error" role="alert"> ' +
-				                    ' <a href="#" class="close" data-dismiss="alert"> &times;</a> ' +
-				                    '<strong>Error!</strong> '+data.message  +
-				                '</div>';
-				    $('body').prepend(alert);
-				    setTimeout(function(){
-				        $('.alert').fadeOut("slow",function(){
-							$(this).remove();
-						});
-				    },5000);
+					systemFailureAlert(data.message);
 				}
 			}
 		});
@@ -150,14 +136,20 @@
 		var end_btn = $(this).button('loading');
 		$.ajax(
 		{
-			url:'/tracker/events/'+$(end_btn).attr('event_id')+'/end',
+			url:'/tracker/events/'+$(end_btn).attr('data-event_id')+'/end',
 			method:'put',
 			contentType:'application/json',
 			dataType:'json',
 			beforeSend: function (xhr) {
 				 xhr.setRequestHeader($("meta[name='_csrf_header']").attr("content"), $("meta[name='_csrf']").attr("content"));
          	},
-			data:JSON.stringify({}),
+         	error: function (xhr, ajaxOptions, thrownError) {
+					if(xhr.status==403){	//if unauthorized, remove spinner and show alert
+						$(end_btn).button('reset');
+						systemFailureAlert("Sorry! Unauthorized to work on this. Contact Manager ");
+	    	        }
+    	    },
+			data:JSON.stringify({id:$(end_btn).attr('data-event_id')}),
 			success:function(data)
 			{
 				var end=data.event['actual_end'];
@@ -166,20 +158,39 @@
 				else
 				{
 					$(end_btn).button('reset');
-					var alert='<div class="alert alert-danger alert-error" role="alert"> ' +
-				                    ' <a href="#" class="close" data-dismiss="alert"> &times;</a> ' +
-				                    '<strong>Error!</strong> '+data.message  +
-				                '</div>';
-				    $('body').prepend(alert);
-				    setTimeout(function(){
-				        $('.alert').fadeOut("slow",function(){
-							$(this).remove();
-						});
-				    },5000);
+					systemFailureAlert(data.message);
 				}
 			}
 		});
 	});
+	
+	
+	function systemSuccessAlert(message){
+    	var alert='<div class="alert alert-success" role="alert"> ' +
+				        '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
+				        '<strong>'+message+'</strong>'+
+				    '</div>';
+		$('body').prepend(alert);
+		alertTimeOut();
+	}
+	
+	function systemFailureAlert(message){
+    	var alert='<div class="alert alert-danger alert-error" role="alert"> ' +
+				        '<a href="#" class="close" data-dismiss="alert">&times;</a> ' +
+				        '<strong>'+message+'</strong>'+
+				    '</div>';
+		$('body').prepend(alert);
+		alertTimeOut();
+	}
+	
+	function alertTimeOut() {
+		setTimeout(function(){
+			$('.alert').fadeOut("slow",function(){
+				$(this).remove();
+			});
+		},5000);
+	}
+	
 	
 	function changeChecklistState(id,state) {
 		var icon = $('.checklist-'+id);
@@ -203,16 +214,22 @@
 			beforeSend: function (xhr) {
 				 xhr.setRequestHeader($("meta[name='_csrf_header']").attr("content"), $("meta[name='_csrf']").attr("content"));
          	},
-			success:function(data)
+			success:function(event)
 			{
-				var checklists=data.checklist;
+				console.log(event.actual_start);
+				if(event.actual_start!=null)
+					$('#start-event').html('<h3 class="text-success text-center">Event started at '+event.actual_start+'</h3>');
+				if(event.actual_end!=null)
+					$('#end-event').html('<h3 class="text-danger text-center">Event ended at '+event.actual_end+'</h3>');
+					
+				var checklists=event.checklist;
 				$(checklists).each(function(index,checklist) {
 					changeChecklistState(checklist.id, checklist.completed);
 				});
 			}
 		});
 		
-	}, 3000);
+	}, 5000);
 	
 	$(document).on('hidden.bs.modal','#myModal', function (e) {
 		$(this).unbind();               // unbing clicks from closed modals

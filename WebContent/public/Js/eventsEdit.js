@@ -10,7 +10,7 @@ function sort()
        var data=new Object();
        data["id"]=$(this).attr('id');
        data["item_order"]=counter++;
-       data["phase"]=$(this).parents('.sortable').attr('phase');
+       data["phase"]=$(this).parents('.sortable').attr('data-phase');
        order.push(data);
     });
     
@@ -94,7 +94,7 @@ function sort()
                         beforeSend: function (xhr) {
                         	 xhr.setRequestHeader($("meta[name='_csrf_header']").attr("content"), $("meta[name='_csrf']").attr("content"));
                     	},
-                        data:JSON.stringify({name:$('#newName').val(), details:$('#newDetails').val()}),
+                        data:JSON.stringify({id:$(editingItem).attr('id'),name:$('#newName').val(), details:$('#newDetails').val()}),
                         success:function(data)
                         {
                         	$(editingItem).find('.item-name a').html(data.name);
@@ -200,7 +200,7 @@ function sort()
                             beforeSend: function (xhr) {
                             	 xhr.setRequestHeader($("meta[name='_csrf_header']").attr("content"), $("meta[name='_csrf']").attr("content"));
                         	},
-                            data:JSON.stringify({event_id:$(addToGroup).attr('event_id'), name:$('#newName').val(), details:$('#newDetails').val(), phase:$(addToGroup).attr('phase')}),
+                            data:JSON.stringify({event_id:$(addToGroup).attr('data-event_id'), name:$('#newName').val(), details:$('#newDetails').val(), phase:$(addToGroup).attr('data-phase')}),
                             success:function(data)
                             {
                             	var x='<div class="checklistItem" id="'+data.id+'" >'+

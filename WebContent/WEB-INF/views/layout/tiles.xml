@@ -32,12 +32,12 @@
 		<put-attribute name="body" value="/WEB-INF/views/events/edit.jsp"></put-attribute>
 	</definition>
 	
-	<definition name="pages/register" extends="base">
-		<put-attribute name="body" value="/WEB-INF/views/pages/register.jsp"></put-attribute>
+	<definition name="user/register" extends="base">
+		<put-attribute name="body" value="/WEB-INF/views/user/register.jsp"></put-attribute>
 	</definition>
 	
-	<definition name="pages/login" extends="base">
-		<put-attribute name="body" value="/WEB-INF/views/pages/login.jsp"></put-attribute>
+	<definition name="user/login" extends="base">
+		<put-attribute name="body" value="/WEB-INF/views/user/login.jsp"></put-attribute>
 	</definition>
 	
 	<definition name="checklists/show" extends="base">
@@ -48,12 +48,16 @@
 		<put-attribute name="body" value="/WEB-INF/views/reports/create.jsp"></put-attribute>
 	</definition>
 	
-	<definition name="pages/accountRecovery" extends="base">
-		<put-attribute name="body" value="/WEB-INF/views/pages/accountRecovery.jsp"></put-attribute>
+	<definition name="user/accountRecovery" extends="base">
+		<put-attribute name="body" value="/WEB-INF/views/user/accountRecovery.jsp"></put-attribute>
 	</definition>
 	
-	<definition name="pages/passwordReset" extends="base">
-		<put-attribute name="body" value="/WEB-INF/views/pages/passwordReset.jsp"></put-attribute>
+	<definition name="user/passwordReset" extends="base">
+		<put-attribute name="body" value="/WEB-INF/views/user/passwordReset.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="pages/accessdenied" extends="base">
+		<put-attribute name="body" value="/WEB-INF/views/pages/accessdenied.jsp"></put-attribute>
 	</definition>
 	
 </tiles-definitions>

@@ -1,4 +1,4 @@
-package com.tracker.config;
+package com.tracker.config.security;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 

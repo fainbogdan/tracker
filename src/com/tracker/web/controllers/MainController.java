@@ -31,4 +31,11 @@ public class MainController {
 		}
 		return "pages/index";
 	}
+	
+	
+	@RequestMapping(value="accessdenied")
+	public String accessDenied(){
+		return "pages/accessdenied";
+	}
+	
 }

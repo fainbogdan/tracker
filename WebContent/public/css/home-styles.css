@@ -309,7 +309,9 @@ a.link
 .alert .close{
 	margin-left:20px
 }
-
+#accessdenied{
+	margin-top: 10%;
+}
 
 
 

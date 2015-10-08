@@ -6,22 +6,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.joda.time.LocalDateTime;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
-
 import com.tracker.integrations.EmailMessage;
 import com.tracker.web.dao.interfaces.ChecklistRepo;
 import com.tracker.web.dao.interfaces.EventRepo;
@@ -79,11 +75,16 @@ public class EventServiceImpl implements EventService {
 		if(event.getEvent_type().equals("emergency"))
 			event.setActual_start(new LocalDateTime());
 		
+		User currentUser=currentUser();
+		event.setCreator(currentUser);
+		event.getWatchers().add(currentUser);
+		Event savedEvent=eventRepo.save(event);
+		
 		Checklist plan=new Checklist();
 		plan.setName("plan");
 		plan.setItem_order(1);
 		plan.setPhase("setup");
-		plan.setEvent(event);
+		plan.setEvent(savedEvent);
 		plan.setCreator(currentUser());
 		checklistRepo.save(plan);
 		
@@ -91,7 +92,7 @@ public class EventServiceImpl implements EventService {
 		process.setName("process");
 		process.setItem_order(2);
 		process.setPhase("execute");
-		process.setEvent(event);
+		process.setEvent(savedEvent);
 		process.setCreator(currentUser());
 		checklistRepo.save(process);
 		
@@ -99,7 +100,7 @@ public class EventServiceImpl implements EventService {
 		test.setName("test");
 		test.setItem_order(3);
 		test.setPhase("execute");
-		test.setEvent(event);
+		test.setEvent(savedEvent);
 		test.setCreator(currentUser());
 		checklistRepo.save(test);
 		
@@ -107,21 +108,9 @@ public class EventServiceImpl implements EventService {
 		approve.setName("approve");
 		approve.setItem_order(4);
 		approve.setPhase("teardown");
-		approve.setEvent(event);
+		approve.setEvent(savedEvent);
 		approve.setCreator(currentUser());
 		checklistRepo.save(approve);
-		
-		Collection<Checklist> checklist=new ArrayList<Checklist>();
-		checklist.add(plan);
-		checklist.add(process);
-		checklist.add(test);
-		checklist.add(approve);
-		
-		event.setChecklist(checklist);
-		User currentUser=currentUser();
-		event.setCreator(currentUser);
-		event.getWatchers().add(currentUser);
-		Event savedEvent=eventRepo.save(event);
 		
 		final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
 		context.setVariable("event", savedEvent);
@@ -216,13 +205,12 @@ public class EventServiceImpl implements EventService {
 		return eventRepo.getEventsForMonth();
 	}
 	
-
-	@PreAuthorize("hasRole('ROLE_LEAD')")
 	@Override
 	public List<Event> getEventsToApprove(CustomUser user) {
 		return eventRepo.getEventsToApprove(user);
 	}
 
+	
 	@Override
 	public Event approve(Map<String,String> action) {
 		return eventRepo.approve(action);

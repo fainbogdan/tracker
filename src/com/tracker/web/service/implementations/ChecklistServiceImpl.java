@@ -69,7 +69,8 @@ public class ChecklistServiceImpl implements ChecklistService{
 	
 	@Override
 	public Checklist getChecklist(int id) {
-		return checklistRepo.getChecklist(id);
+		Checklist checklist=checklistRepo.getChecklist(id);
+		return checklist;
 	}
 
 
@@ -83,6 +84,7 @@ public class ChecklistServiceImpl implements ChecklistService{
 		checklist.setCreator(currentUser());
 		return checklistRepo.save(checklist);
 	}
+	
 	
 	@Override
 	public Checklist update(Checklist checklist) {

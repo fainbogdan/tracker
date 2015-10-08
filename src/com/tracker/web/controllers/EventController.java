@@ -4,22 +4,20 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
-
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,7 +46,6 @@ public class EventController {
 		this.eventService = eventService;
 	}
 	
-	@ModelAttribute("loggeduser")
 	public CustomUser currentUser()
 	{
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -145,12 +142,15 @@ public class EventController {
 	}
 	
 	
+	@PreAuthorize("hasPermission(#id,'Integer','write')")
 	@RequestMapping(value="events/{id}/edit",method=RequestMethod.GET)
 	public String edit(Model model,@PathVariable("id") int id) {
 		model.addAttribute("event", eventService.getEvent(id));
 		return "events/edit";
 	}
 	
+	
+	@PreAuthorize("hasPermission(#event,'write')")
 	@RequestMapping(value="/events/{id}/start", method=RequestMethod.PUT,consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public Map<String, Object> eventStart(@RequestBody Event event, @PathVariable("id") int id, HttpServletRequest request, HttpServletResponse response) throws MessagingException
@@ -160,6 +160,7 @@ public class EventController {
 	}
 	
 	
+	@PreAuthorize("hasPermission(#event,'write')")
 	@RequestMapping(value="/events/{id}/end", method=RequestMethod.PUT,consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public Map<String, Object> eventEnd(@RequestBody Event event, @PathVariable("id") int id, HttpServletRequest request, HttpServletResponse response) throws MessagingException
@@ -168,6 +169,7 @@ public class EventController {
 		return eventService.eventEnd(event, request, response);
 	}
 
+	@PreAuthorize("hasRole('ROLE_LEAD')")
 	@RequestMapping(value="/events/eventsToApprove", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public List<Event> eventsToApprove(@RequestParam("user") String username){
@@ -178,6 +180,7 @@ public class EventController {
 		return null;
 	}
 	
+	@PreAuthorize("hasRole('ROLE_LEAD')")
 	@RequestMapping(value="/events/{id}/approve",method=RequestMethod.PUT,consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public Event approve(@RequestBody Map<String,String> action){

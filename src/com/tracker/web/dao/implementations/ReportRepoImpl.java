@@ -2,6 +2,8 @@ package com.tracker.web.dao.implementations;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.apache.lucene.search.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,6 +17,7 @@ import com.tracker.web.dao.interfaces.ReportRepo;
 import com.tracker.web.models.Event;
 
 @Repository
+@Transactional
 public class ReportRepoImpl implements ReportRepo {
 
 	private SessionFactory sessionFactory;

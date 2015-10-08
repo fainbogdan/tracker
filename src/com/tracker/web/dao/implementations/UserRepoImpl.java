@@ -2,21 +2,19 @@ package com.tracker.web.dao.implementations;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.transaction.Transactional;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.ProjectionList;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import com.tracker.web.dao.interfaces.UserRepo;
-import com.tracker.web.models.Event;
 import com.tracker.web.models.User;
 
 @Repository
+@Transactional
 public class UserRepoImpl implements UserRepo {
 
 	private SessionFactory sessionFactory;

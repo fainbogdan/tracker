@@ -112,18 +112,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User register(User user, HttpServletRequest request, HttpServletResponse response) throws MessagingException {
-		List<Role> roles=new ArrayList<Role>();
-		Role role=new Role();
-		role.setRole("user");
-		role.setUser(user);
-		roleService.save(role);
-		roles.add(role);
-		user.setRoles(roles);
-		
-		tokenService.saveToken(user);
 		User registeredUser=userRepo.save(user);
+		Role role=new Role();
+		role.setRole("ROLE_USER");
+		role.setUser(registeredUser);
+		roleService.save(role);
+		VerificationToken token=tokenService.saveToken(registeredUser);
 		
-		if(registeredUser!=null){
+		if(registeredUser!=null && token!=null){
 			final WebContext context = new WebContext(request, response, request.getServletContext(), locale);
 			String url = "";
 			if (request.getServerPort() == 80  || request.getServerPort() == 443 )
@@ -173,7 +169,6 @@ public class UserServiceImpl implements UserService {
 			{
 				url+= "/regitrationConfirm?token=" + token.getToken();
 				context.setVariable("url", url);
-				System.out.println("activation url:"+ url);
 				String content=templateEngine.process("userActivation", context);
 				String[] recievers={"lokesh.cherukuri8@gmail.com"};
 				EmailMessage emailMessage=new EmailMessage(content, recievers, "Tracker : Account Activation");

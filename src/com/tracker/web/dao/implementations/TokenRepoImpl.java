@@ -2,6 +2,8 @@ package com.tracker.web.dao.implementations;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,6 +17,7 @@ import com.tracker.web.models.User;
 import com.tracker.web.models.VerificationToken;
 
 @Repository
+@Transactional
 public class TokenRepoImpl implements TokenRepo {
 
 private SessionFactory sessionFactory;
