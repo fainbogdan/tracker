@@ -1,4 +1,4 @@
-package com.tracker.web.controllers;
+package com.tracker.web.interceptors;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;

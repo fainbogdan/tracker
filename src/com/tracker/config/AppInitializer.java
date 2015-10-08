@@ -2,8 +2,9 @@ package com.tracker.config;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration.Dynamic;
-
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+import com.tracker.config.security.MethodSecurityConfig;
+import com.tracker.config.security.SecurityConfig;
 
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer{
 

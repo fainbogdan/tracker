@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -11,20 +12,32 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
 
-import com.tracker.web.controllers.EventsApprovalInterceptor;
+import com.tracker.web.interceptors.EventsApprovalInterceptor;
+import com.tracker.web.interceptors.LoggedUserInterceptor;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan("com.tracker.web.controllers")
+@EnableGlobalMethodSecurity(prePostEnabled=true)
+@ComponentScan({"com.tracker.web.controllers","com.tracker.web.interceptors"})
 public class WebConfig extends WebMvcConfigurerAdapter{
 	
 	private EventsApprovalInterceptor eventsApprovalInterceptor;
+	private LoggedUserInterceptor loggedUserInterceptor;
+
 	
 	@Autowired
-	public void setLoggedUserInterceptor(EventsApprovalInterceptor eventsApprovalInterceptor) {
+	public void setEventsApprovalInterceptor(
+			EventsApprovalInterceptor eventsApprovalInterceptor) {
 		this.eventsApprovalInterceptor = eventsApprovalInterceptor;
 	}
 
+	
+	@Autowired
+	public void setLoggedUserInterceptor(LoggedUserInterceptor loggedUserInterceptor) {
+		this.loggedUserInterceptor = loggedUserInterceptor;
+	}
+
+	
 	@Bean
 	public TilesConfigurer tilesConfigurer()
 	{
@@ -34,11 +47,13 @@ public class WebConfig extends WebMvcConfigurerAdapter{
 		return configurer;
 	}
 	
+	
 	@Bean
 	public TilesViewResolver tilesViewResolver()
 	{
 		return new TilesViewResolver();
 	}
+	
 	
 	@Override
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer)
@@ -46,9 +61,11 @@ public class WebConfig extends WebMvcConfigurerAdapter{
 		configurer.enable();
 	}
 	
+	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(eventsApprovalInterceptor);
+		registry.addInterceptor(loggedUserInterceptor);
 	}
 	
 }

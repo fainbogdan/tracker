@@ -112,7 +112,7 @@
 	    		 xhr.setRequestHeader($("meta[name='_csrf_header']").attr("content"), $("meta[name='_csrf']").attr("content"));
 	    	 },
 	    	 error: function (xhr, ajaxOptions, thrownError) {
-    	        if(xhr.status==403)
+	    		 if(xhr.status==403)
     	        	clearInterval(interval);
     	      },
 			 success:function(events){

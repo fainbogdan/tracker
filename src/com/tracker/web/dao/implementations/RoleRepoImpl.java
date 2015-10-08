@@ -1,5 +1,7 @@
 package com.tracker.web.dao.implementations;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -8,6 +10,7 @@ import com.tracker.web.dao.interfaces.RoleRepo;
 import com.tracker.web.models.Role;
 
 @Repository
+@Transactional
 public class RoleRepoImpl implements RoleRepo {
 
 private SessionFactory sessionFactory;

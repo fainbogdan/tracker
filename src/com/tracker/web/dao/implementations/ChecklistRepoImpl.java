@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -17,6 +19,7 @@ import com.tracker.web.dao.interfaces.ChecklistRepo;
 import com.tracker.web.models.Checklist;
 
 @Repository
+@Transactional
 public class ChecklistRepoImpl implements ChecklistRepo{
 
 	private SessionFactory sessionFactory;

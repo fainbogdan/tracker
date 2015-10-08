@@ -3,11 +3,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
 import com.tracker.web.models.Checklist;
 import com.tracker.web.service.implementations.UserServiceImpl.CustomUser;
 import com.tracker.web.service.interfaces.ChecklistService;
@@ -67,6 +71,8 @@ public class ChecklistController {
 		return checklistService.save(map);
 	}
 
+	
+	@PreAuthorize("hasPermission(#checklist,'write')")
 	@RequestMapping(value="/checklist/{id}",method=RequestMethod.PUT, consumes=MediaType.APPLICATION_JSON_VALUE , produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public Checklist update(@RequestBody Checklist checklist, @PathVariable("id") int id)
@@ -75,6 +81,8 @@ public class ChecklistController {
 		return checklistService.update(checklist);
 	}
 	
+	
+	@PreAuthorize("hasPermission(#checklist,'write')")
 	@RequestMapping(value="/checklistState/{id}", method=RequestMethod.PUT, consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public Map<String, Object> updateState(@RequestBody Checklist checklist, @PathVariable("id") int id, HttpServletRequest request, HttpServletResponse response) throws MessagingException 

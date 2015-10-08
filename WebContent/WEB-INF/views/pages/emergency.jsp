@@ -64,7 +64,7 @@
 	              	<c:choose>
 	              		<c:when test="${fn:length(eventsForToday) >0}">
 	              			<c:forEach items="${eventsForToday }" var="event">
-			                  <li class="list-group-item event pointer" event_id='<c:out value="${event.getId() }"></c:out>'>
+			                  <li class="list-group-item event pointer" data-event_id='<c:out value="${event.getId() }"></c:out>'>
 			                  	<c:choose>
 			                  		<c:when test="${event.getEvent_type()=='emergency'}">
 										<i class="fa fa-exclamation-triangle emergency-type"></i>

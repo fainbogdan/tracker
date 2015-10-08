@@ -37,25 +37,30 @@ public class UserController {
 	@RequestMapping(value="/register",method=RequestMethod.GET)
 	public String create(Model model) {
 		model.addAttribute("user", new User());
-		return "pages/register";
+		return "user/register";
 	}
 	
 	@RequestMapping(value={"/login","/login?error"}, method=RequestMethod.GET)
 	public String login()
 	{
-		return "pages/login";
+		return "user/login";
 	}
 	
 	@RequestMapping(value="register",method=RequestMethod.POST)
 	public String store(@Valid User user, Errors errors, RedirectAttributes redirectAttributes , HttpServletRequest request, HttpServletResponse response) throws MessagingException
 	{
 		if(errors.hasErrors())
-			return "pages/register";
+			return "user/register";
 
 		User registeredUser= userService.register(user,request,response);
-		redirectAttributes.addFlashAttribute("message", "Registration success. See confirmation email to activate your account.");
-		redirectAttributes.addFlashAttribute("registeredUser", registeredUser);
-		return "redirect:/login";
+		if(registeredUser!=null){
+			redirectAttributes.addFlashAttribute("message", "Registration success. See confirmation email to activate your account.");
+			redirectAttributes.addFlashAttribute("registeredUser", registeredUser);
+			return "redirect:/login";
+		}
+		else {
+			return "user/register";
+		}
 	}
 	
 	@RequestMapping(value="/regitrationConfirm")
@@ -83,7 +88,7 @@ public class UserController {
 	
 	@RequestMapping(value="/accountRecovery", method=RequestMethod.GET)
 	public String getAccountRecovery(){
-		return "pages/accountRecovery";
+		return "user/accountRecovery";
 	}
 	
 	@RequestMapping(value="/forgotPassword", method=RequestMethod.GET)
@@ -102,24 +107,24 @@ public class UserController {
 				if(recoveredUser!=null)
 				{
 					model.addAttribute("message", "Requested link sent to your email");
-					return "pages/login";
+					return "user/login";
 				}
 				else
 				{
 					model.addAttribute("message", "This email is not associated with any account");
-					return "pages/accountRecovery";
+					return "user/accountRecovery";
 				}
 			}
 			else
 			{
 				model.addAttribute("message", "This email is not associated with any account");
-				return "pages/accountRecovery";
+				return "user/accountRecovery";
 			}
 			
 		}
 		else {
 			model.addAttribute("message", "Email and request option needed");
-			return "pages/accountRecovery";
+			return "user/accountRecovery";
 		}
 		
 	}
@@ -128,17 +133,17 @@ public class UserController {
 	public String passwordReset(@RequestParam(value="token", required=false) String tokenValue, Model model){
 		if(tokenValue==null){
 			model.addAttribute("message", "Use reset link sent to your email. Request again if needed");
-			return "pages/accountRecovery";
+			return "user/accountRecovery";
 		}
 		
 		VerificationToken token=tokenService.getTokenByValue(tokenValue);
 		if(token!=null){
 			model.addAttribute("token", token.getToken());
-			return "pages/passwordReset";
+			return "user/passwordReset";
 		}
 		else{
 			model.addAttribute("message", "Invalid reset link. Try again or request new link");
-			return "pages/login";
+			return "user/login";
 		}
 	}
 	
@@ -148,17 +153,17 @@ public class UserController {
 			User user=userService.resetpassword(inputs);
 			if(user!=null){
 				model.addAttribute("message", "password changed. Login with your new Credentials");
-				return "pages/login";
+				return "user/login";
 			}
 			else{
 				model.addAttribute("message", "Something went wrong. try again");
-				return "pages/accountRecovery";
+				return "user/accountRecovery";
 			}
 		}
 		else{
 			model.addAttribute("token", inputs.get("token"));
 			model.addAttribute("message", "Password & Confirm password should match");
-			return "pages/passwordReset";
+			return "user/passwordReset";
 		}
 	}
 	

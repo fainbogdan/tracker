@@ -1,4 +1,4 @@
-package com.tracker.config;
+package com.tracker.config.security;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -23,6 +23,7 @@ public class AuthFailureHandler extends SimpleUrlAuthenticationFailureHandler{
 					+ " Click activation link sent to your email or request link again.");
 			super.setDefaultFailureUrl("/accountRecovery");
 		}		
+		
 		if(exception.getClass().isAssignableFrom(BadCredentialsException.class)){
 			request.getSession().setAttribute("login_error", "Incorrect username or password");
 			super.setDefaultFailureUrl("/login?error");

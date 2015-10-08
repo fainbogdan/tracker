@@ -2,6 +2,9 @@ package com.tracker.web.dao.implementations;
 
 import java.util.List;
 import java.util.Map;
+
+import javax.transaction.Transactional;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,12 +15,14 @@ import org.hibernate.criterion.Restrictions;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import com.tracker.web.dao.interfaces.EventRepo;
 import com.tracker.web.models.Checklist;
 import com.tracker.web.models.Event;
 import com.tracker.web.service.implementations.UserServiceImpl.CustomUser;
 
 @Repository
+@Transactional
 public class EventRepoImpl implements EventRepo {
 
 	private SessionFactory sessionFactory;

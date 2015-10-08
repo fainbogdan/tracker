@@ -5,7 +5,7 @@
 	<div class="row">
 	    <div class="col-md-4">
 	        <h3>Setup phase</h3>
-	        <div id="sortable1" class="sortable connectedSortable"  phase='setup' event_id='<c:out value="${event.getId() }" />'>
+	        <div id="sortable1" class="sortable connectedSortable"  data-phase='setup' data-event_id='<c:out value="${event.getId() }" />'>
 	        	<c:forEach items="${event.sortedChecklist() }" var="checklist">
 	        		<c:if test="${checklist.getPhase()=='setup' }">
 	        			<div class='checklistItem' id='<c:out value="${checklist.getId() }" />'> 
@@ -51,7 +51,7 @@
 	    </div>
 	    <div class="col-md-4">
 	        <h3>execute phase</h3>
-	        <div id="sortable2" class="sortable connectedSortable"  phase="execute" event_id='<c:out value="${event.getId() }" />'>
+	        <div id="sortable2" class="sortable connectedSortable"  data-phase="execute" data-event_id='<c:out value="${event.getId() }" />'>
 	            <c:forEach items="${event.sortedChecklist() }" var="checklist">
 	        		<c:if test="${checklist.getPhase()=='execute' }">
 	        			<div class='checklistItem' id='<c:out value="${checklist.getId() }" />' > 
@@ -97,7 +97,7 @@
 	    </div>
 	    <div class="col-md-4">
 	        <h3>teardown phase</h3>
-	        <div id="sortable3" class="sortable connectedSortable"  phase="teardown" event_id='<c:out value="${event.getId() }" />'>
+	        <div id="sortable3" class="sortable connectedSortable"  data-phase="teardown" data-event_id='<c:out value="${event.getId() }" />'>
 	           <c:forEach items="${event.sortedChecklist() }" var="checklist">
 	        		<c:if test="${checklist.getPhase()=='teardown' }">
 	        			<div class='checklistItem' id='<c:out value="${checklist.getId() }" />' > 

@@ -27,12 +27,13 @@
 				</span>
 				<h1><c:out value="${event.getName() }"></c:out></h1>
 				<span>
-					<message>You are watching this event</message> 
 					<c:choose>
 						<c:when test="${amIWatching }">
+							<message>You are watching this event</message> 
 							<i class="fa fa-eye fa-lg watcher-icon pointer" data-status="watching"></i>
 						</c:when>
 						<c:otherwise>
+							<message>You are not watching this event</message> 
 							<i class="fa fa-eye-slash fa-lg watcher-icon pointer" data-status="nwatching"></i>
 						</c:otherwise>
 					</c:choose>
@@ -102,7 +103,7 @@
 					<ul class="list-group">
 						<c:forEach items="${event.sortedChecklist() }" var="checklist">
 							<c:if test="${checklist.getPhase()=='setup' }">
-								<li class="list-group-item" checklist-id='<c:out value="${checklist.getId() }" />'>
+								<li class="list-group-item" data-checklist-id='<c:out value="${checklist.getId() }" />'>
 									<c:choose>
 										<c:when test="${checklist.getCompleted() eq 'Y' }">
 											<i class='fa fa-check-circle fa-2x fa-fw checklist-icon pointer checklist-<c:out  value="${checklist.getId() }"></c:out> '></i>
@@ -121,13 +122,13 @@
 					</ul>
 				</div>
 				
-				<div id="start-event text-center">
+				<div id="start-event">
 					<c:choose>
 						<c:when test="${empty event.getActual_start() }">
-							<button class="btn btn-success btn-lg btn-block" id="start_event_btn" data-loading-text="Starting event..." event_id='<c:out value="${event.getId()}"></c:out>' >Start Event</button>
+							<button class="btn btn-success btn-lg btn-block" id="start_event_btn" data-loading-text="Starting event..." data-event_id='<c:out value="${event.getId()}"></c:out>' >Start Event</button>
 						</c:when>
 						<c:otherwise>
-							<h3 class="text-success">Event started at <c:out value="${event.getActual_start().toString('MM-dd-yyyy HH:mm:ss') }" /></h3>
+							<h3 class="text-success text-center">Event started at <c:out value="${event.getActual_start().toString('MM-dd-yyyy HH:mm:ss') }" /></h3>
 						</c:otherwise>
 					</c:choose>
 				</div>
@@ -137,7 +138,7 @@
 					<ul class="list-group">
 						<c:forEach items="${event.sortedChecklist() }" var="checklist">
 							<c:if test="${checklist.getPhase()=='execute' }">
-								<li class="list-group-item" checklist-id='<c:out value="${checklist.getId() }" />'>
+								<li class="list-group-item" data-checklist-id='<c:out value="${checklist.getId() }" />'>
 									<c:choose>
 										<c:when test="${checklist.getCompleted() eq 'Y' }">
 											<i class='fa fa-check-circle fa-2x fa-fw checklist-icon pointer checklist-<c:out  value="${checklist.getId() }"></c:out> '></i>
@@ -159,7 +160,7 @@
 				<div id="end-event">
 					<c:choose>
 						<c:when test="${empty event.getActual_end() }">
-							<button class="btn btn-danger btn-lg btn-block" id="end_event_btn" data-loading-text="Ending event..." event_id='<c:out value="${event.getId()}"></c:out>' >End Event</button>
+							<button class="btn btn-danger btn-lg btn-block" id="end_event_btn" data-loading-text="Ending event..." data-event_id='<c:out value="${event.getId()}"></c:out>' >End Event</button>
 						</c:when>
 						<c:otherwise>
 							<h3 class="text-danger text-center">Event ended at <c:out value="${event.getActual_end().toString('MM-dd-yyyy HH:mm:ss') }" /></h3>
@@ -172,7 +173,7 @@
 					<ul class="list-group">
 						<c:forEach items="${event.sortedChecklist() }" var="checklist">
 							<c:if test="${checklist.getPhase()=='teardown' }">
-								<li class="list-group-item" checklist-id='<c:out value="${checklist.getId() }" />'>
+								<li class="list-group-item" data-checklist-id='<c:out value="${checklist.getId() }" />'>
 									<c:choose>
 										<c:when test="${checklist.getCompleted() eq 'Y' }">
 											<i class='fa fa-check-circle fa-2x fa-fw checklist-icon pointer checklist-<c:out  value="${checklist.getId() }"></c:out> '></i>
