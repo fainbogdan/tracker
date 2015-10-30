@@ -1,7 +1,6 @@
 # tracker
 
 Technology stack:
-‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 ★ Front end : HTML, CSS, Bootstrap, JQuery & Ajax
 ★ View technologies : Apache Tiles, Java Server Pages (JSP)
 ★ Framework : Spring Framework ( Core, Web MVC, Security & AMQP)
