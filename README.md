@@ -8,4 +8,4 @@ Technology stack:
 ★ Database : Mysql
 ★ Server : Apache Tomcat
 ★ Build manager: Maven
-★ Libraries: Jersey, Jackson, JSTL, Joda-time, Java mail
+★ Libraries: Jackson, JSTL, Joda-time, Java mail
