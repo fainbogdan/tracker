@@ -12,7 +12,7 @@ public interface EventRepo {
 	
 	public Event save(Event event);
 	public Event getEvent(int id);
-	public List<Event> getEvents(LocalDateTime week_start, LocalDateTime week_end);
+	public List<Event> getEvents(LocalDateTime start, LocalDateTime end);
 	public Event eventStart(Event event);
 	public boolean canEventStart(Event event);
 	public boolean canEventEnd(Event event);
