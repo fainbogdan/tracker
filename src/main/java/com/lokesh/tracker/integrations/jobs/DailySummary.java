@@ -5,6 +5,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.lokesh.tracker.web.service.interfaces.SummaryService;
 
@@ -21,7 +22,7 @@ public class DailySummary extends QuartzJobBean{
 	@Override
 	protected void executeInternal(JobExecutionContext arg0)
 			throws JobExecutionException {
-		System.out.println(summaryService);
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 		summaryService.sendDailySummaries();
 	}
 

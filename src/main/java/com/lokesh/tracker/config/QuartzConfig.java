@@ -51,7 +51,7 @@ public class QuartzConfig {
 		bean.setStartTime(calendar.getTime());
 		bean.setBeanName("dailySummarytrigger");
 		bean.setGroup("dailySummaries");
-		bean.setCronExpression("0 0/1 * 1/1 * ? *");
+		bean.setCronExpression("0 1 0 * * ?");
 		return bean;
 	}
 	
@@ -91,7 +91,6 @@ public class QuartzConfig {
 	public SchedulerFactoryBean schedulerFactoryBean() {
 		SchedulerFactoryBean scheduler = new SchedulerFactoryBean();
 		scheduler.setTriggers(dailySummarytrigger().getObject(),weeklySummarytrigger().getObject(),monthlySummarytrigger().getObject());
-		System.out.println("scheduled");
 		return scheduler;
 	} 
 }

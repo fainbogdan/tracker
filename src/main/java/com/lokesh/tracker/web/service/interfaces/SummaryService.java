@@ -2,8 +2,8 @@ package com.lokesh.tracker.web.service.interfaces;
 
 public interface SummaryService {
 
-	public int sendDailySummaries();
-	public int sendWeeklySummaries();
-	public int sendMontlySummaries();
+	public void sendDailySummaries();
+	public void sendWeeklySummaries();
+	public void sendMontlySummaries();
 	
 }
