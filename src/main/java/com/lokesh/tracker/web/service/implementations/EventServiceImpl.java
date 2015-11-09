@@ -1,16 +1,12 @@
 package com.lokesh.tracker.web.service.implementations;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.joda.time.LocalDateTime;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
-
 import com.lokesh.tracker.integrations.EmailMessage;
 import com.lokesh.tracker.web.dao.interfaces.ChecklistRepo;
 import com.lokesh.tracker.web.dao.interfaces.EventRepo;
@@ -130,8 +125,8 @@ public class EventServiceImpl implements EventService {
 	}
 	
 	@Override
-	public List<Event> getEvents(LocalDateTime week_start, LocalDateTime week_end) {
-		return eventRepo.getEvents(week_start,week_end);
+	public List<Event> getEvents(LocalDateTime start, LocalDateTime end) {
+		return eventRepo.getEvents(start,end);
 	}
 
 	@Override

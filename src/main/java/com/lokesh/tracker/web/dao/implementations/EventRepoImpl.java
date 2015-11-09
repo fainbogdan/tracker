@@ -50,10 +50,10 @@ public class EventRepoImpl implements EventRepo {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Event> getEvents(LocalDateTime week_start, LocalDateTime week_end) {
+	public List<Event> getEvents(LocalDateTime start, LocalDateTime end) {
 		Criteria criteria=getCurrentSession().createCriteria(Event.class);
-		Criterion exp_start =Restrictions.between("expected_start", week_start, week_end);
-		Criterion exp_end=Restrictions.between("expected_end", week_start, week_end);
+		Criterion exp_start =Restrictions.between("expected_start", start, end);
+		Criterion exp_end=Restrictions.between("expected_end", start, end);
 		
 		Disjunction expression=Restrictions.disjunction(exp_start, exp_end);
 		criteria.add(expression);

@@ -15,7 +15,7 @@ import com.lokesh.tracker.web.service.implementations.UserServiceImpl.CustomUser
 public interface EventService {
 	public Event save(Event event, HttpServletRequest request, HttpServletResponse response) throws MessagingException;
 	public Event getEvent(int id);
-	public List<Event> getEvents(LocalDateTime week_start, LocalDateTime week_end);
+	public List<Event> getEvents(LocalDateTime start, LocalDateTime end);
 	public Map<String, Object> eventStart(Event event,HttpServletRequest request, HttpServletResponse response) throws MessagingException;
 	public Map<String, Object> eventEnd(Event event,HttpServletRequest request, HttpServletResponse response) throws MessagingException;
 	public List<Event> getEventsForToday();
